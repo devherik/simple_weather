@@ -26,14 +26,38 @@ class WeatherApiImp implements WeatherApi {
 
   @override
   getWeatherByLocation(double lat, double lon) async {
-    final Weather weather = await _factory!.currentWeatherByLocation(lat, lon);
+    final Weather value = await _factory!.currentWeatherByLocation(lat, lon);
+    final WeatherEntity weather = WeatherEntity(
+        value.areaName,
+        value.country,
+        value.date,
+        value.weatherDescription,
+        value.tempMax!.celsius,
+        value.tempMin!.celsius,
+        value.tempFeelsLike!.celsius,
+        value.sunrise,
+        value.sunset);
     return weather;
   }
 
   @override
   getForecastByCity(String city) async {
-    final List<Weather> forecast =
+    final List<Weather> values =
         await _factory!.fiveDayForecastByCityName(city);
+    final List<WeatherEntity> forecast = [];
+    for (var value in values) {
+      final WeatherEntity weather = WeatherEntity(
+          value.areaName,
+          value.country,
+          value.date,
+          value.weatherDescription,
+          value.tempMax!.celsius,
+          value.tempMin!.celsius,
+          value.tempFeelsLike!.celsius,
+          value.sunrise,
+          value.sunset);
+      forecast.add(weather);
+    }
     return forecast;
   }
 

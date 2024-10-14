@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:simple_weather_app/data/data_sources/remote/location_api_imp.dart';
 import 'package:simple_weather_app/data/data_sources/remote/weather_api_imp.dart';
@@ -46,9 +44,17 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Expanded(
                           flex: 1,
-                          child: Text(
-                            '${weather.cityName}, ${weather.country}\n$day',
-                            textAlign: TextAlign.center,
+                          child: Column(
+                            children: [
+                              Text(
+                                '${weather.cityName}, ${weather.country}',
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                day,
+                                textAlign: TextAlign.center,
+                              )
+                            ],
                           )),
                       Expanded(flex: 4, child: weatherCard(weather)),
                     ],

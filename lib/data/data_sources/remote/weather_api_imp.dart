@@ -3,9 +3,8 @@ import 'package:simple_weather_app/infra/port/input/weather_api.dart';
 import 'package:weather/weather.dart';
 
 class WeatherApiImp implements WeatherApi {
-  WeatherApiImp({required this.key});
-  @override
-  final String key;
+  WeatherApiImp._privateConstructor();
+  static final WeatherApiImp instance = WeatherApiImp._privateConstructor();
   WeatherFactory? _factory;
 
   @override
@@ -16,6 +15,7 @@ class WeatherApiImp implements WeatherApi {
         value.country,
         value.date,
         value.weatherDescription,
+        value.temperature!.celsius,
         value.tempMax!.celsius,
         value.tempMin!.celsius,
         value.tempFeelsLike!.celsius,
@@ -32,6 +32,7 @@ class WeatherApiImp implements WeatherApi {
         value.country,
         value.date,
         value.weatherDescription,
+        value.temperature!.celsius,
         value.tempMax!.celsius,
         value.tempMin!.celsius,
         value.tempFeelsLike!.celsius,
@@ -51,6 +52,7 @@ class WeatherApiImp implements WeatherApi {
           value.country,
           value.date,
           value.weatherDescription,
+          value.temperature!.celsius,
           value.tempMax!.celsius,
           value.tempMin!.celsius,
           value.tempFeelsLike!.celsius,
@@ -62,7 +64,7 @@ class WeatherApiImp implements WeatherApi {
   }
 
   @override
-  initAPI() {
+  initAPI(String key) {
     _factory = WeatherFactory(key);
   }
 }

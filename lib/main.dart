@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_weather_app/core/theme/theme.dart';
 import 'package:simple_weather_app/features/home.dart';
 
 void main() {
@@ -14,10 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Simple Weather',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.light,
       home: const HomePage(),
     );
   }

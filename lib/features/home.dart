@@ -78,23 +78,20 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                            flex: 1,
+                            flex: 2,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  weather.temp!.toStringAsFixed(0),
+                                  '${weather.temp!.toStringAsFixed(0)}°',
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.oldStandardTt(
-                                      fontWeight: FontWeight.w500,
-                                      letterSpacing: 2,
-                                      color: Colors.black,
-                                      fontSize: 56),
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 Text(
                                   day,
                                   textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.titleSmall,
                                 )
                               ],
                             )),

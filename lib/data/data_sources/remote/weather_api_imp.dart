@@ -21,6 +21,7 @@ class WeatherApiImp implements WeatherApi {
         value.tempFeelsLike!.celsius,
         value.sunrise,
         value.sunset);
+    weather.forecast = await getForecastByCity(city);
     return weather;
   }
 

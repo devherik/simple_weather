@@ -9,6 +9,7 @@ class WeatherEntity {
   double? feelsTemp;
   DateTime? sunRise;
   DateTime? sunSet;
+  List<WeatherEntity> forecast = [];
 
   WeatherEntity(
       this.cityName,

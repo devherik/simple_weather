@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_weather_app/data/data_sources/remote/location_api_imp.dart';
@@ -18,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   late WeatherApi? _weatherAPI;
   late LocationApi _locationApi;
   late String _location;
+  final minWidht = 320.0, minHeight = 800.0;
 
   @override
   void initState() {
@@ -33,37 +36,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final String day = weekDay(DateTime.now().weekday);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     var weather = _weatherAPI!.getWeatherByCity(_location);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_location),
-        titleTextStyle: GoogleFonts.oldStandardTt(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-            color: Colors.black,
-            fontSize: 24),
-        actions: [
-          MaterialButton(
-            padding: const EdgeInsets.all(8),
-            shape: const CircleBorder(
-              eccentricity: 0,
-            ),
-            child: const Icon(Icons.add),
-            onPressed: () {},
-          ),
-          MaterialButton(
-            padding: const EdgeInsets.all(8),
-            shape: const CircleBorder(
-              eccentricity: 0,
-            ),
-            child: const Icon(Icons.share),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(24),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+              maxWidth: max(screenWidth, minWidht),
+              minWidth: minWidht,
+              minHeight: max(screenHeight, minHeight)),
           child: FutureBuilder(
             future: weather,
             builder: (context, snapshot) {
@@ -91,11 +74,31 @@ class _HomePageState extends State<HomePage> {
                                 Text(
                                   day,
                                   textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.titleSmall,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 )
                               ],
                             )),
-                        Expanded(flex: 4, child: weatherCard(weather)),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              weather.cityName!,
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * .2,
+                              width: MediaQuery.of(context).size.width,
+                              child: ListView.builder(
+                                padding: const EdgeInsets.all(4),
+                                itemCount: 4,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) =>
+                                    weatherCard(weather.forecast[index]),
+                              ),
+                            )
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -113,7 +116,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget weatherCard(WeatherEntity weather) {
-    return Text(weather.toString());
+    return Column(
+      children: [
+        const Icon(Icons.sunny),
+        Text('${weather.temp!.toStringAsFixed(0)}°')
+      ],
+    );
   }
 
   String weekDay(int day) {

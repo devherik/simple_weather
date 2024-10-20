@@ -9,6 +9,7 @@ import 'package:simple_weather_app/data/data_sources/remote/weather_api_imp.dart
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/infra/port/input/location_api.dart';
 import 'package:simple_weather_app/infra/port/input/weather_api.dart';
+import 'package:simple_weather_app/core/constant/globals.dart' as global;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -65,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                                     _locationApi.getCurrentAddress()),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(
                                     flex: 2,
@@ -94,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                                 Expanded(
                                   flex: 4,
                                   child: Lottie.asset(
-                                      'assets/animations/clear.json'),
+                                      withWeatherAnimation(weather.condition!)),
                                 ),
                                 Expanded(
                                   flex: 3,
@@ -109,6 +110,7 @@ class _HomePageState extends State<HomePage> {
                                             .textTheme
                                             .bodyLarge,
                                       ),
+                                      global.verySmallBoxSpace,
                                       SizedBox(
                                         height:
                                             MediaQuery.of(context).size.height *
@@ -116,8 +118,12 @@ class _HomePageState extends State<HomePage> {
                                         width:
                                             MediaQuery.of(context).size.width,
                                         child: ListView.builder(
-                                          padding: const EdgeInsets.all(4),
-                                          itemCount: 4,
+                                          padding: const EdgeInsets.all(8),
+                                          itemCount: 5,
+                                          itemExtent: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .17,
                                           scrollDirection: Axis.horizontal,
                                           itemBuilder: (context, index) =>
                                               weatherCard(
@@ -132,7 +138,9 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       } else {
-                        return const Center();
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
                       }
                     },
                   ),
@@ -158,6 +166,27 @@ class _HomePageState extends State<HomePage> {
         Text('${weather.temp!.toStringAsFixed(0)}°')
       ],
     );
+  }
+
+  String withWeatherAnimation(int code) {
+    switch (code) {
+      case >= 200 && < 300:
+        return 'assets/animations/thunder.json';
+      case >= 300 && < 400:
+        return 'assets/animations/partly_rain.json';
+      case >= 500 && < 600:
+        return 'assets/animations/storm.json';
+      case >= 600 && < 700:
+        return 'assets/animations/snow.json';
+      case 701:
+        return 'assets/animations/mist.json';
+      case 800:
+        return 'assets/animations/clear.json';
+      case >= 800 && < 900:
+        return 'assets/animations/mist.json';
+      default:
+        return 'assets/animations/clear.json';
+    }
   }
 
   String weekDay(int day) {

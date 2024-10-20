@@ -3,6 +3,7 @@ class WeatherEntity {
   String? country;
   DateTime? dateTime;
   String? weather;
+  int? condition;
   double? temp;
   double? maxTemp;
   double? minTemp;
@@ -16,6 +17,7 @@ class WeatherEntity {
       this.country,
       this.dateTime,
       this.weather,
+      this.condition,
       this.temp,
       this.maxTemp,
       this.minTemp,

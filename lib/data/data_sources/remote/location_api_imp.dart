@@ -27,10 +27,18 @@ class LocationApiImp implements LocationApi {
       throw 'Service disabled';
     }
     _permission = await _geolocatorPlatform!.checkPermission();
-    if (await checkPermission()) {
+    if (await checkPermission() == false) {
       await requestLocationPermission();
+      if (_permission == LocationPermission.whileInUse ||
+          _permission == LocationPermission.always) {
+        _currentPosition = await _geolocatorPlatform!.getCurrentPosition();
+        // _currentAddress
+      } else {
+        throw 'Permission denied';
+      }
     } else {
-      if (_permission == LocationPermission.whileInUse) {
+      if (_permission == LocationPermission.whileInUse ||
+          _permission == LocationPermission.always) {
         _currentPosition = await _geolocatorPlatform!.getCurrentPosition();
         // _currentAddress
       } else {
@@ -43,7 +51,8 @@ class LocationApiImp implements LocationApi {
   @override
   requestLocationPermission() async {
     _permission = await _geolocatorPlatform!.requestPermission();
-    if (_permission == LocationPermission.whileInUse) {
+    if (_permission == LocationPermission.whileInUse ||
+        _permission == LocationPermission.always) {
       _currentPosition = await _geolocatorPlatform!.getCurrentPosition();
       return _currentPosition;
       // _currentAddress

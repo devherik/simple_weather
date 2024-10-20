@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:lottie/lottie.dart';
 import 'package:simple_weather_app/data/data_sources/remote/location_api_imp.dart';
 import 'package:simple_weather_app/data/data_sources/remote/weather_api_imp.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
@@ -90,30 +91,41 @@ class _HomePageState extends State<HomePage> {
                                         )
                                       ],
                                     )),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text(
-                                      weather.cityName!,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              .2,
-                                      width: MediaQuery.of(context).size.width,
-                                      child: ListView.builder(
-                                        padding: const EdgeInsets.all(4),
-                                        itemCount: 4,
-                                        scrollDirection: Axis.horizontal,
-                                        itemBuilder: (context, index) =>
-                                            weatherCard(
-                                                weather.forecast[index]),
+                                Expanded(
+                                  flex: 4,
+                                  child: Lottie.asset(
+                                      'assets/animations/clear.json'),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        weather.cityName!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                .2,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: ListView.builder(
+                                          padding: const EdgeInsets.all(4),
+                                          itemCount: 4,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (context, index) =>
+                                              weatherCard(
+                                                  weather.forecast[index]),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 )
                               ],
                             ),

@@ -45,7 +45,6 @@ class LocationApiImp implements LocationApi {
         throw 'Permission denied';
       }
     }
-    return _currentPosition;
   }
 
   @override

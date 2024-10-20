@@ -126,10 +126,13 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             } else {
-              _locationApi.requestLocationPermission();
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return FutureBuilder(
+                  future: _locationApi.requestLocationPermission(),
+                  builder: (context, snapshot) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  });
             }
           }),
     );

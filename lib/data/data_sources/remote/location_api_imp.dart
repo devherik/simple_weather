@@ -45,6 +45,7 @@ class LocationApiImp implements LocationApi {
     _permission = await _geolocatorPlatform!.requestPermission();
     if (_permission == LocationPermission.whileInUse) {
       _currentPosition = await _geolocatorPlatform!.getCurrentPosition();
+      return _currentPosition;
       // _currentAddress
     } else {
       throw 'Permission denied';

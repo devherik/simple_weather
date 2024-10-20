@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:simple_weather_app/data/data_sources/remote/location_api_imp.dart';
 import 'package:simple_weather_app/data/data_sources/remote/weather_api_imp.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
@@ -141,7 +142,7 @@ class _HomePageState extends State<HomePage> {
   Widget weatherCard(WeatherEntity weather) {
     return Column(
       children: [
-        const Icon(Icons.sunny),
+        const Icon(Iconsax.cloud_sunny),
         Text('${weather.temp!.toStringAsFixed(0)}°')
       ],
     );

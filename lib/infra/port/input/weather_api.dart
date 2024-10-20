@@ -6,4 +6,5 @@ abstract class WeatherApi<T> {
   T getWeatherByCity(String city);
   T getWeatherByLocation(double lat, double lon);
   T getForecastByCity(String city);
+  T getForecastByLocation(double lat, double lon);
 }

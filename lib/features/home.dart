@@ -30,23 +30,51 @@ class _HomePageState extends State<HomePage> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+        appBar: AppBar(
+          leading: Builder(
+              builder: (context) => IconButton(
+                    icon: Icon(
+                      Iconsax.menu_board,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                    onPressed: () => showModalBottomSheet(
+                      context: context,
+                      builder: (context) => modalBottomSheetLocations(),
+                    ),
+                  )),
+          actions: [
+            Builder(
+              builder: (context) => IconButton(
+                icon: Icon(
+                  Iconsax.refresh,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                onPressed: () async => _controller.updateWeather(),
+              ),
+            )
+          ],
+        ),
         body: FutureBuilder(
             future: _controller.initController(),
             builder: (context, snapshot) {
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                      maxWidth: max(screenWidth, minWidht),
-                      minWidth: minWidht,
-                      minHeight: max(screenHeight, minHeight)),
-                  child: FutureBuilder(
-                    future: _controller.getWeatherByLocation(),
-                    builder: (context, weatherSnapshot) {
-                      if (weatherSnapshot.hasData) {
-                        WeatherEntity weather =
-                            weatherSnapshot.data as WeatherEntity;
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxWidth: max(screenWidth, minWidht),
+                    minWidth: minWidht,
+                    minHeight: max(screenHeight, minHeight)),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
+                  child: ValueListenableBuilder(
+                    valueListenable: _controller.weather$,
+                    builder: (context, value, child) {
+                      if (value.condition == 0) {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        );
+                      } else {
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,14 +86,14 @@ class _HomePageState extends State<HomePage> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '${weather.temp!.toStringAsFixed(0)}°',
+                                      '${value.temp!.toStringAsFixed(0)}°',
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleLarge,
                                     ),
                                     Text(
-                                      day,
+                                      '$day - ${value.getHour()}',
                                       textAlign: TextAlign.center,
                                       style:
                                           Theme.of(context).textTheme.bodyLarge,
@@ -75,43 +103,54 @@ class _HomePageState extends State<HomePage> {
                             Expanded(
                               flex: 4,
                               child: Lottie.asset(
-                                  withWeatherAnimation(weather.condition!)),
+                                  withWeatherAnimation(value.condition!)),
                             ),
                             Expanded(
-                              flex: 3,
+                              flex: 2,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
-                                    weather.cityName!,
+                                    value.cityName!,
                                     style:
                                         Theme.of(context).textTheme.bodyLarge,
                                   ),
                                   global.verySmallBoxSpace,
                                   SizedBox(
-                                    height:
-                                        MediaQuery.of(context).size.height * .2,
+                                      width: MediaQuery.of(context).size.width *
+                                          .7,
+                                      child: Divider(
+                                        thickness: .5,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .inversePrimary,
+                                      )),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        .10,
                                     width: MediaQuery.of(context).size.width,
                                     child: ListView.builder(
-                                      padding: const EdgeInsets.all(8),
-                                      itemCount: 5,
-                                      itemExtent:
-                                          MediaQuery.of(context).size.width *
-                                              .17,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) =>
-                                          weatherCard(weather.forecast[index]),
-                                    ),
+                                        padding: const EdgeInsets.all(8),
+                                        itemCount: 9,
+                                        itemExtent:
+                                            MediaQuery.of(context).size.width *
+                                                .17,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index) {
+                                          try {
+                                            return weatherCard(
+                                                value.forecast[index]);
+                                          } catch (e) {
+                                            print(e.toString());
+                                          }
+                                          return const SizedBox();
+                                        }),
                                   )
                                 ],
                               ),
                             )
                           ],
-                        );
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
                         );
                       }
                     },
@@ -121,11 +160,24 @@ class _HomePageState extends State<HomePage> {
             }));
   }
 
+  Widget modalBottomSheetLocations() {
+    return Container(
+      height: MediaQuery.of(context).size.height * .4,
+    );
+  }
+
   Widget weatherCard(WeatherEntity weather) {
     return Column(
       children: [
-        const Icon(Iconsax.cloud_sunny),
-        Text('${weather.temp!.toStringAsFixed(0)}°')
+        withWeatherIcon(weather.condition!),
+        Text(
+          '${weather.temp!.toStringAsFixed(0)}°',
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
+        Text(
+          '${weather.dateTime!.hour.toString()}hr',
+          style: Theme.of(context).textTheme.labelMedium,
+        ),
       ],
     );
   }
@@ -151,22 +203,43 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Icon withWeatherIcon(int code) {
+    switch (code) {
+      case >= 200 && < 300:
+        return const Icon(Iconsax.cloud_lightning, color: global.blue);
+      case >= 300 && < 400:
+        return const Icon(Iconsax.cloud_minus, color: global.blue);
+      case >= 500 && < 600:
+        return const Icon(Iconsax.cloud_minus, color: global.blue);
+      case >= 600 && < 700:
+        return const Icon(Iconsax.cloud_snow, color: Colors.white);
+      case 701:
+        return const Icon(Iconsax.cloud_fog, color: Colors.grey);
+      case 800:
+        return Icon(Iconsax.sun_1, color: Colors.yellow.shade200);
+      case >= 800 && < 900:
+        return const Icon(Iconsax.cloud_fog, color: Colors.white);
+      default:
+        return Icon(Iconsax.cloud_sunny, color: Colors.yellow.shade200);
+    }
+  }
+
   String weekDay(int day) {
     switch (day) {
       case 1:
-        return 'SEGUNDA';
+        return 'Segunda';
       case 2:
-        return 'TERÇA';
+        return 'Terça';
       case 3:
-        return 'QUARTA';
+        return 'Quarta';
       case 4:
-        return 'QUINTA';
+        return 'Quinta';
       case 5:
-        return 'SEXTA';
+        return 'Sexta';
       case 6:
-        return 'SÁBADO';
+        return 'Sábado';
       case 7:
-        return 'DOMINGO';
+        return 'Domingo';
       default:
         return 'não sei';
     }

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:simple_weather_app/data/data_sources/remote/location_api_imp.dart';
 import 'package:simple_weather_app/data/data_sources/remote/weather_api_imp.dart';
@@ -13,11 +16,25 @@ class Controller {
   final LocationApi _locationApi = LocationApiImp.instance;
   final WeatherApi _weatherApi = WeatherApiImp.instance;
 
+  late Position location;
+  late ValueNotifier<WeatherEntity> weather$ = ValueNotifier<WeatherEntity>(
+      WeatherEntity('', '', DateTime.now(), '', 0, 20, 20, 20, 20,
+          DateTime.now(), DateTime.now()));
+
   final String _weatherApiKey = '41bdaa6c0895ca108bf29a888bdf885e';
 
   initController() async {
     await _weatherApi.initAPI(_weatherApiKey);
+    location = await _locationApi.getCurrentLocation();
+    weather$.value = await getWeatherByLocation();
   }
+
+  updateWeather() async {
+    weather$.value = await getWeatherByCity('Timóteo');
+  }
+
+  WeatherEntity getWeather() => weather$.value;
+  Future<Position> getLocation() async => location;
 
   Future<WeatherEntity> getWeatherByLocation() async {
     final Position location = await _locationApi.getCurrentLocation();

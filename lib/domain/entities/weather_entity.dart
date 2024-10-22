@@ -25,6 +25,8 @@ class WeatherEntity {
       this.sunRise,
       this.sunSet);
 
+  String getHour() => '${dateTime!.hour}:${dateTime!.minute}';
+
   @override
   String toString() {
     return '$cityName, $dateTime\n$weather\n$temp\nMax: $maxTemp\nMin: $minTemp';

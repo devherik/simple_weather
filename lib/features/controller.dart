@@ -16,8 +16,8 @@ class Controller {
   final LocationApi _locationApi = LocationApiImp.instance;
   final WeatherApi _weatherApi = WeatherApiImp.instance;
 
-  late Position location;
-  late ValueNotifier<WeatherEntity> weather$ = ValueNotifier<WeatherEntity>(
+  late ValueNotifier<Position> location$;
+  ValueNotifier<WeatherEntity> weather$ = ValueNotifier<WeatherEntity>(
       WeatherEntity('', '', DateTime.now(), '', 0, 20, 20, 20, 20,
           DateTime.now(), DateTime.now()));
 
@@ -25,16 +25,17 @@ class Controller {
 
   initController() async {
     await _weatherApi.initAPI(_weatherApiKey);
-    location = await _locationApi.getCurrentLocation();
+    location$ =
+        ValueNotifier<Position>(await _locationApi.getCurrentLocation());
     weather$.value = await getWeatherByLocation();
   }
 
   updateWeather() async {
-    weather$.value = await getWeatherByCity('Timóteo');
+    weather$.value = await getWeatherByLocation();
   }
 
   WeatherEntity getWeather() => weather$.value;
-  Future<Position> getLocation() async => location;
+  Future<Position> getLocation() async => location$.value;
 
   Future<WeatherEntity> getWeatherByLocation() async {
     final Position location = await _locationApi.getCurrentLocation();

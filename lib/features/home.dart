@@ -33,9 +33,9 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           leading: Builder(
               builder: (context) => IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Iconsax.menu_board,
-                      color: Theme.of(context).colorScheme.inversePrimary,
+                      color: global.blue,
                     ),
                     onPressed: () => showModalBottomSheet(
                       context: context,
@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                                         itemCount: 9,
                                         itemExtent:
                                             MediaQuery.of(context).size.width *
-                                                .17,
+                                                .20,
                                         scrollDirection: Axis.horizontal,
                                         itemBuilder: (context, index) {
                                           try {
@@ -162,12 +162,35 @@ class _HomePageState extends State<HomePage> {
 
   Widget modalBottomSheetLocations() {
     return Container(
-      height: MediaQuery.of(context).size.height * .4,
+      height: MediaQuery.of(context).size.height * .7,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              width: 30,
+              child: Divider(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  thickness: 3),
+            ),
+            global.smallBoxSpace,
+            Text(_controller.weather$.value.cityName!)
+          ],
+        ),
+      ),
     );
   }
 
   Widget weatherCard(WeatherEntity weather) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         withWeatherIcon(weather.condition!),
         Text(
@@ -212,13 +235,13 @@ class _HomePageState extends State<HomePage> {
       case >= 500 && < 600:
         return const Icon(Iconsax.cloud_minus, color: global.blue);
       case >= 600 && < 700:
-        return const Icon(Iconsax.cloud_snow, color: Colors.white);
+        return const Icon(Iconsax.cloud_snow, color: Colors.lightBlue);
       case 701:
         return const Icon(Iconsax.cloud_fog, color: Colors.grey);
       case 800:
         return Icon(Iconsax.sun_1, color: Colors.yellow.shade200);
       case >= 800 && < 900:
-        return const Icon(Iconsax.cloud_fog, color: Colors.white);
+        return const Icon(Iconsax.cloud_fog, color: Colors.pinkAccent);
       default:
         return Icon(Iconsax.cloud_sunny, color: Colors.yellow.shade200);
     }

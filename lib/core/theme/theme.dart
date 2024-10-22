@@ -30,27 +30,27 @@ abstract class AppTheme {
           inversePrimary: global.primaryDarkColor,
           inverseSurface: global.secondaryDarkColor),
       textTheme: TextTheme(
-        titleLarge: GoogleFonts.roboto(
+        titleLarge: GoogleFonts.ubuntu(
             fontSize: 96, letterSpacing: 1, color: global.primaryDarkColor),
-        titleMedium: GoogleFonts.roboto(
+        titleMedium: GoogleFonts.ubuntu(
             fontSize: 48, letterSpacing: 1.5, color: global.primaryDarkColor),
-        titleSmall: GoogleFonts.roboto(
+        titleSmall: GoogleFonts.ubuntu(
             fontSize: 24, letterSpacing: 2, color: global.primaryDarkColor),
-        bodyLarge: GoogleFonts.robotoMono(
+        bodyLarge: GoogleFonts.roboto(
             fontSize: 16, letterSpacing: 2, color: global.primaryDarkColor),
-        bodyMedium: GoogleFonts.robotoMono(
+        bodyMedium: GoogleFonts.roboto(
             fontSize: 12, letterSpacing: 2, color: global.primaryDarkColor),
-        bodySmall: GoogleFonts.robotoMono(
+        bodySmall: GoogleFonts.roboto(
             fontSize: 8, letterSpacing: 2, color: global.primaryDarkColor),
-        labelLarge: GoogleFonts.robotoMono(
+        labelLarge: GoogleFonts.roboto(
             fontSize: 16,
             letterSpacing: 2,
             color: global.primaryDarkColor.withOpacity(.8)),
-        labelMedium: GoogleFonts.robotoMono(
+        labelMedium: GoogleFonts.roboto(
             fontSize: 12,
             letterSpacing: 2,
             color: global.primaryDarkColor.withOpacity(.8)),
-        labelSmall: GoogleFonts.robotoMono(
+        labelSmall: GoogleFonts.roboto(
             fontSize: 8,
             letterSpacing: 2,
             color: global.primaryDarkColor.withOpacity(.8)),
@@ -84,27 +84,27 @@ abstract class AppTheme {
           inversePrimary: global.primaryLightColor,
           inverseSurface: global.secondaryLightColor),
       textTheme: TextTheme(
-        titleLarge: GoogleFonts.roboto(
+        titleLarge: GoogleFonts.ubuntu(
             fontSize: 96, letterSpacing: 1, color: global.primaryLightColor),
-        titleMedium: GoogleFonts.roboto(
+        titleMedium: GoogleFonts.ubuntu(
             fontSize: 48, letterSpacing: 1.5, color: global.primaryLightColor),
-        titleSmall: GoogleFonts.roboto(
+        titleSmall: GoogleFonts.ubuntu(
             fontSize: 25, letterSpacing: 2, color: global.primaryLightColor),
-        bodyLarge: GoogleFonts.robotoMono(
+        bodyLarge: GoogleFonts.roboto(
             fontSize: 16, letterSpacing: 2, color: global.primaryLightColor),
-        bodyMedium: GoogleFonts.robotoMono(
+        bodyMedium: GoogleFonts.roboto(
             fontSize: 12, letterSpacing: 2, color: global.primaryLightColor),
-        bodySmall: GoogleFonts.robotoMono(
+        bodySmall: GoogleFonts.roboto(
             fontSize: 8, letterSpacing: 2, color: global.primaryLightColor),
-        labelLarge: GoogleFonts.robotoMono(
+        labelLarge: GoogleFonts.roboto(
             fontSize: 16,
             letterSpacing: 2,
             color: global.primaryLightColor.withOpacity(.8)),
-        labelMedium: GoogleFonts.robotoMono(
+        labelMedium: GoogleFonts.roboto(
             fontSize: 12,
             letterSpacing: 2,
             color: global.primaryLightColor.withOpacity(.8)),
-        labelSmall: GoogleFonts.robotoMono(
+        labelSmall: GoogleFonts.roboto(
             fontSize: 8,
             letterSpacing: 2,
             color: global.primaryLightColor.withOpacity(.8)),

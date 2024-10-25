@@ -10,6 +10,7 @@ import 'package:simple_weather_app/infra/port/input/weather_api.dart';
 import 'package:weather/weather.dart';
 
 class Controller {
+  // change to a weather controller
   Controller._privateController();
   static final Controller instance = Controller._privateController();
 
@@ -38,9 +39,8 @@ class Controller {
   Future<Position> getLocation() async => location$.value;
 
   Future<WeatherEntity> getWeatherByLocation() async {
-    final Position location = await _locationApi.getCurrentLocation();
     final Weather value = await _weatherApi.getWeatherByLocation(
-        location.latitude, location.longitude);
+        location$.value.latitude, location$.value.longitude);
     final WeatherEntity weather = WeatherEntity(
         value.areaName,
         value.country,
@@ -53,8 +53,8 @@ class Controller {
         value.tempFeelsLike!.celsius,
         value.sunrise,
         value.sunset);
-    weather.forecast =
-        await getForecastByLocation(location.latitude, location.longitude);
+    weather.forecast = await getForecastByLocation(
+        location$.value.latitude, location$.value.longitude);
     return weather;
   }
 

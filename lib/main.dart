@@ -6,6 +6,8 @@ import 'package:simple_weather_app/infra/port/input/location_api.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // TODO: implemnts a local storage suchs as HIVE
+  // TODO: switch to here the initialization of the controller
   final LocationApi locationAPI = LocationApiImp.instance;
   await locationAPI.initAPI();
   runApp(const MyApp());

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:simple_weather_app/core/theme/theme.dart';
-import 'package:simple_weather_app/data/data_sources/remote/location_api_imp.dart';
 import 'package:simple_weather_app/features/home.dart';
-import 'package:simple_weather_app/infra/port/input/location_api.dart';
+import 'package:simple_weather_app/main_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // TODO: implemnts a local storage suchs as HIVE
-  // TODO: switch to here the initialization of the controller
-  final LocationApi locationAPI = LocationApiImp.instance;
-  await locationAPI.initAPI();
+  final MainController mainController = MainController.instance;
+  await mainController.initController();
   runApp(const MyApp());
 }
 

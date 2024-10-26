@@ -15,13 +15,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Controller _controller;
+  late WeatherController _weatherController;
   final minWidht = 320.0, minHeight = 800.0;
 
   @override
   void initState() {
     super.initState();
-    _controller = Controller.instance;
+    _weatherController = WeatherController.instance;
   }
 
   @override
@@ -49,13 +49,13 @@ class _HomePageState extends State<HomePage> {
                   Iconsax.refresh,
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
-                onPressed: () async => _controller.updateWeather(),
+                onPressed: () async => _weatherController.updateWeather(),
               ),
             )
           ],
         ),
         body: FutureBuilder(
-            future: _controller.initController(),
+            future: _weatherController.initController(),
             builder: (context, snapshot) {
               return ConstrainedBox(
                 constraints: BoxConstraints(
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
                   child: ValueListenableBuilder(
-                    valueListenable: _controller.weather$,
+                    valueListenable: _weatherController.weather$,
                     builder: (context, value, child) {
                       if (value.condition == 0) {
                         return Center(
@@ -180,12 +180,35 @@ class _HomePageState extends State<HomePage> {
                   thickness: 3),
             ),
             global.smallBoxSpace,
-            Text(_controller.weather$.value.cityName!)
+            Text(
+              'Minhas localizações',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            global.smallBoxSpace,
+            changeToCityLocationButton(),
           ],
         ),
       ),
     );
   }
+
+  Widget changeToCityLocationButton() => MaterialButton(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+        minWidth: MediaQuery.of(context).size.width,
+        onPressed: () async => _weatherController.weather$.value =
+            await _weatherController.getWeatherByCity('Timóteo'),
+        splashColor: Theme.of(context).colorScheme.secondary,
+        elevation: 2,
+        color: Theme.of(context).colorScheme.tertiary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Text(
+          'Timóteo',
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.inversePrimary,
+              letterSpacing: 3,
+              fontSize: 16),
+        ),
+      );
 
   Widget weatherCard(WeatherEntity weather) {
     return Column(

@@ -9,10 +9,10 @@ import 'package:simple_weather_app/infra/port/input/location_api.dart';
 import 'package:simple_weather_app/infra/port/input/weather_api.dart';
 import 'package:weather/weather.dart';
 
-class Controller {
-  // change to a weather controller
-  Controller._privateController();
-  static final Controller instance = Controller._privateController();
+class WeatherController {
+  WeatherController._privateConstructor();
+  static final WeatherController instance =
+      WeatherController._privateConstructor();
 
   final LocationApi _locationApi = LocationApiImp.instance;
   final WeatherApi _weatherApi = WeatherApiImp.instance;
@@ -32,6 +32,7 @@ class Controller {
   }
 
   updateWeather() async {
+    //TODO: update using the current city name
     weather$.value = await getWeatherByLocation();
   }
 

@@ -32,8 +32,7 @@ class WeatherController {
   }
 
   updateWeather() async {
-    //TODO: update using the current city name
-    weather$.value = await getWeatherByLocation();
+    weather$.value = await getWeatherByCity(_locationApi.getCurrentAddress());
   }
 
   WeatherEntity getWeather() => weather$.value;
@@ -56,6 +55,7 @@ class WeatherController {
         value.sunset);
     weather.forecast = await getForecastByLocation(
         location$.value.latitude, location$.value.longitude);
+    _locationApi.updateCurrentAddress(weather.cityName);
     return weather;
   }
 
@@ -74,6 +74,7 @@ class WeatherController {
         value.sunrise,
         value.sunset);
     weather.forecast = await getForecastByCity(city);
+    _locationApi.updateCurrentAddress(weather.cityName);
     return weather;
   }
 

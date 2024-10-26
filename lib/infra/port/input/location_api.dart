@@ -3,5 +3,6 @@ abstract class LocationApi<T> {
   T getCurrentLocation();
   T checkPermission();
   T getCurrentAddress();
+  updateCurrentAddress(T newAddress);
   T requestLocationPermission();
 }

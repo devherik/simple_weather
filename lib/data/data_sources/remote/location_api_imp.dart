@@ -71,4 +71,7 @@ class LocationApiImp implements LocationApi {
 
   @override
   String getCurrentAddress() => currentAddress;
+
+  @override
+  updateCurrentAddress(newAddress) => currentAddress = newAddress;
 }

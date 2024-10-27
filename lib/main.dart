@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simple_weather_app/core/theme/theme.dart';
-import 'package:simple_weather_app/features/home.dart';
+import 'package:simple_weather_app/features/home/home.dart';
 import 'package:simple_weather_app/main_controller.dart';
 
 void main() async {

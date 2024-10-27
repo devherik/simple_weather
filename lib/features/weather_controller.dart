@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:simple_weather_app/data/data_sources/remote/location_api_imp.dart';
 import 'package:simple_weather_app/data/data_sources/remote/weather_api_imp.dart';
@@ -22,7 +23,7 @@ class WeatherController {
       WeatherEntity('', '', DateTime.now(), '', 0, 20, 20, 20, 20,
           DateTime.now(), DateTime.now()));
 
-  final String _weatherApiKey = '41bdaa6c0895ca108bf29a888bdf885e';
+  final String _weatherApiKey = dotenv.env['WEATHER_KEY']!;
 
   initController() async {
     await _weatherApi.initAPI(_weatherApiKey);

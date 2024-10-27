@@ -6,7 +6,6 @@ import 'package:lottie/lottie.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/features/weather_controller.dart';
 import 'package:simple_weather_app/core/constant/globals.dart' as global;
-import 'package:weather/weather.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

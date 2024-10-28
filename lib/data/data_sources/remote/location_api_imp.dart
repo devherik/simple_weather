@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:simple_weather_app/infra/port/input/location_api.dart';
 
 class LocationApiImp implements LocationApi {
@@ -11,7 +13,7 @@ class LocationApiImp implements LocationApi {
   bool _servicePermission = false;
   GeolocatorPlatform? _geolocatorPlatform;
   LocationPermission? _permission;
-  String currentAddress = 'Timóteo';
+  String currentAddress = '';
 
   @override
   getCurrentLocation() async {
@@ -31,15 +33,27 @@ class LocationApiImp implements LocationApi {
       await requestLocationPermission();
       if (_permission == LocationPermission.whileInUse ||
           _permission == LocationPermission.always) {
-        _currentPosition = await _geolocatorPlatform!.getCurrentPosition();
-        // _currentAddress
+        _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
+            locationSettings:
+                const LocationSettings(accuracy: LocationAccuracy.high));
+        currentAddress = localStorage.getItem('PRIMARY_LOCATION') ?? '';
+        currentAddress == ''
+            ? await placemarkFromCoordinates(
+                    _currentPosition!.latitude, _currentPosition!.longitude)
+                .then((List<Placemark> places) {
+                Placemark place = places[0];
+                currentAddress = place.administrativeArea!;
+              })
+            : null;
       } else {
         throw 'Permission denied';
       }
     } else {
       if (_permission == LocationPermission.whileInUse ||
           _permission == LocationPermission.always) {
-        _currentPosition = await _geolocatorPlatform!.getCurrentPosition();
+        _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
+            locationSettings:
+                const LocationSettings(accuracy: LocationAccuracy.best));
         // _currentAddress
       } else {
         throw 'Permission denied';
@@ -52,7 +66,9 @@ class LocationApiImp implements LocationApi {
     _permission = await _geolocatorPlatform!.requestPermission();
     if (_permission == LocationPermission.whileInUse ||
         _permission == LocationPermission.always) {
-      _currentPosition = await _geolocatorPlatform!.getCurrentPosition();
+      _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
+          locationSettings:
+              const LocationSettings(accuracy: LocationAccuracy.best));
       return _currentPosition;
       // _currentAddress
     } else {

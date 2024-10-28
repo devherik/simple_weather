@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:simple_weather_app/core/constant/my_util.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/core/constant/globals.dart' as global;
@@ -89,8 +90,11 @@ class HomeWidgets {
   Widget changeToCityLocationButton(WeatherEntity weather) => MaterialButton(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         minWidth: MediaQuery.of(context).size.width,
-        onPressed: () async => _weatherController.weather$.value =
-            await _weatherController.getWeatherByCity(weather.cityName!),
+        onPressed: () async {
+          _weatherController.weather$.value =
+              await _weatherController.getWeatherByCity(weather.cityName!);
+          localStorage.setItem('PRIMARY_LOCATION', weather.cityName!);
+        },
         splashColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,
         color: Theme.of(context).colorScheme.primary,

@@ -27,9 +27,15 @@ class WeatherController {
 
   initController() async {
     await _weatherApi.initAPI(_weatherApiKey);
-    location$ =
-        ValueNotifier<Position>(await _locationApi.getCurrentLocation());
-    weather$.value = await getWeatherByLocation();
+    if (_locationApi.getCurrentAddress() == '') {
+      location$ =
+          ValueNotifier<Position>(await _locationApi.getCurrentLocation());
+      weather$.value = await getWeatherByLocation();
+    } else {
+      location$ =
+          ValueNotifier<Position>(await _locationApi.getCurrentLocation());
+      weather$.value = await getWeatherByCity(_locationApi.getCurrentAddress());
+    }
   }
 
   updateWeather() async {

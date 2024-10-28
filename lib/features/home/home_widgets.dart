@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:simple_weather_app/core/constant/my_util.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/core/constant/globals.dart' as global;
@@ -33,11 +34,20 @@ class HomeWidgets {
                   thickness: 3),
             ),
             global.smallBoxSpace,
-            Text(
-              'Minhas localizações',
-              style: Theme.of(context).textTheme.titleSmall,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                iconButton(Icon(
+                  Iconsax.search_normal,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                )),
+                iconButton(Icon(
+                  Iconsax.setting,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ))
+              ],
             ),
-            global.smallBoxSpace,
+            global.verySmallBoxSpace,
             // TODO: locations must be storage and instanciated with the app initialization
             FutureBuilder(
                 future: _weatherController.getWeatherByCity('Timóteo'),
@@ -46,10 +56,11 @@ class HomeWidgets {
                     return changeToCityLocationButton(
                         snapshot.data as WeatherEntity);
                   } else {
-                    return changeToCityLocationButtonLoading();
+                    return util.loaderBoxAnimation(
+                        context, 20, MediaQuery.of(context).size.width * .5);
                   }
                 }),
-            global.smallBoxSpace,
+            global.verySmallBoxSpace,
             FutureBuilder(
                 future:
                     _weatherController.getWeatherByCity('Santana do Paraíso'),
@@ -58,15 +69,22 @@ class HomeWidgets {
                     return changeToCityLocationButton(
                         snapshot.data as WeatherEntity);
                   } else {
-                    return changeToCityLocationButtonLoading();
+                    return util.loaderBoxAnimation(
+                        context, 20, MediaQuery.of(context).size.width * .5);
                   }
                 }),
-            global.smallBoxSpace,
+            global.verySmallBoxSpace,
           ],
         ),
       ),
     );
   }
+
+  Builder iconButton(Icon icon) => Builder(
+      builder: (context) => IconButton(
+            icon: icon,
+            onPressed: () {},
+          ));
 
   Widget changeToCityLocationButton(WeatherEntity weather) => MaterialButton(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
@@ -74,48 +92,45 @@ class HomeWidgets {
         onPressed: () async => _weatherController.weather$.value =
             await _weatherController.getWeatherByCity(weather.cityName!),
         splashColor: Theme.of(context).colorScheme.secondary,
-        elevation: 2,
-        color: Theme.of(context).colorScheme.tertiary,
+        elevation: 0,
+        color: Theme.of(context).colorScheme.primary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Text(
-          '${weather.cityName!} - ${weather.temp!.toStringAsFixed(0)}°',
-          style: TextStyle(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Iconsax.location,
               color: Theme.of(context).colorScheme.inversePrimary,
-              letterSpacing: 3,
-              fontSize: 16),
-        ),
-      );
-
-  Widget changeToCityLocationButtonLoading() => MaterialButton(
-        // TODO: add an animation
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-        minWidth: MediaQuery.of(context).size.width,
-        onPressed: () async {},
-        splashColor: Theme.of(context).colorScheme.secondary,
-        elevation: 2,
-        color: Theme.of(context).colorScheme.tertiary,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Text(
-          '',
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.inversePrimary,
-              letterSpacing: 3,
-              fontSize: 16),
+            ),
+            Text(
+              ' ${weather.cityName!}   ${weather.temp!.toStringAsFixed(0)}° ',
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  letterSpacing: 3,
+                  fontSize: 16),
+            ),
+            util.withWeatherIcon(weather.condition!),
+          ],
         ),
       );
 
   Widget weatherCard(WeatherEntity weather) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        util.withWeatherIcon(weather.condition!),
-        Text(
-          '${weather.temp!.toStringAsFixed(0)}°',
-          style: Theme.of(context).textTheme.labelLarge,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '${weather.temp!.toStringAsFixed(0)}° ',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            util.withWeatherIcon(weather.condition!),
+          ],
         ),
         Text(
-          '${weather.dateTime!.hour.toString()}hr',
+          '${weather.dateTime!.hour.toString()}:00',
           style: Theme.of(context).textTheme.labelMedium,
         ),
       ],

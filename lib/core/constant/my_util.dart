@@ -34,15 +34,23 @@ class MyUtil {
       case >= 300 && < 400:
         return 'assets/animations/partly_rain.json';
       case >= 500 && < 600:
-        return 'assets/animations/storm.json';
+        return DateTime.now().hour > 18 || DateTime.now().hour < 6
+            ? 'assets/animations/rainy_night.json'
+            : 'assets/animations/rainy.json';
       case >= 600 && < 700:
-        return 'assets/animations/snow.json';
+        return DateTime.now().hour > 18 || DateTime.now().hour < 6
+            ? 'assets/animations/snow_day.json'
+            : 'assets/animations/snow_night.json';
       case 701:
         return 'assets/animations/mist.json';
       case 800:
-        return 'assets/animations/clear.json';
+        return DateTime.now().hour > 18 || DateTime.now().hour < 6
+            ? 'assets/animations/clear.json'
+            : 'assets/animations/clear_night.json';
       case >= 800 && < 900:
-        return 'assets/animations/mist.json';
+        return DateTime.now().hour > 18 || DateTime.now().hour < 6
+            ? 'assets/animations/cloud_night.json'
+            : 'assets/animations/cloud.json';
       default:
         return 'assets/animations/clear.json';
     }
@@ -57,15 +65,23 @@ class MyUtil {
       case >= 500 && < 600:
         return const Icon(Iconsax.cloud_minus, color: global.blue);
       case >= 600 && < 700:
-        return const Icon(Iconsax.cloud_snow, color: Colors.lightBlue);
+        return const Icon(Iconsax.cloud_snow, color: Colors.grey);
       case 701:
         return const Icon(Iconsax.cloud_fog, color: Colors.grey);
       case 800:
         return Icon(Iconsax.sun_1, color: Colors.yellow.shade200);
       case >= 800 && < 900:
-        return const Icon(Iconsax.cloud_fog, color: Colors.pinkAccent);
+        return const Icon(Iconsax.cloud_fog, color: Colors.white);
       default:
         return Icon(Iconsax.cloud_sunny, color: Colors.yellow.shade200);
     }
   }
+
+  loaderBoxAnimation(BuildContext context, double heigh, double widght) =>
+      SizedBox(
+          width: widght,
+          child: LinearProgressIndicator(
+            minHeight: heigh,
+            color: Theme.of(context).colorScheme.tertiary,
+          ));
 }

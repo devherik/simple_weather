@@ -35,7 +35,7 @@ class LocationApiImp implements LocationApi {
           _permission == LocationPermission.always) {
         _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
             locationSettings:
-                const LocationSettings(accuracy: LocationAccuracy.high));
+                const LocationSettings(accuracy: LocationAccuracy.best));
         currentAddress = localStorage.getItem('PRIMARY_LOCATION') ?? '';
         currentAddress == ''
             ? await placemarkFromCoordinates(

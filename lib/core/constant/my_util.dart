@@ -71,7 +71,7 @@ class MyUtil {
       case 800:
         return Icon(Iconsax.sun_1, color: Colors.yellow.shade200);
       case >= 800 && < 900:
-        return const Icon(Iconsax.cloud_fog, color: Colors.white);
+        return const Icon(Iconsax.cloud_fog, color: Colors.grey);
       default:
         return Icon(Iconsax.cloud_sunny, color: Colors.yellow.shade200);
     }

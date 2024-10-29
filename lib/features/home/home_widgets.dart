@@ -49,31 +49,43 @@ class HomeWidgets {
               ],
             ),
             global.verySmallBoxSpace,
-            // TODO: locations must be storage and instanciated with the app initialization
-            FutureBuilder(
-                future: _weatherController.getWeatherByCity('Timóteo'),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return changeToCityLocationButton(
-                        snapshot.data as WeatherEntity);
+            SizedBox(
+              height: 300,
+              child: ListView.builder(
+                itemCount: 3,
+                itemExtent: 80,
+                itemBuilder: (context, index) {
+                  final List<String> list =
+                      _weatherController.getUserLocations();
+                  if (list[index] == '') {
+                    return FutureBuilder(
+                        future: _weatherController.getWeatherByLocation(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return currentLocationButton(
+                                snapshot.data as WeatherEntity);
+                          } else {
+                            return util.loaderBoxAnimation(context, 20,
+                                MediaQuery.of(context).size.width * .5);
+                          }
+                        });
                   } else {
-                    return util.loaderBoxAnimation(
-                        context, 20, MediaQuery.of(context).size.width * .5);
+                    return FutureBuilder(
+                        future:
+                            _weatherController.getWeatherByCity(list[index]),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return changeToCityLocationButton(
+                                snapshot.data as WeatherEntity);
+                          } else {
+                            return util.loaderBoxAnimation(context, 20,
+                                MediaQuery.of(context).size.width * .5);
+                          }
+                        });
                   }
-                }),
-            global.verySmallBoxSpace,
-            FutureBuilder(
-                future:
-                    _weatherController.getWeatherByCity('Santana do Paraíso'),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return changeToCityLocationButton(
-                        snapshot.data as WeatherEntity);
-                  } else {
-                    return util.loaderBoxAnimation(
-                        context, 20, MediaQuery.of(context).size.width * .5);
-                  }
-                }),
+                },
+              ),
+            ),
             global.verySmallBoxSpace,
           ],
         ),
@@ -103,7 +115,40 @@ class HomeWidgets {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Iconsax.location,
+              localStorage.getItem('PRIMARY_LOCATION') == weather.cityName
+                  ? Iconsax.location5
+                  : Iconsax.location,
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
+            Text(
+              ' ${weather.cityName!}   ${weather.temp!.toStringAsFixed(0)}° ',
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  letterSpacing: 3,
+                  fontSize: 16),
+            ),
+            util.withWeatherIcon(weather.condition!),
+          ],
+        ),
+      );
+
+  Widget currentLocationButton(WeatherEntity weather) => MaterialButton(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+        minWidth: MediaQuery.of(context).size.width,
+        onPressed: () async {
+          _weatherController.weather$.value =
+              await _weatherController.getWeatherByCity(weather.cityName!);
+          localStorage.setItem('PRIMARY_LOCATION', weather.cityName!);
+        },
+        splashColor: Theme.of(context).colorScheme.secondary,
+        elevation: 0,
+        color: Theme.of(context).colorScheme.primary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Iconsax.location_add,
               color: Theme.of(context).colorScheme.inversePrimary,
             ),
             Text(

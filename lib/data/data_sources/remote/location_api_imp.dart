@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:simple_weather_app/infra/port/input/location_api.dart';
@@ -14,6 +13,7 @@ class LocationApiImp implements LocationApi {
   GeolocatorPlatform? _geolocatorPlatform;
   LocationPermission? _permission;
   String currentAddress = '';
+  final List<String> userLocations = [];
 
   @override
   getCurrentLocation() async {
@@ -36,15 +36,11 @@ class LocationApiImp implements LocationApi {
         _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
             locationSettings:
                 const LocationSettings(accuracy: LocationAccuracy.best));
-        currentAddress = localStorage.getItem('PRIMARY_LOCATION') ?? '';
-        currentAddress == ''
-            ? await placemarkFromCoordinates(
-                    _currentPosition!.latitude, _currentPosition!.longitude)
-                .then((List<Placemark> places) {
-                Placemark place = places[0];
-                currentAddress = place.administrativeArea!;
-              })
-            : null;
+
+        userLocations.add(localStorage.getItem('PRIMARY_LOCATION') ?? '');
+        userLocations.add(
+            localStorage.getItem('SECONDARY_LOCATION') ?? 'Santana do Paraíso');
+        userLocations.add(localStorage.getItem('TERTIARY_LOCATION') ?? '');
       } else {
         throw 'Permission denied';
       }
@@ -54,6 +50,11 @@ class LocationApiImp implements LocationApi {
         _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
             locationSettings:
                 const LocationSettings(accuracy: LocationAccuracy.best));
+
+        userLocations.add(localStorage.getItem('PRIMARY_LOCATION') ?? '');
+        userLocations.add(
+            localStorage.getItem('SECONDARY_LOCATION') ?? 'Santana do Paraíso');
+        userLocations.add(localStorage.getItem('TERTIARY_LOCATION') ?? '');
         // _currentAddress
       } else {
         throw 'Permission denied';
@@ -90,4 +91,14 @@ class LocationApiImp implements LocationApi {
 
   @override
   updateCurrentAddress(newAddress) => currentAddress = newAddress;
+
+  @override
+  List<String> getUserLocations() {
+    return userLocations;
+  }
+
+  @override
+  setUserLocation(newLocation) {
+    for (var location in userLocations) {}
+  }
 }

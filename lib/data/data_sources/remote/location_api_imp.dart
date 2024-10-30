@@ -36,11 +36,10 @@ class LocationApiImp implements LocationApi {
         _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
             locationSettings:
                 const LocationSettings(accuracy: LocationAccuracy.best));
-
-        userLocations.add(localStorage.getItem('PRIMARY_LOCATION') ?? '');
-        userLocations.add(
-            localStorage.getItem('SECONDARY_LOCATION') ?? 'Santana do Paraíso');
-        userLocations.add(localStorage.getItem('TERTIARY_LOCATION') ?? '');
+        int index = 0;
+        do {
+          userLocations.add(localStorage.getItem('LOCATION_$index') ?? '');
+        } while (localStorage.getItem('LOCATION_$index') != '');
       } else {
         throw 'Permission denied';
       }
@@ -50,11 +49,10 @@ class LocationApiImp implements LocationApi {
         _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
             locationSettings:
                 const LocationSettings(accuracy: LocationAccuracy.best));
-
-        userLocations.add(localStorage.getItem('PRIMARY_LOCATION') ?? '');
-        userLocations.add(
-            localStorage.getItem('SECONDARY_LOCATION') ?? 'Santana do Paraíso');
-        userLocations.add(localStorage.getItem('TERTIARY_LOCATION') ?? '');
+        int index = 0;
+        do {
+          userLocations.add(localStorage.getItem('LOCATION_$index') ?? '');
+        } while (localStorage.getItem('LOCATION_$index') != '');
         // _currentAddress
       } else {
         throw 'Permission denied';
@@ -99,6 +97,8 @@ class LocationApiImp implements LocationApi {
 
   @override
   setUserLocation(newLocation) {
-    for (var location in userLocations) {}
+    userLocations.last == ''
+        ? userLocations.last = newLocation
+        : userLocations.add(newLocation);
   }
 }

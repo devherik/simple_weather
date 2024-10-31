@@ -45,8 +45,8 @@ class MyUtil {
         return 'assets/animations/mist.json';
       case 800:
         return DateTime.now().hour > 18 || DateTime.now().hour < 6
-            ? 'assets/animations/clear.json'
-            : 'assets/animations/clear_night.json';
+            ? 'assets/animations/clear_night.json'
+            : 'assets/animations/clear.json';
       case >= 800 && < 900:
         return DateTime.now().hour > 18 || DateTime.now().hour < 6
             ? 'assets/animations/cloud_night.json'

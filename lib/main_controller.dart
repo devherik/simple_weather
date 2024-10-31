@@ -12,6 +12,9 @@ class MainController {
 
   initController() async {
     await initLocalStorage();
+    localStorage.setItem('LOCATION_0', 'Timóteo');
+    localStorage.setItem('LOCATION_1', 'Santana do Paraíso');
+    localStorage.setItem('LOCATION_2', 'Ouro Branco');
     await _locationApi.initAPI();
     await dotenv.load(fileName: '.env');
   }

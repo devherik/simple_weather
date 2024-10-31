@@ -17,8 +17,6 @@ class HomeWidgets {
 
   Widget modalBottomSheetLocations() {
     return Container(
-      height: MediaQuery.of(context).size.height * .7,
-      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
         borderRadius: const BorderRadius.only(
@@ -35,41 +33,53 @@ class HomeWidgets {
                   thickness: 3),
             ),
             global.smallBoxSpace,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                iconButton(Icon(
-                  Iconsax.search_normal,
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                )),
-                iconButton(Icon(
-                  Iconsax.setting,
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                ))
-              ],
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      iconButton(Icon(
+                        Iconsax.search_normal,
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      )),
+                      iconButton(Icon(
+                        Iconsax.setting,
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ))
+                    ],
+                  ),
+                  FutureBuilder(
+                      future: _weatherController.getWeatherByLocation(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return currentLocationButton(
+                              snapshot.data as WeatherEntity);
+                        } else {
+                          return util.loaderBoxAnimation(context, 20,
+                              MediaQuery.of(context).size.width * .5);
+                        }
+                      }),
+                  SizedBox(
+                      width: 300,
+                      child: Divider(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        thickness: .5,
+                      )),
+                ],
+              ),
             ),
             global.verySmallBoxSpace,
-            SizedBox(
-              height: 300,
+            Expanded(
+              flex: 3,
               child: ListView.builder(
-                itemCount: 3,
+                itemCount: _weatherController.getUserLocations().length,
                 itemExtent: 80,
                 itemBuilder: (context, index) {
                   final List<String> list =
                       _weatherController.getUserLocations();
-                  if (list[index] == '') {
-                    return FutureBuilder(
-                        future: _weatherController.getWeatherByLocation(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return currentLocationButton(
-                                snapshot.data as WeatherEntity);
-                          } else {
-                            return util.loaderBoxAnimation(context, 20,
-                                MediaQuery.of(context).size.width * .5);
-                          }
-                        });
-                  } else {
+                  if (list[index].isNotEmpty) {
                     return FutureBuilder(
                         future:
                             _weatherController.getWeatherByCity(list[index]),
@@ -82,11 +92,12 @@ class HomeWidgets {
                                 MediaQuery.of(context).size.width * .5);
                           }
                         });
+                  } else {
+                    return const SizedBox();
                   }
                 },
               ),
             ),
-            global.verySmallBoxSpace,
           ],
         ),
       ),
@@ -105,7 +116,7 @@ class HomeWidgets {
         onPressed: () async {
           _weatherController.weather$.value =
               await _weatherController.getWeatherByCity(weather.cityName!);
-          localStorage.setItem('PRIMARY_LOCATION', weather.cityName!);
+          localStorage.setItem('LOCATION_0', weather.cityName!);
         },
         splashColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,
@@ -144,21 +155,34 @@ class HomeWidgets {
         elevation: 0,
         color: Theme.of(context).colorScheme.primary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Row(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
-              Iconsax.location_add,
-              color: Theme.of(context).colorScheme.inversePrimary,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Iconsax.location_add,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                Text(
+                  ' Localização atual   ${weather.temp!.toStringAsFixed(0)}° ',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      letterSpacing: 3,
+                      fontSize: 16),
+                ),
+                util.withWeatherIcon(weather.condition!),
+              ],
             ),
             Text(
-              ' ${weather.cityName!}   ${weather.temp!.toStringAsFixed(0)}° ',
+              weather.cityName!,
               style: TextStyle(
                   color: Theme.of(context).colorScheme.inversePrimary,
                   letterSpacing: 3,
-                  fontSize: 16),
-            ),
-            util.withWeatherIcon(weather.condition!),
+                  fontSize: 12),
+            )
           ],
         ),
       );

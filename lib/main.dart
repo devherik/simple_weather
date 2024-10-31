@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:simple_weather_app/core/router/router.dart';
 import 'package:simple_weather_app/core/theme/theme.dart';
-import 'package:simple_weather_app/features/home/home.dart';
 import 'package:simple_weather_app/main_controller.dart';
 
 void main() async {
@@ -19,13 +19,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Simple Weather',
       theme: AppTheme.light,
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.system,
       darkTheme: AppTheme.dark,
-      home: const HomePage(),
+      routerConfig: AppRouter().router,
     );
   }
 }

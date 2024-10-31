@@ -37,9 +37,11 @@ class LocationApiImp implements LocationApi {
             locationSettings:
                 const LocationSettings(accuracy: LocationAccuracy.best));
         int index = 0;
+        //TODO: doenst work
         do {
           userLocations.add(localStorage.getItem('LOCATION_$index') ?? '');
-        } while (localStorage.getItem('LOCATION_$index') != '');
+          index++;
+        } while (localStorage.getItem('LOCATION_$index') != null);
       } else {
         throw 'Permission denied';
       }
@@ -52,7 +54,8 @@ class LocationApiImp implements LocationApi {
         int index = 0;
         do {
           userLocations.add(localStorage.getItem('LOCATION_$index') ?? '');
-        } while (localStorage.getItem('LOCATION_$index') != '');
+          index++;
+        } while (localStorage.getItem('LOCATION_$index') != null);
         // _currentAddress
       } else {
         throw 'Permission denied';

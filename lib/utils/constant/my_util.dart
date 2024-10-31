@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:simple_weather_app/core/constant/globals.dart' as global;
+import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 
 class MyUtil {
   MyUtil._privateConstructor();
@@ -69,11 +69,11 @@ class MyUtil {
       case 701:
         return const Icon(Iconsax.cloud_fog, color: Colors.grey);
       case 800:
-        return Icon(Iconsax.sun_1, color: Colors.yellow.shade200);
+        return const Icon(Iconsax.sun_1, color: global.red);
       case >= 800 && < 900:
         return const Icon(Iconsax.cloud_fog, color: Colors.grey);
       default:
-        return Icon(Iconsax.cloud_sunny, color: Colors.yellow.shade200);
+        return const Icon(Iconsax.cloud_sunny, color: global.red);
     }
   }
 

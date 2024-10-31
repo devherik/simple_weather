@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:simple_weather_app/features/home/home.dart';
+import 'package:simple_weather_app/presentation/features/home/home.dart';
 
 class AppRouter {
   final router = GoRouter(routes: <RouteBase>[

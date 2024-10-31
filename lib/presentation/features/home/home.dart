@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
-import 'package:simple_weather_app/core/constant/my_util.dart';
-import 'package:simple_weather_app/features/home/home_widgets.dart';
-import 'package:simple_weather_app/features/weather_controller.dart';
-import 'package:simple_weather_app/core/constant/globals.dart' as global;
+import 'package:simple_weather_app/utils/constant/my_util.dart';
+import 'package:simple_weather_app/presentation/features/home/home_widgets.dart';
+import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
+import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -101,7 +101,8 @@ class _HomePageState extends State<HomePage> {
                           Expanded(
                             flex: 4,
                             child: Lottie.asset(
-                                util.withWeatherAnimation(value.condition!)),
+                                util.withWeatherAnimation(value.condition!),
+                                alignment: Alignment.centerRight),
                           ),
                           Expanded(
                             flex: 2,

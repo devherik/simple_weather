@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:simple_weather_app/core/constant/globals.dart' as global;
+import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppTheme {

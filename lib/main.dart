@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:simple_weather_app/core/router/router.dart';
-import 'package:simple_weather_app/core/theme/theme.dart';
-import 'package:simple_weather_app/main_controller.dart';
+import 'package:simple_weather_app/config/router/router.dart';
+import 'package:simple_weather_app/config/theme/theme.dart';
+import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

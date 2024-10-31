@@ -81,7 +81,7 @@ class MyUtil {
       SizedBox(
           width: widght,
           child: LinearProgressIndicator(
-            minHeight: heigh,
-            color: Theme.of(context).colorScheme.tertiary,
+            minHeight: 20,
+            color: Theme.of(context).colorScheme.primary,
           ));
 }

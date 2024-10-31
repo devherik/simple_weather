@@ -38,16 +38,25 @@ class HomeWidgets {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       iconButton(Icon(
-                        Iconsax.search_normal,
+                        Iconsax.moon,
                         color: Theme.of(context).colorScheme.inversePrimary,
                       )),
-                      iconButton(Icon(
-                        Iconsax.setting,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ))
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          iconButton(Icon(
+                            Iconsax.search_normal,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          )),
+                          iconButton(Icon(
+                            Iconsax.setting,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ))
+                        ],
+                      ),
                     ],
                   ),
                   FutureBuilder(

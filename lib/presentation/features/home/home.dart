@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
                 child: ValueListenableBuilder(
-                  valueListenable: _weatherController.weather$,
+                  valueListenable: _weatherController.currentWeather$,
                   builder: (context, value, child) {
                     if (value.condition == 0) {
                       return Center(

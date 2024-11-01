@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:simple_weather_app/data/data_sources/remote/location_api_imp.dart';
 import 'package:simple_weather_app/data/data_sources/remote/weather_api_imp.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/infra/port/input/location_api.dart';
 import 'package:simple_weather_app/infra/port/input/weather_api.dart';
+import 'package:simple_weather_app/presentation/controllers/localstorage_controller.dart';
 import 'package:weather/weather.dart';
 
 class WeatherController {
@@ -17,9 +17,9 @@ class WeatherController {
 
   final LocationApi _locationApi = LocationApiImp.instance;
   final WeatherApi _weatherApi = WeatherApiImp.instance;
+  final LocalstorageController localstorage = LocalstorageController.instance;
 
-  late ValueNotifier<Position> location$;
-  ValueNotifier<WeatherEntity> weather$ = ValueNotifier<WeatherEntity>(
+  ValueNotifier<WeatherEntity> currentWeather$ = ValueNotifier<WeatherEntity>(
       WeatherEntity('', '', DateTime.now(), '', 0, 20, 20, 20, 20,
           DateTime.now(), DateTime.now()));
 
@@ -27,28 +27,32 @@ class WeatherController {
 
   initController() async {
     await _weatherApi.initAPI(_weatherApiKey);
-    location$ =
-        ValueNotifier<Position>(await _locationApi.getCurrentLocation());
-    if (_locationApi.getUserLocations()[0] == '') {
-      weather$.value = await getWeatherByLocation();
+    if (localstorage.userAddresses$.value[0].isEmpty) {
+      currentWeather$.value = await getWeatherByLocation();
     } else {
-      weather$.value =
-          await getWeatherByCity(_locationApi.getUserLocations()[0]);
+      currentWeather$.value =
+          await getWeatherByCity(localstorage.userAddresses$.value[0]);
     }
   }
 
   updateWeather() async {
-    weather$.value = await getWeatherByCity(_locationApi.getCurrentAddress());
+    currentWeather$.value =
+        await getWeatherByCity(_locationApi.getCurrentAddress());
   }
 
-  List<String> getUserLocations() => _locationApi.getUserLocations();
+  changeAddressWeather(String address) async {
+    await _locationApi.updateCurrentAddress(address);
+    await updateWeather();
+  }
 
-  WeatherEntity getWeather() => weather$.value;
-  Future<Position> getLocation() async => location$.value;
+  String getUserAddress() => _locationApi.getCurrentAddress();
+
+  List<String> getUserAddresses() => localstorage.userAddresses$.value;
 
   Future<WeatherEntity> getWeatherByLocation() async {
+    final location = await _locationApi.getCurrentLocation();
     final Weather value = await _weatherApi.getWeatherByLocation(
-        location$.value.latitude, location$.value.longitude);
+        location.latitude, location.longitude);
     final WeatherEntity weather = WeatherEntity(
         value.areaName,
         value.country,
@@ -61,8 +65,8 @@ class WeatherController {
         value.tempFeelsLike!.celsius,
         value.sunrise,
         value.sunset);
-    weather.forecast = await getForecastByLocation(
-        location$.value.latitude, location$.value.longitude);
+    weather.forecast =
+        await getForecastByLocation(location.latitude, location.longitude);
     _locationApi.updateCurrentAddress(weather.cityName);
     return weather;
   }

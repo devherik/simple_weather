@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:simple_weather_app/infra/port/input/location_api.dart';
 
 class LocationApiImp implements LocationApi {
@@ -9,14 +8,15 @@ class LocationApiImp implements LocationApi {
   static final LocationApiImp instance = LocationApiImp._privateConstructor();
 
   Position? _currentPosition;
+  String _currentAddress = '';
+
   bool _servicePermission = false;
   GeolocatorPlatform? _geolocatorPlatform;
   LocationPermission? _permission;
-  String currentAddress = '';
-  final List<String> userLocations = [];
 
   @override
   getCurrentLocation() async {
+    _currentPosition = await _geolocatorPlatform!.getCurrentPosition();
     return _currentPosition;
   }
 
@@ -36,12 +36,6 @@ class LocationApiImp implements LocationApi {
         _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
             locationSettings:
                 const LocationSettings(accuracy: LocationAccuracy.best));
-        int index = 0;
-        //TODO: doenst work
-        do {
-          userLocations.add(localStorage.getItem('LOCATION_$index') ?? '');
-          index++;
-        } while (localStorage.getItem('LOCATION_$index') != null);
       } else {
         throw 'Permission denied';
       }
@@ -51,11 +45,6 @@ class LocationApiImp implements LocationApi {
         _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
             locationSettings:
                 const LocationSettings(accuracy: LocationAccuracy.best));
-        int index = 0;
-        do {
-          userLocations.add(localStorage.getItem('LOCATION_$index') ?? '');
-          index++;
-        } while (localStorage.getItem('LOCATION_$index') != null);
         // _currentAddress
       } else {
         throw 'Permission denied';
@@ -88,20 +77,8 @@ class LocationApiImp implements LocationApi {
   }
 
   @override
-  String getCurrentAddress() => currentAddress;
+  String getCurrentAddress() => _currentAddress;
 
   @override
-  updateCurrentAddress(newAddress) => currentAddress = newAddress;
-
-  @override
-  List<String> getUserLocations() {
-    return userLocations;
-  }
-
-  @override
-  setUserLocation(newLocation) {
-    userLocations.last == ''
-        ? userLocations.last = newLocation
-        : userLocations.add(newLocation);
-  }
+  updateCurrentAddress(newAddress) => _currentAddress = newAddress;
 }

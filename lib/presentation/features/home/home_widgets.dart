@@ -83,11 +83,11 @@ class HomeWidgets {
             Expanded(
               flex: 3,
               child: ListView.builder(
-                itemCount: _weatherController.getUserLocations().length,
+                itemCount: _weatherController.getUserAddresses().length,
                 itemExtent: 80,
                 itemBuilder: (context, index) {
                   final List<String> list =
-                      _weatherController.getUserLocations();
+                      _weatherController.getUserAddresses();
                   if (list[index].isNotEmpty) {
                     return FutureBuilder(
                         future:
@@ -123,9 +123,7 @@ class HomeWidgets {
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () async {
-          _weatherController.weather$.value =
-              await _weatherController.getWeatherByCity(weather.cityName!);
-          localStorage.setItem('LOCATION_0', weather.cityName!);
+          await _weatherController.changeAddressWeather(weather.cityName!);
         },
         splashColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,
@@ -135,7 +133,7 @@ class HomeWidgets {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              localStorage.getItem('LOCATION_0') == weather.cityName
+              _weatherController.getUserAddress() == weather.cityName
                   ? Iconsax.location5
                   : Iconsax.location,
               color: Theme.of(context).colorScheme.inversePrimary,
@@ -156,9 +154,7 @@ class HomeWidgets {
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () async {
-          _weatherController.weather$.value =
-              await _weatherController.getWeatherByCity(weather.cityName!);
-          localStorage.setItem('LOCATION_0', weather.cityName!);
+          await _weatherController.changeAddressWeather(weather.cityName!);
         },
         splashColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,

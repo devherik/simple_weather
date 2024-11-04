@@ -13,17 +13,28 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final MainController mainController = MainController.instance;
+  @override
+  void initState() {
+    super.initState();
+    mainController.themeMode$.addListener(() => setState(() {}));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Simple Weather',
       theme: AppTheme.light,
-      themeMode: ThemeMode.light,
+      themeMode: mainController.getTheme(),
       darkTheme: AppTheme.dark,
       routerConfig: AppRouter().router,
     );

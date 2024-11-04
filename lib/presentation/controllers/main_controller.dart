@@ -14,6 +14,7 @@ class MainController {
       LocalstorageController.instance;
 
   var themeMode$ = ValueNotifier<ThemeMode>(ThemeMode.light);
+  bool darkThemeOn = false;
 
   initController() async {
     await dotenv.load(fileName: '.env');
@@ -24,17 +25,9 @@ class MainController {
   ThemeMode getTheme() => themeMode$.value;
 
   changeTheme() {
-    switch (themeMode$.value) {
-      case ThemeMode.system:
-        themeMode$.value = ThemeMode.dark;
-        break;
-      case ThemeMode.light:
-        themeMode$.value = ThemeMode.dark;
-        break;
-      case ThemeMode.dark:
-        themeMode$.value = ThemeMode.light;
-        break;
-      default:
-    }
+    darkThemeOn = !darkThemeOn;
+    darkThemeOn
+        ? themeMode$.value = ThemeMode.dark
+        : themeMode$.value = ThemeMode.light;
   }
 }

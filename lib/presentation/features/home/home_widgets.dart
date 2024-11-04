@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
@@ -16,8 +15,6 @@ class HomeWidgets {
   final WeatherController _weatherController;
   final MyUtil util = MyUtil.instance;
 
-  final MainController mainController = MainController.instance;
-
   Widget modalBottomSheetLocations() {
     return Container(
       decoration: BoxDecoration(
@@ -26,7 +23,7 @@ class HomeWidgets {
             topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: Column(
           children: <Widget>[
             SizedBox(
@@ -41,22 +38,11 @@ class HomeWidgets {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Builder(
-                          builder: (context) => IconButton(
-                                icon: Icon(
-                                  Iconsax.moon,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary,
-                                ),
-                                onPressed: () {
-                                  mainController.changeTheme();
-                                },
-                              )),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Builder(
                               builder: (context) => IconButton(

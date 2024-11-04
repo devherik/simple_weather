@@ -8,13 +8,12 @@ abstract class AppTheme {
     return ThemeData(
       scaffoldBackgroundColor: global.primaryLightColor,
       appBarTheme: AppBarTheme(
-          elevation: 0.0,
-          color: Colors.transparent,
-          iconTheme: IconThemeData(color: global.primaryDarkColor),
-          titleTextStyle: TextStyle(
-            color: global.primaryDarkColor,
-            fontSize: 16,
-          )),
+        elevation: 0.0,
+        color: Colors.transparent,
+        iconTheme: IconThemeData(color: global.primaryDarkColor),
+        titleTextStyle: GoogleFonts.roboto(
+            fontSize: 16, letterSpacing: 2, color: global.primaryDarkColor),
+      ),
       colorScheme: ColorScheme(
           brightness: Brightness.light,
           primaryContainer: global.primaryLightColor,
@@ -62,13 +61,12 @@ abstract class AppTheme {
     return ThemeData(
       scaffoldBackgroundColor: global.primaryDarkColor,
       appBarTheme: AppBarTheme(
-          elevation: 0.0,
-          color: Colors.transparent,
-          iconTheme: IconThemeData(color: global.terciaryDarkColor),
-          titleTextStyle: TextStyle(
-            color: global.primaryLightColor,
-            fontSize: 16,
-          )),
+        elevation: 0.0,
+        color: Colors.transparent,
+        iconTheme: IconThemeData(color: global.primaryLightColor),
+        titleTextStyle: GoogleFonts.roboto(
+            fontSize: 16, letterSpacing: 2, color: global.primaryLightColor),
+      ),
       colorScheme: ColorScheme(
           brightness: Brightness.dark,
           primaryContainer: global.primaryDarkColor,
@@ -89,7 +87,7 @@ abstract class AppTheme {
         titleMedium: GoogleFonts.ubuntu(
             fontSize: 48, letterSpacing: 1.5, color: global.primaryLightColor),
         titleSmall: GoogleFonts.ubuntu(
-            fontSize: 25, letterSpacing: 2, color: global.primaryLightColor),
+            fontSize: 24, letterSpacing: 2, color: global.primaryLightColor),
         bodyLarge: GoogleFonts.roboto(
             fontSize: 16, letterSpacing: 2, color: global.primaryLightColor),
         bodyMedium: GoogleFonts.roboto(

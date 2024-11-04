@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
@@ -40,21 +40,43 @@ class HomeWidgets {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      iconButton(Icon(
-                        Iconsax.moon,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      )),
+                      Builder(
+                          builder: (context) => IconButton(
+                                icon: Icon(
+                                  Iconsax.moon,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                ),
+                                onPressed: () {
+                                  ThemeMode.dark;
+                                },
+                              )),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          iconButton(Icon(
-                            Iconsax.search_normal,
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                          )),
-                          iconButton(Icon(
-                            Iconsax.setting,
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                          ))
+                          Builder(
+                              builder: (context) => IconButton(
+                                    icon: Icon(
+                                      Iconsax.search_normal,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary,
+                                    ),
+                                    onPressed: () {},
+                                  )),
+                          Builder(
+                              builder: (context) => IconButton(
+                                    icon: Icon(
+                                      Iconsax.setting,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary,
+                                    ),
+                                    onPressed: () {
+                                      context.go('/settings');
+                                    },
+                                  )),
                         ],
                       ),
                     ],
@@ -113,12 +135,6 @@ class HomeWidgets {
     );
   }
 
-  Builder iconButton(Icon icon) => Builder(
-      builder: (context) => IconButton(
-            icon: icon,
-            onPressed: () {},
-          ));
-
   Widget changeToCityLocationButton(WeatherEntity weather) => MaterialButton(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         minWidth: MediaQuery.of(context).size.width,
@@ -133,6 +149,7 @@ class HomeWidgets {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
+              //TODO: icons state aren't working
               _weatherController.getUserAddress() == weather.cityName
                   ? Iconsax.location5
                   : Iconsax.location,

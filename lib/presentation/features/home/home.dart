@@ -48,26 +48,28 @@ class _HomePageState extends State<HomePage> {
                     ),
                   )),
           actions: [
-            Switch(
-                value: mainController.darkThemeOn,
-                activeThumbImage:
-                    const AssetImage('assets/images/icons/moon.png'),
-                inactiveThumbImage:
-                    const AssetImage('assets/images/icons/sun.png'),
-                inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
-                activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                onChanged: (bool value) => setState(() {
-                      mainController.changeTheme();
-                    })),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Switch(
+                  value: mainController.darkThemeOn,
+                  activeThumbImage:
+                      const AssetImage('assets/images/icons/moon.png'),
+                  inactiveThumbImage:
+                      const AssetImage('assets/images/icons/sun.png'),
+                  inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
+                  activeTrackColor: Theme.of(context).colorScheme.tertiary,
+                  onChanged: (bool value) => setState(() {
+                        mainController.changeTheme();
+                      })),
+            ),
           ],
         ),
-        body: FutureBuilder(
-            future: _weatherController.initController(),
-            builder: (context, snapshot) {
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
-                child: ValueListenableBuilder(
+        body: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: FutureBuilder(
+              future: _weatherController.initController(),
+              builder: (context, snapshot) {
+                return ValueListenableBuilder(
                   valueListenable: _weatherController.currentWeather$,
                   builder: (context, value, child) {
                     if (value.condition == 0) {
@@ -79,10 +81,10 @@ class _HomePageState extends State<HomePage> {
                     } else {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
-                              flex: 1,
+                              flex: 3,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,15 +120,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                     ],
-                                  )
-                                ],
-                              )),
-                          Expanded(
-                              flex: 2,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
+                                  ),
                                   Text(
                                     '${value.temp!.toStringAsFixed(0)}°',
                                     textAlign: TextAlign.center,
@@ -134,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                                         Theme.of(context).textTheme.titleLarge,
                                   ),
                                   Text(
-                                    '$day - ${value.getHour()}',
+                                    '${util.withWeather(value.condition!)} - ${value.condition}',
                                     textAlign: TextAlign.center,
                                     style:
                                         Theme.of(context).textTheme.bodyLarge,
@@ -142,10 +136,10 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               )),
                           Expanded(
-                            flex: 2,
+                            flex: 3,
                             child: Lottie.asset(
                                 util.withWeatherAnimation(value.condition!),
-                                alignment: Alignment.centerRight),
+                                alignment: Alignment.center),
                           ),
                           Expanded(
                             flex: 2,
@@ -195,8 +189,8 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                   },
-                ),
-              );
-            }));
+                );
+              }),
+        ));
   }
 }

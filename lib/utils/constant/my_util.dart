@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
+import 'package:weather_icons/weather_icons.dart';
 
 class MyUtil {
   MyUtil._privateConstructor();
@@ -59,21 +60,42 @@ class MyUtil {
   Icon withWeatherIcon(int code) {
     switch (code) {
       case >= 200 && < 300:
-        return const Icon(Iconsax.cloud_lightning, color: global.blue);
+        return const Icon(WeatherIcons.thunderstorm, color: global.blue);
       case >= 300 && < 400:
-        return const Icon(Iconsax.cloud_minus, color: global.blue);
+        return const Icon(WeatherIcons.raindrops, color: global.blue);
       case >= 500 && < 600:
-        return const Icon(Iconsax.cloud_minus, color: global.blue);
+        return const Icon(WeatherIcons.rain, color: global.blue);
       case >= 600 && < 700:
-        return const Icon(Iconsax.cloud_snow, color: Colors.grey);
+        return const Icon(WeatherIcons.snow, color: Colors.grey);
       case 701:
-        return const Icon(Iconsax.cloud_fog, color: Colors.grey);
+        return const Icon(WeatherIcons.fog, color: Colors.grey);
       case 800:
-        return const Icon(Iconsax.sun_1, color: global.red);
+        return const Icon(WeatherIcons.day_sunny, color: global.red);
       case >= 800 && < 900:
-        return const Icon(Iconsax.cloud_fog, color: Colors.grey);
+        return const Icon(WeatherIcons.cloud, color: Colors.grey);
       default:
         return const Icon(Iconsax.cloud_sunny, color: global.red);
+    }
+  }
+
+  String withWeather(int code) {
+    switch (code) {
+      case >= 200 && < 300:
+        return 'tempestade';
+      case >= 300 && < 400:
+        return 'chuva leve';
+      case >= 500 && < 600:
+        return 'chuva';
+      case >= 600 && < 700:
+        return 'neve';
+      case 701:
+        return 'nevoeiro';
+      case 800:
+        return 'tempo limpo';
+      case >= 800 && < 900:
+        return 'nuvens';
+      default:
+        return '';
     }
   }
 

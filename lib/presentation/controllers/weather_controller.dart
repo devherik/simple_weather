@@ -35,7 +35,7 @@ class WeatherController {
     }
   }
 
-  updateWeather() async {
+  Future<void> updateWeather() async {
     currentWeather$.value =
         await getWeatherByCity(_locationApi.getCurrentAddress());
   }

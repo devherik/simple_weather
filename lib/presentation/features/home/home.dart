@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
+import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/presentation/features/home/home_widgets.dart';
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
@@ -17,11 +18,13 @@ class _HomePageState extends State<HomePage> {
   late WeatherController _weatherController;
   late MyUtil util;
   late HomeWidgets homeWidgets;
+  late MainController mainController;
 
   @override
   void initState() {
     super.initState();
     _weatherController = WeatherController.instance;
+    mainController = MainController.instance;
     util = MyUtil.instance;
     homeWidgets =
         HomeWidgets(classContext: context, classController: _weatherController);
@@ -54,13 +57,21 @@ class _HomePageState extends State<HomePage> {
                 // TODO: add an animation
                 onPressed: () async => _weatherController.updateWeather(),
               ),
-            )
+            ),
+            Switch(
+                value: mainController.darkThemeOn,
+                inactiveThumbColor:
+                    Theme.of(context).colorScheme.inversePrimary,
+                inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
+                activeColor: Theme.of(context).colorScheme.inversePrimary,
+                onChanged: (bool value) => setState(() {
+                      mainController.changeTheme();
+                    })),
           ],
         ),
         body: FutureBuilder(
             future: _weatherController.initController(),
             builder: (context, snapshot) {
-              // TODO: add an animation
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 40, horizontal: 16),

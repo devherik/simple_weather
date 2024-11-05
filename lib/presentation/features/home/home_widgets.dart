@@ -63,7 +63,7 @@ class HomeWidgets {
                                           .inversePrimary,
                                     ),
                                     onPressed: () {
-                                      context.go('/settings');
+                                      context.push('/settings');
                                     },
                                   )),
                         ],

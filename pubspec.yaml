@@ -84,8 +84,9 @@ flutter:
     - assets/animations/storm_rainy.json
     - assets/animations/snow_day.json
     - assets/animations/snow_night.json
-  #   - images/a_dot_ham.jpeg
     - .env
+    - assets/images/icons/sun.png
+    - assets/images/icons/moon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

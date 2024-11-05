@@ -37,9 +37,9 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           leading: Builder(
               builder: (context) => IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Iconsax.menu_board,
-                      color: global.blue,
+                      color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                     onPressed: () => showModalBottomSheet(
                       context: context,
@@ -48,22 +48,14 @@ class _HomePageState extends State<HomePage> {
                     ),
                   )),
           actions: [
-            Builder(
-              builder: (context) => IconButton(
-                icon: Icon(
-                  Iconsax.refresh,
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                ),
-                // TODO: add an animation
-                onPressed: () async => _weatherController.updateWeather(),
-              ),
-            ),
             Switch(
                 value: mainController.darkThemeOn,
-                inactiveThumbColor:
-                    Theme.of(context).colorScheme.inversePrimary,
+                activeThumbImage:
+                    const AssetImage('assets/images/icons/moon.png'),
+                inactiveThumbImage:
+                    const AssetImage('assets/images/icons/sun.png'),
                 inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
-                activeColor: Theme.of(context).colorScheme.inversePrimary,
+                activeTrackColor: Theme.of(context).colorScheme.tertiary,
                 onChanged: (bool value) => setState(() {
                       mainController.changeTheme();
                     })),
@@ -90,6 +82,46 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
+                              flex: 1,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    value.cityName!,
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        '$day - ${value.getHour()}',
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
+                                      ),
+                                      Builder(
+                                        builder: (context) => IconButton(
+                                          iconSize: 15,
+                                          icon: Icon(
+                                            Iconsax.refresh,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inversePrimary,
+                                          ),
+                                          // TODO: add an animation
+                                          onPressed: () async =>
+                                              _weatherController
+                                                  .updateWeather(),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              )),
+                          Expanded(
                               flex: 2,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -110,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               )),
                           Expanded(
-                            flex: 4,
+                            flex: 2,
                             child: Lottie.asset(
                                 util.withWeatherAnimation(value.condition!),
                                 alignment: Alignment.centerRight),
@@ -122,11 +154,12 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  value.cityName!,
+                                  'Próximas horas',
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                                 global.verySmallBoxSpace,
                                 SizedBox(
+                                    height: 2,
                                     width:
                                         MediaQuery.of(context).size.width * .7,
                                     child: Divider(

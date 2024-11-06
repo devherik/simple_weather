@@ -27,27 +27,27 @@ class WeatherController {
 
   initController() async {
     await _weatherApi.initAPI(_weatherApiKey);
-    if (localstorage.userAddresses$.value[0].isEmpty) {
+    if (localstorage.getMainLocation() == '') {
       currentWeather$.value = await getWeatherByLocation();
     } else {
       currentWeather$.value =
-          await getWeatherByCity(localstorage.userAddresses$.value[0]);
+          await getWeatherByCity(localstorage.getMainLocation());
     }
   }
 
   Future<void> updateWeather() async {
     currentWeather$.value =
-        await getWeatherByCity(_locationApi.getCurrentAddress());
+        await getWeatherByCity(localstorage.getMainLocation());
   }
 
-  changeAddressWeather(String address) async {
-    await _locationApi.updateCurrentAddress(address);
+  changeMainLocationWeather(String location) async {
+    localstorage.setMainLocation(location);
     await updateWeather();
   }
 
-  String getUserAddress() => _locationApi.getCurrentAddress();
+  String getUserMainLocation() => localstorage.getMainLocation();
 
-  List<String> getUserAddresses() => localstorage.userAddresses$.value;
+  List<String> getUserLocations() => localstorage.userLocations$.value;
 
   Future<WeatherEntity> getWeatherByLocation() async {
     final location = await _locationApi.getCurrentLocation();
@@ -67,7 +67,6 @@ class WeatherController {
         value.sunset);
     weather.forecast =
         await getForecastByLocation(location.latitude, location.longitude);
-    _locationApi.updateCurrentAddress(weather.cityName);
     return weather;
   }
 
@@ -86,7 +85,6 @@ class WeatherController {
         value.sunrise,
         value.sunset);
     weather.forecast = await getForecastByCity(city);
-    _locationApi.updateCurrentAddress(weather.cityName);
     return weather;
   }
 

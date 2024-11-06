@@ -8,7 +8,6 @@ class LocationApiImp implements LocationApi {
   static final LocationApiImp instance = LocationApiImp._privateConstructor();
 
   Position? _currentPosition;
-  String _currentAddress = '';
 
   bool _servicePermission = false;
   GeolocatorPlatform? _geolocatorPlatform;
@@ -75,10 +74,4 @@ class LocationApiImp implements LocationApi {
       return true;
     }
   }
-
-  @override
-  String getCurrentAddress() => _currentAddress;
-
-  @override
-  updateCurrentAddress(newAddress) => _currentAddress = newAddress;
 }

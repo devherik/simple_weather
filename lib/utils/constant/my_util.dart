@@ -81,19 +81,19 @@ class MyUtil {
   String withWeather(int code) {
     switch (code) {
       case >= 200 && < 300:
-        return 'tempestade';
+        return 'Chuva intensa';
       case >= 300 && < 400:
-        return 'chuva leve';
+        return 'Chuva leve';
       case >= 500 && < 600:
-        return 'chuva';
+        return 'Chuva';
       case >= 600 && < 700:
-        return 'neve';
+        return 'Neve';
       case 701:
-        return 'nevoeiro';
+        return 'Nevoeiro';
       case 800:
-        return 'tempo limpo';
+        return 'Tempo limpo';
       case >= 800 && < 900:
-        return 'nuvens';
+        return 'Nublado';
       default:
         return '';
     }

@@ -90,15 +90,14 @@ class HomeWidgets {
                 ],
               ),
             ),
-            global.verySmallBoxSpace,
             Expanded(
               flex: 3,
               child: ListView.builder(
-                itemCount: _weatherController.getUserAddresses().length,
+                itemCount: _weatherController.getUserLocations().length,
                 itemExtent: 80,
                 itemBuilder: (context, index) {
                   final List<String> list =
-                      _weatherController.getUserAddresses();
+                      _weatherController.getUserLocations();
                   if (list[index].isNotEmpty) {
                     return FutureBuilder(
                         future:
@@ -128,7 +127,9 @@ class HomeWidgets {
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () async {
-          await _weatherController.changeAddressWeather(weather.cityName!);
+          await _weatherController.changeMainLocationWeather(weather.cityName!);
+          // ignore: use_build_context_synchronously
+          context.pop();
         },
         splashColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,
@@ -138,14 +139,13 @@ class HomeWidgets {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              //TODO: icons state aren't working
-              _weatherController.getUserAddress() == weather.cityName
+              _weatherController.getUserMainLocation() == weather.cityName
                   ? Iconsax.location5
                   : Iconsax.location,
               color: Theme.of(context).colorScheme.inversePrimary,
             ),
             Text(
-              ' ${weather.cityName!}   ${weather.temp!.toStringAsFixed(0)}° ',
+              ' ${weather.cityName!}   ${weather.temp!.toStringAsFixed(0)}°',
               style: TextStyle(
                   color: Theme.of(context).colorScheme.inversePrimary,
                   letterSpacing: 3,
@@ -160,7 +160,9 @@ class HomeWidgets {
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () async {
-          await _weatherController.changeAddressWeather(weather.cityName!);
+          await _weatherController.changeMainLocationWeather(weather.cityName!);
+          // ignore: use_build_context_synchronously
+          context.pop();
         },
         splashColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,
@@ -200,7 +202,7 @@ class HomeWidgets {
 
   Widget weatherCard(WeatherEntity weather) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Row(

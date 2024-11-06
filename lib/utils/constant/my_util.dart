@@ -104,6 +104,7 @@ class MyUtil {
           width: widght,
           child: LinearProgressIndicator(
             minHeight: 20,
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.tertiary,
+            backgroundColor: Theme.of(context).colorScheme.primary,
           ));
 }

@@ -52,6 +52,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Switch(
                   value: mainController.darkThemeOn,
+                  activeColor: Theme.of(context).colorScheme.tertiary,
                   activeThumbImage:
                       const AssetImage('assets/images/icons/moon.png'),
                   inactiveThumbImage:

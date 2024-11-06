@@ -71,7 +71,7 @@ abstract class AppTheme {
           brightness: Brightness.dark,
           primaryContainer: global.primaryDarkColor,
           primary: global.primaryDarkColor,
-          onPrimary: global.primaryDarkColor,
+          onPrimary: global.secondaryDarkColor,
           secondary: global.secondaryDarkColor,
           onSecondary: global.secondaryDarkColor,
           error: global.red,

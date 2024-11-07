@@ -47,7 +47,7 @@ class WeatherController {
 
   String getUserMainLocation() => localstorage.getMainLocation();
 
-  List<String> getUserLocations() => localstorage.userLocations$.value;
+  List<String> getUserLocations() => localstorage.userLocations;
 
   Future<WeatherEntity> getWeatherByLocation() async {
     final location = await _locationApi.getCurrentLocation();

@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 
 class LocalstorageController {
   LocalstorageController._privateConstructor();
   static final instance = LocalstorageController._privateConstructor();
 
-  var userLocations$ = ValueNotifier<List<String>>([]);
+  final userLocations = <String>[];
 
   initController() async {
     await initLocalStorage().whenComplete(
@@ -32,28 +31,26 @@ class LocalstorageController {
   restoreUserLocations() {
     int index = 0;
     while (localStorage.getItem('LOCATION_$index') != null && index < 3) {
-      userLocations$.value.add(localStorage.getItem('LOCATION_$index') ?? '');
+      userLocations.add(localStorage.getItem('LOCATION_$index') ?? '');
       index++;
     }
   }
 
   updateUserLocations() {
     int index = 0;
-    for (var location in userLocations$.value) {
+    for (var location in userLocations) {
       localStorage.setItem('LOCATION_$index', location);
       index++;
     }
   }
 
   addLocation(String name) {
-    userLocations$.value.length < 3
-        ? userLocations$.value.add(name)
-        : throw 'List is full';
+    userLocations.length < 3 ? userLocations.add(name) : throw 'List is full';
     updateUserLocations();
   }
 
   removeUserLocation(String name) {
-    userLocations$.value.removeWhere((element) => element == name);
+    userLocations.removeWhere((element) => element == name);
     updateUserLocations();
   }
 }

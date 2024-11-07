@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 
 class LocalstorageController {
@@ -17,6 +18,31 @@ class LocalstorageController {
       },
     );
   }
+
+  ThemeMode getDefaultTheme() {
+    ThemeMode theme;
+    if (localStorage.getItem('DEFAULT_THEME') != null) {
+      final defaultTheme = localStorage.getItem('DEFAULT_THEME');
+      switch (defaultTheme) {
+        case 'light':
+          theme = ThemeMode.light;
+          break;
+        case 'dark':
+          theme = ThemeMode.dark;
+          break;
+        default:
+          theme = ThemeMode.light;
+          break;
+      }
+      return theme;
+    } else {
+      localStorage.setItem('DEFAULT_THEME', 'light');
+      theme = ThemeMode.light;
+      return theme;
+    }
+  }
+
+  setDefaultTheme(String theme) => localStorage.setItem('DEFAULT_THEME', theme);
 
   String getMainLocation() {
     if (localStorage.getItem('MAIN_LOCATION') != null) {

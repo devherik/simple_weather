@@ -13,21 +13,41 @@ class MainController {
   final LocalstorageController _localstorageController =
       LocalstorageController.instance;
 
-  var themeMode$ = ValueNotifier<ThemeMode>(ThemeMode.light);
+  var themeMode$ = ValueNotifier<ThemeMode>(ThemeMode.system);
   bool darkThemeOn = false;
 
   initController() async {
     await dotenv.load(fileName: '.env');
     await _locationApi.initAPI();
     await _localstorageController.initController();
+    setTheme();
+  }
+
+  setTheme() {
+    themeMode$.value = _localstorageController.getDefaultTheme();
+    switch (themeMode$.value) {
+      case ThemeMode.light:
+        darkThemeOn = false;
+        break;
+      case ThemeMode.dark:
+        darkThemeOn = true;
+        break;
+      default:
+        darkThemeOn = false;
+        break;
+    }
   }
 
   ThemeMode getTheme() => themeMode$.value;
 
   changeTheme() {
     darkThemeOn = !darkThemeOn;
-    darkThemeOn
-        ? themeMode$.value = ThemeMode.dark
-        : themeMode$.value = ThemeMode.light;
+    if (darkThemeOn) {
+      themeMode$.value = ThemeMode.dark;
+      _localstorageController.setDefaultTheme('dark');
+    } else {
+      themeMode$.value = ThemeMode.light;
+      _localstorageController.setDefaultTheme('light');
+    }
   }
 }

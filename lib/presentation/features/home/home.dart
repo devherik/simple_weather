@@ -14,11 +14,13 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   late WeatherController _weatherController;
   late MyUtil util;
   late HomeWidgets homeWidgets;
   late MainController mainController;
+  late AnimationController animationController;
 
   @override
   void initState() {
@@ -28,11 +30,23 @@ class _HomePageState extends State<HomePage> {
     util = MyUtil.instance;
     homeWidgets =
         HomeWidgets(classContext: context, classController: _weatherController);
+    animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1))
+          ..stop();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final String day = util.weekDay(DateTime.now().weekday);
+    final Animation<double> turnController =
+        CurvedAnimation(parent: animationController, curve: Curves.easeOutCirc);
+
     return Scaffold(
         appBar: AppBar(
           leading: Builder(
@@ -107,18 +121,26 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       Builder(
                                         builder: (context) => IconButton(
-                                          iconSize: 15,
-                                          icon: Icon(
-                                            Iconsax.refresh,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .inversePrimary,
-                                          ),
-                                          // TODO: add an animation
-                                          onPressed: () async =>
-                                              _weatherController
-                                                  .updateWeather(),
-                                        ),
+                                            iconSize: 15,
+                                            icon: RotationTransition(
+                                              turns: turnController,
+                                              child: Icon(
+                                                Iconsax.refresh,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .inversePrimary,
+                                              ),
+                                            ),
+                                            onPressed: () async {
+                                              await _weatherController
+                                                  .updateWeather();
+                                              animationController
+                                                  .forward()
+                                                  .whenComplete(
+                                                    () => animationController
+                                                        .reset(),
+                                                  );
+                                            }),
                                       ),
                                     ],
                                   ),

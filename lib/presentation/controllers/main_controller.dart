@@ -14,6 +14,7 @@ class MainController {
       LocalstorageController.instance;
 
   var themeMode$ = ValueNotifier<ThemeMode>(ThemeMode.system);
+  var weatherUnit$ = ValueNotifier<String>('Celcius');
   bool darkThemeOn = false;
 
   initController() async {
@@ -21,6 +22,14 @@ class MainController {
     await _locationApi.initAPI();
     await _localstorageController.initController();
     setTheme();
+    setWeatherUnit();
+  }
+
+  setWeatherUnit() =>
+      weatherUnit$.value = _localstorageController.getWeatherUnit();
+  changeWeatherUnit(String value) {
+    weatherUnit$.value = value;
+    _localstorageController.setWeatherUnit(value);
   }
 
   setTheme() {

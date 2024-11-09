@@ -20,17 +20,9 @@ class AppRouter {
         GoRoute(
           path: 'settings',
           name: 'settings',
-          pageBuilder: (context, state) => CustomTransitionPage(
-            child: const SettingsPage(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) =>
-                    FadeTransition(
-              opacity: animation,
-              child: child,
-            ),
-          ),
+          builder: (context, state) => const SettingsPage(),
         ),
       ],
     ),
-  ], initialLocation: '/');
+  ], initialLocation: '/settings');
 }

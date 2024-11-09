@@ -33,6 +33,7 @@ class WeatherController {
       currentWeather$.value =
           await getWeatherByCity(localstorage.getMainLocation());
     }
+    final weatherUnit = localstorage.getWeatherUnit();
   }
 
   Future<void> updateWeather() async {

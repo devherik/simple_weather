@@ -14,10 +14,21 @@ class LocalstorageController {
         localStorage.setItem('LOCATION_1', 'Santana do Paraíso');
         localStorage.setItem('LOCATION_2', 'Belo Horizonte');
         localStorage.setItem('MAIN_LOCATION', 'Timóteo');
+        localStorage.setItem('WEATHER_UNIT', 'Celcius');
         restoreUserLocations();
       },
     );
   }
+
+  String getWeatherUnit() {
+    if (localStorage.getItem('WEATHER_UNIT') != null) {
+      return localStorage.getItem('WEATHER_UNIT')!;
+    } else {
+      return 'Celcius';
+    }
+  }
+
+  setWeatherUnit(String value) => localStorage.setItem('WEATHER_UNIT', value);
 
   ThemeMode getDefaultTheme() {
     ThemeMode theme;

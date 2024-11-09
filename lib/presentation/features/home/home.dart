@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage>
     _weatherController = WeatherController.instance;
     mainController = MainController.instance;
     util = MyUtil.instance;
+    mainController.weatherUnit$.addListener(() => setState(() {}));
     homeWidgets =
         HomeWidgets(classContext: context, classController: _weatherController);
     animationController =
@@ -151,7 +152,7 @@ class _HomePageState extends State<HomePage>
                                         Theme.of(context).textTheme.titleLarge,
                                   ),
                                   Text(
-                                    '${util.withWeather(value.condition!)} - ${value.condition}',
+                                    util.withWeather(value.condition!),
                                     textAlign: TextAlign.center,
                                     style:
                                         Theme.of(context).textTheme.bodyLarge,

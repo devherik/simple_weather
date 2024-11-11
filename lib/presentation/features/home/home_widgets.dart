@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
 
 class HomeWidgets {
-  HomeWidgets({required classContext, required classController})
+  HomeWidgets({required classContext, required wcontroll, required mcontroll})
       : context = classContext,
-        _weatherController = classController;
+        _weatherController = wcontroll,
+        _mainController = mcontroll;
 
   final BuildContext context;
   final WeatherController _weatherController;
+  final MainController _mainController;
   final MyUtil util = MyUtil.instance;
 
   Widget modalBottomSheetLocations() {
@@ -63,7 +66,10 @@ class HomeWidgets {
                                           .inversePrimary,
                                     ),
                                     onPressed: () {
-                                      context.push('/settings');
+                                      context.push('/settings', extra: {
+                                        'weather': _weatherController,
+                                        'main': _mainController
+                                      });
                                     },
                                   )),
                         ],

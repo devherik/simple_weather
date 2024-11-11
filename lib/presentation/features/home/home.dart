@@ -19,18 +19,21 @@ class _HomePageState extends State<HomePage>
   late WeatherController _weatherController;
   late MyUtil util;
   late HomeWidgets homeWidgets;
-  late MainController mainController;
+  late MainController _mainController;
   late AnimationController animationController;
 
   @override
   void initState() {
     super.initState();
     _weatherController = WeatherController.instance;
-    mainController = MainController.instance;
+    _mainController = MainController.instance;
     util = MyUtil.instance;
-    mainController.weatherUnit$.addListener(() => setState(() {}));
-    homeWidgets =
-        HomeWidgets(classContext: context, classController: _weatherController);
+    _weatherController.initController();
+    _mainController.weatherUnit$.addListener(() => setState(() {}));
+    homeWidgets = HomeWidgets(
+        classContext: context,
+        wcontroll: _weatherController,
+        mcontroll: _mainController);
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1))
           ..stop();
@@ -66,7 +69,7 @@ class _HomePageState extends State<HomePage>
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Switch(
-                  value: mainController.darkThemeOn,
+                  value: _mainController.darkThemeOn,
                   activeColor: Theme.of(context).colorScheme.tertiary,
                   activeThumbImage:
                       const AssetImage('assets/images/icons/moon.png'),
@@ -75,7 +78,7 @@ class _HomePageState extends State<HomePage>
                   inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
                   activeTrackColor: Theme.of(context).colorScheme.tertiary,
                   onChanged: (bool value) => setState(() {
-                        mainController.changeTheme();
+                        _mainController.changeTheme();
                       })),
             ),
           ],

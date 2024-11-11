@@ -2,22 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
+import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
 
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+  const SettingsPage(
+      {super.key,
+      required WeatherController wcontrol,
+      required MainController mcontrol})
+      : _weatherController = wcontrol,
+        _mainController = mcontrol;
+  final WeatherController _weatherController;
+  final MainController _mainController;
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final MainController mainController = MainController.instance;
   @override
   void initState() {
     super.initState();
-    mainController.weatherUnit$.addListener(() => setState(() {}));
+    widget._mainController.weatherUnit$.addListener(
+        () => setState(() => widget._weatherController.updateWeather()));
   }
 
   @override
@@ -50,7 +58,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       children: <Widget>[
                         const Icon(Iconsax.sun_1),
                         Text(
-                          '  Unidade de tempo - ${mainController.weatherUnit$.value}',
+                          '  Unidade de tempo - ${widget._mainController.weatherUnit$.value}',
                           style: Theme.of(context).textTheme.bodyLarge,
                         )
                       ],
@@ -180,13 +188,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Switch(
-                    value: mainController.darkThemeOn,
+                    value: widget._mainController.darkThemeOn,
                     inactiveThumbColor:
                         Theme.of(context).colorScheme.inversePrimary,
                     inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
                     activeColor: Theme.of(context).colorScheme.inversePrimary,
                     onChanged: (bool value) => setState(() {
-                          mainController.changeTheme();
+                          widget._mainController.changeTheme();
                         })),
               ],
             ),
@@ -223,7 +231,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
                 minWidth: MediaQuery.of(context).size.width,
                 onPressed: () {
-                  mainController.changeWeatherUnit('Celcius');
+                  widget._mainController.changeWeatherUnit('Celcius');
                   context.pop();
                 },
                 splashColor: Theme.of(context).colorScheme.secondary,
@@ -243,7 +251,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           fontSize: 16),
                     ),
                     Icon(
-                      mainController.weatherUnit$.value == 'Celcius'
+                      widget._mainController.weatherUnit$.value == 'Celcius'
                           ? Iconsax.toggle_on_circle5
                           : Iconsax.toggle_off_circle,
                       color: Theme.of(context).colorScheme.inversePrimary,
@@ -260,7 +268,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
                 minWidth: MediaQuery.of(context).size.width,
                 onPressed: () {
-                  mainController.changeWeatherUnit('Farenheid');
+                  widget._mainController.changeWeatherUnit('Farenheid');
                   context.pop();
                 },
                 splashColor: Theme.of(context).colorScheme.secondary,
@@ -280,7 +288,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           fontSize: 16),
                     ),
                     Icon(
-                      mainController.weatherUnit$.value == 'Farenheid'
+                      widget._mainController.weatherUnit$.value == 'Farenheid'
                           ? Iconsax.toggle_on_circle5
                           : Iconsax.toggle_off_circle,
                       color: Theme.of(context).colorScheme.inversePrimary,
@@ -297,7 +305,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
                 minWidth: MediaQuery.of(context).size.width,
                 onPressed: () {
-                  mainController.changeWeatherUnit('Kelvin');
+                  widget._mainController.changeWeatherUnit('Kelvin');
                   context.pop();
                 },
                 splashColor: Theme.of(context).colorScheme.secondary,
@@ -317,7 +325,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           fontSize: 16),
                     ),
                     Icon(
-                      mainController.weatherUnit$.value == 'Kelvin'
+                      widget._mainController.weatherUnit$.value == 'Kelvin'
                           ? Iconsax.toggle_on_circle5
                           : Iconsax.toggle_off_circle,
                       color: Theme.of(context).colorScheme.inversePrimary,

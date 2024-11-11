@@ -8,6 +8,7 @@ import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/infra/port/input/location_api.dart';
 import 'package:simple_weather_app/infra/port/input/weather_api.dart';
 import 'package:simple_weather_app/presentation/controllers/localstorage_controller.dart';
+import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
 import 'package:weather/weather.dart';
 
 class WeatherController {
@@ -17,6 +18,7 @@ class WeatherController {
 
   final LocationApi _locationApi = LocationApiImp.instance;
   final WeatherApi _weatherApi = WeatherApiImp.instance;
+  final MainController _mainController = MainController.instance;
   final LocalstorageController localstorage = LocalstorageController.instance;
 
   ValueNotifier<WeatherEntity> currentWeather$ = ValueNotifier<WeatherEntity>(
@@ -33,7 +35,6 @@ class WeatherController {
       currentWeather$.value =
           await getWeatherByCity(localstorage.getMainLocation());
     }
-    final weatherUnit = localstorage.getWeatherUnit();
   }
 
   Future<void> updateWeather() async {
@@ -54,18 +55,7 @@ class WeatherController {
     final location = await _locationApi.getCurrentLocation();
     final Weather value = await _weatherApi.getWeatherByLocation(
         location.latitude, location.longitude);
-    final WeatherEntity weather = WeatherEntity(
-        value.areaName,
-        value.country,
-        value.date,
-        value.weatherDescription,
-        value.weatherConditionCode,
-        value.temperature!.celsius,
-        value.tempMax!.celsius,
-        value.tempMin!.celsius,
-        value.tempFeelsLike!.celsius,
-        value.sunrise,
-        value.sunset);
+    final WeatherEntity weather = instanceAWeather(value);
     weather.forecast =
         await getForecastByLocation(location.latitude, location.longitude);
     return weather;
@@ -73,18 +63,7 @@ class WeatherController {
 
   Future<WeatherEntity> getWeatherByCity(String city) async {
     final Weather value = await _weatherApi.getWeatherByCity(city);
-    final WeatherEntity weather = WeatherEntity(
-        value.areaName,
-        value.country,
-        value.date,
-        value.weatherDescription,
-        value.weatherConditionCode,
-        value.temperature!.celsius,
-        value.tempMax!.celsius,
-        value.tempMin!.celsius,
-        value.tempFeelsLike!.celsius,
-        value.sunrise,
-        value.sunset);
+    final WeatherEntity weather = instanceAWeather(value);
     weather.forecast = await getForecastByCity(city);
     return weather;
   }
@@ -93,18 +72,7 @@ class WeatherController {
     final List<Weather> values = await _weatherApi.getForecastByCity(city);
     final List<WeatherEntity> forecast = [];
     for (var value in values) {
-      final WeatherEntity weather = WeatherEntity(
-          value.areaName,
-          value.country,
-          value.date,
-          value.weatherDescription,
-          value.weatherConditionCode,
-          value.temperature!.celsius,
-          value.tempMax!.celsius,
-          value.tempMin!.celsius,
-          value.tempFeelsLike!.celsius,
-          value.sunrise,
-          value.sunset);
+      final WeatherEntity weather = instanceAWeather(value);
       forecast.add(weather);
     }
     return forecast;
@@ -116,20 +84,55 @@ class WeatherController {
         await _weatherApi.getForecastByLocation(lat, lon);
     final List<WeatherEntity> forecast = [];
     for (var value in values) {
-      final WeatherEntity weather = WeatherEntity(
-          value.areaName,
-          value.country,
-          value.date,
-          value.weatherDescription,
-          value.weatherConditionCode,
-          value.temperature!.celsius,
-          value.tempMax!.celsius,
-          value.tempMin!.celsius,
-          value.tempFeelsLike!.celsius,
-          value.sunrise,
-          value.sunset);
+      final WeatherEntity weather = instanceAWeather(value);
       forecast.add(weather);
     }
     return forecast;
+  }
+
+  WeatherEntity instanceAWeather(Weather value) {
+    late WeatherEntity weather;
+    switch (_mainController.weatherUnit$.value) {
+      case 'Celcius':
+        weather = WeatherEntity(
+            value.areaName,
+            value.country,
+            value.date,
+            value.weatherDescription,
+            value.weatherConditionCode,
+            value.temperature!.celsius,
+            value.tempMax!.celsius,
+            value.tempMin!.celsius,
+            value.tempFeelsLike!.celsius,
+            value.sunrise,
+            value.sunset);
+      case 'Kelvin':
+        weather = WeatherEntity(
+            value.areaName,
+            value.country,
+            value.date,
+            value.weatherDescription,
+            value.weatherConditionCode,
+            value.temperature!.kelvin,
+            value.tempMax!.kelvin,
+            value.tempMin!.kelvin,
+            value.tempFeelsLike!.kelvin,
+            value.sunrise,
+            value.sunset);
+      case 'Fahrenheit':
+        weather = WeatherEntity(
+            value.areaName,
+            value.country,
+            value.date,
+            value.weatherDescription,
+            value.weatherConditionCode,
+            value.temperature!.fahrenheit,
+            value.tempMax!.fahrenheit,
+            value.tempMin!.fahrenheit,
+            value.tempFeelsLike!.fahrenheit,
+            value.sunrise,
+            value.sunset);
+    }
+    return weather;
   }
 }

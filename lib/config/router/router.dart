@@ -20,9 +20,15 @@ class AppRouter {
         GoRoute(
           path: 'settings',
           name: 'settings',
-          builder: (context, state) => const SettingsPage(),
+          builder: (context, state) {
+            Map<String, dynamic> map = state.extra! as Map<String, dynamic>;
+            return SettingsPage(
+              mcontrol: map['main'],
+              wcontrol: map['weather'],
+            );
+          },
         ),
       ],
     ),
-  ], initialLocation: '/settings');
+  ], initialLocation: '/');
 }

@@ -268,7 +268,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
                 minWidth: MediaQuery.of(context).size.width,
                 onPressed: () {
-                  widget._mainController.changeWeatherUnit('Farenheid');
+                  widget._mainController.changeWeatherUnit('Fahrenheit');
                   context.pop();
                 },
                 splashColor: Theme.of(context).colorScheme.secondary,
@@ -281,14 +281,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Farenheid',
+                      'Fahrenheit',
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.inversePrimary,
                           letterSpacing: 3,
                           fontSize: 16),
                     ),
                     Icon(
-                      widget._mainController.weatherUnit$.value == 'Farenheid'
+                      widget._mainController.weatherUnit$.value == 'Fahrenheit'
                           ? Iconsax.toggle_on_circle5
                           : Iconsax.toggle_off_circle,
                       color: Theme.of(context).colorScheme.inversePrimary,

@@ -29,7 +29,8 @@ class _HomePageState extends State<HomePage>
     _mainController = MainController.instance;
     util = MyUtil.instance;
     _weatherController.initController();
-    _mainController.weatherUnit$.addListener(() => setState(() {}));
+    _mainController.weatherUnit$.addListener(
+        () => setState(() async => await _weatherController.updateWeather()));
     homeWidgets = HomeWidgets(
         classContext: context,
         wcontroll: _weatherController,
@@ -37,12 +38,6 @@ class _HomePageState extends State<HomePage>
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1))
           ..stop();
-  }
-
-  @override
-  void dispose() {
-    animationController.dispose();
-    super.dispose();
   }
 
   @override

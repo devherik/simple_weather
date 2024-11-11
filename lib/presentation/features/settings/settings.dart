@@ -24,8 +24,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    widget._mainController.weatherUnit$.addListener(
-        () => setState(() => widget._weatherController.updateWeather()));
   }
 
   @override
@@ -57,9 +55,12 @@ class _SettingsPageState extends State<SettingsPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         const Icon(Iconsax.sun_1),
-                        Text(
-                          '  Unidade de tempo - ${widget._mainController.weatherUnit$.value}',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                        ValueListenableBuilder(
+                          valueListenable: widget._mainController.weatherUnit$,
+                          builder: (context, value, child) => Text(
+                            '  Unidade de tempo - $value',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                         )
                       ],
                     ),

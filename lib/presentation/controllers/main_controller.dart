@@ -59,4 +59,6 @@ class MainController {
       _localstorageController.setDefaultTheme('light');
     }
   }
+
+  eraseAllInformation() async {}
 }

@@ -89,7 +89,12 @@ class _SettingsPageState extends State<SettingsPage> {
                         )
                       ],
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => modalBottomSheetEraseAll(),
+                      );
+                    },
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
@@ -181,24 +186,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     )
                   ],
                 )),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Tema escuro: ',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                Switch(
-                    value: widget._mainController.darkThemeOn,
-                    inactiveThumbColor:
-                        Theme.of(context).colorScheme.inversePrimary,
-                    inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
-                    activeColor: Theme.of(context).colorScheme.inversePrimary,
-                    onChanged: (bool value) => setState(() {
-                          widget._mainController.changeTheme();
-                        })),
-              ],
-            ),
           ],
         ),
       ),
@@ -335,6 +322,98 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+
+  modalBottomSheetEraseAll() {
+    return Container(
+      height: 250,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              width: 30,
+              child: Divider(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  thickness: 3),
+            ),
+            global.smallBoxSpace,
+            Flexible(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Apagar informações',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    global.verySmallBoxSpace,
+                    Text(
+                      'Deseja apagar todas as suas \nconfigurações do aplicativo?',
+                      style: Theme.of(context).textTheme.labelLarge,
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                )),
+            Flexible(
+              flex: 2,
+              fit: FlexFit.loose,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  MaterialButton(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 12),
+                    minWidth: MediaQuery.of(context).size.width * .3,
+                    onPressed: () {
+                      context.pop();
+                    },
+                    splashColor: Theme.of(context).colorScheme.secondary,
+                    elevation: 0,
+                    color: Theme.of(context).colorScheme.primary,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                    child: Text(
+                      'Não, mantenha.',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          letterSpacing: 3,
+                          fontSize: 16),
+                    ),
+                  ),
+                  MaterialButton(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 12),
+                    minWidth: MediaQuery.of(context).size.width * .3,
+                    onPressed: () async {
+                      await widget._mainController.eraseAllInformation();
+                    },
+                    splashColor: Theme.of(context).colorScheme.secondary,
+                    elevation: 0,
+                    color: global.red,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                    child: Text(
+                      'Sim, apague.',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          letterSpacing: 3,
+                          fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

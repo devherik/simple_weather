@@ -75,21 +75,6 @@ class _HomePageState extends State<HomePage>
                         });
                       },
                     )),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Switch(
-                  value: _mainController.darkThemeOn,
-                  activeColor: Theme.of(context).colorScheme.tertiary,
-                  activeThumbImage:
-                      const AssetImage('assets/images/icons/moon.png'),
-                  inactiveThumbImage:
-                      const AssetImage('assets/images/icons/sun.png'),
-                  inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
-                  activeTrackColor: Theme.of(context).colorScheme.tertiary,
-                  onChanged: (bool value) => setState(() {
-                        _mainController.changeTheme();
-                      })),
-            ),
           ],
         ),
         body: Container(

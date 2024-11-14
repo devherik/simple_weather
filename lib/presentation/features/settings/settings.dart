@@ -82,6 +82,34 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
+                        const Icon(Iconsax.color_swatch),
+                        ValueListenableBuilder(
+                          valueListenable: widget._mainController.weatherUnit$,
+                          builder: (context, value, child) => Text(
+                            '  Tema do aplicativo',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        )
+                      ],
+                    ),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => modalBottomSheetTheme(),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Divider(
+                      thickness: .1,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                  ),
+                  MaterialButton(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
                         const Icon(Iconsax.eraser),
                         Text(
                           '  Limpar suas informações',
@@ -331,6 +359,105 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+
+  modalBottomSheetTheme() {
+    return Container(
+      height: 250,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              width: 30,
+              child: Divider(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  thickness: 3),
+            ),
+            global.smallBoxSpace,
+            Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
+              child: MaterialButton(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+                minWidth: MediaQuery.of(context).size.width,
+                onPressed: () {
+                  widget._mainController.changeTheme();
+                  context.pop();
+                },
+                splashColor: Theme.of(context).colorScheme.secondary,
+                elevation: 0,
+                color: Theme.of(context).colorScheme.primary,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Tema claro',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          letterSpacing: 3,
+                          fontSize: 16),
+                    ),
+                    Icon(
+                      !widget._mainController.darkThemeOn
+                          ? Iconsax.toggle_on_circle5
+                          : Iconsax.toggle_off_circle,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.loose,
+              child: MaterialButton(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+                minWidth: MediaQuery.of(context).size.width,
+                onPressed: () {
+                  widget._mainController.changeTheme();
+                  context.pop();
+                },
+                splashColor: Theme.of(context).colorScheme.secondary,
+                elevation: 0,
+                color: Theme.of(context).colorScheme.primary,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Tema escuro',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          letterSpacing: 3,
+                          fontSize: 16),
+                    ),
+                    Icon(
+                      widget._mainController.darkThemeOn
+                          ? Iconsax.toggle_on_circle5
+                          : Iconsax.toggle_off_circle,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

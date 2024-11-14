@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
+import 'package:go_router/go_router.dart';
 import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/presentation/features/home/home_widgets.dart';
@@ -61,6 +62,19 @@ class _HomePageState extends State<HomePage>
                     ),
                   )),
           actions: [
+            Builder(
+                builder: (context) => IconButton(
+                      icon: Icon(
+                        Iconsax.setting,
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                      onPressed: () {
+                        context.push('/settings', extra: {
+                          'weather': _weatherController,
+                          'main': _mainController
+                        });
+                      },
+                    )),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Switch(

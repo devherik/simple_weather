@@ -38,11 +38,11 @@ class _SettingsPageState extends State<SettingsPage> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 3,
-              child: Column(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -105,41 +105,45 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ],
               ),
-            ),
-            Expanded(
-                flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'FEEDBACK',
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
+              global.veryLargeBoxSpace,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'FEEDBACK',
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
-                    global.smallBoxSpace,
-                    MaterialButton(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Icon(Iconsax.message_remove),
-                          Text(
-                            '  Informe um problema',
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          )
-                        ],
-                      ),
-                      onPressed: () {},
+                  ),
+                  global.smallBoxSpace,
+                  MaterialButton(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        const Icon(Iconsax.message_remove),
+                        Text(
+                          '  Informe um problema',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Divider(
-                        thickness: .1,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) =>
+                            modalBottomSheetSendMSG('Informe um problema'),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Divider(
+                      thickness: .1,
+                      color: Theme.of(context).colorScheme.inversePrimary,
                     ),
-                    MaterialButton(
+                  ),
+                  MaterialButton(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -150,43 +154,48 @@ class _SettingsPageState extends State<SettingsPage> {
                           )
                         ],
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                              modalBottomSheetSendMSG('Envie seu feedback'),
+                        );
+                      }),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Divider(
+                      thickness: .1,
+                      color: Theme.of(context).colorScheme.inversePrimary,
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Divider(
-                        thickness: .1,
-                        color: Theme.of(context).colorScheme.inversePrimary,
+                  )
+                ],
+              ),
+              global.veryLargeBoxSpace,
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Feito por Herik Colares',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Iconsax.box,
+                        size: 8,
                       ),
-                    )
-                  ],
-                )),
-            Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Feito por Herik Colares',
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Iconsax.box,
-                          size: 8,
-                        ),
-                        Text(
-                          '  devherik',
-                          style: Theme.of(context).textTheme.labelSmall,
-                        ),
-                      ],
-                    )
-                  ],
-                )),
-          ],
+                      Text(
+                        '  devherik',
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -322,6 +331,104 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+
+  modalBottomSheetSendMSG(String title) {
+    return AlertDialog(
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.titleSmall,
+      ),
+      content: Container(
+        height: MediaQuery.of(context).size.height * .75,
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            TextFormField(
+              maxLines: 5,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.bodyMedium,
+              decoration: InputDecoration(
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.inversePrimary)),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(
+                          color:
+                              Theme.of(context).colorScheme.inversePrimary))),
+            ),
+            global.smallBoxSpace,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MaterialButton(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+                  minWidth: MediaQuery.of(context).size.width * .4,
+                  onPressed: () {
+                    context.pop();
+                  },
+                  splashColor: Theme.of(context).colorScheme.secondary,
+                  elevation: 0,
+                  color: Theme.of(context).colorScheme.primary,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  child: Row(
+                    children: [
+                      const Icon(Iconsax.close_circle),
+                      Text(
+                        ' Cancelar',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            letterSpacing: 3,
+                            fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+                MaterialButton(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+                  minWidth: MediaQuery.of(context).size.width * .4,
+                  onPressed: () async {},
+                  splashColor: Theme.of(context).colorScheme.secondary,
+                  elevation: 0,
+                  color: global.green,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  child: Row(
+                    children: [
+                      const Icon(Iconsax.send1),
+                      Text(
+                        ' Enviar',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            letterSpacing: 3,
+                            fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

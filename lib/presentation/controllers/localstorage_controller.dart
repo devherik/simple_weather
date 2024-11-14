@@ -90,4 +90,8 @@ class LocalstorageController {
     userLocations.removeWhere((element) => element == name);
     updateUserLocations();
   }
+
+  eraseAllData() {
+    localStorage.clear();
+  }
 }

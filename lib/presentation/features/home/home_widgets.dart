@@ -57,21 +57,6 @@ class HomeWidgets {
                                     ),
                                     onPressed: () {},
                                   )),
-                          Builder(
-                              builder: (context) => IconButton(
-                                    icon: Icon(
-                                      Iconsax.setting,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .inversePrimary,
-                                    ),
-                                    onPressed: () {
-                                      context.push('/settings', extra: {
-                                        'weather': _weatherController,
-                                        'main': _mainController
-                                      });
-                                    },
-                                  )),
                         ],
                       ),
                     ],

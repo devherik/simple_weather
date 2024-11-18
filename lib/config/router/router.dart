@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:simple_weather_app/presentation/features/error/error.dart';
 import 'package:simple_weather_app/presentation/features/home/home.dart';
 import 'package:simple_weather_app/presentation/features/settings/settings.dart';
+import 'package:simple_weather_app/widget_tree.dart';
 
 class AppRouter {
   final router = GoRouter(routes: <RouteBase>[
@@ -41,5 +42,13 @@ class AppRouter {
         );
       },
     ),
-  ], initialLocation: '/');
+    GoRoute(
+      path: '/tree',
+      name: 'widgetTree',
+      builder: (context, state) {
+        //Map<String, dynamic> map = state.extra! as Map<String, dynamic>;
+        return const WidgetTree();
+      },
+    ),
+  ], initialLocation: '/tree');
 }

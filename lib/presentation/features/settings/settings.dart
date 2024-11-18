@@ -26,6 +26,8 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
   }
 
+//TODO: organize the code
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

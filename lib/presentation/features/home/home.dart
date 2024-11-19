@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
+import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/presentation/features/home/home_widgets.dart';
@@ -22,6 +23,8 @@ class _HomePageState extends State<HomePage>
   late HomeWidgets homeWidgets;
   late MainController _mainController;
   late AnimationController animationController;
+
+  bool searchState = false;
 
   @override
   void initState() {
@@ -49,18 +52,7 @@ class _HomePageState extends State<HomePage>
 
     return Scaffold(
         appBar: AppBar(
-          leading: Builder(
-              builder: (context) => IconButton(
-                    icon: Icon(
-                      Iconsax.menu_board,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                    onPressed: () => showModalBottomSheet(
-                      context: context,
-                      builder: (context) =>
-                          homeWidgets.modalBottomSheetLocations(),
-                    ),
-                  )),
+          leading: weatherPresentationModal(),
           actions: [
             Builder(
                 builder: (context) => IconButton(
@@ -213,5 +205,102 @@ class _HomePageState extends State<HomePage>
                 );
               }),
         ));
+  }
+
+  Widget weatherPresentationModal() {
+    return Builder(
+        builder: (context) => IconButton(
+            icon: Icon(
+              Iconsax.menu_board,
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
+            onPressed: () {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 30,
+                              child: Divider(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                  thickness: 3),
+                            ),
+                            global.smallBoxSpace,
+                            Expanded(
+                              flex: 2,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Builder(
+                                              builder: (context) => IconButton(
+                                                    icon: Icon(
+                                                      Iconsax.search_normal,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .inversePrimary,
+                                                    ),
+                                                    onPressed: () {},
+                                                  )),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  FutureBuilder(
+                                      future: _weatherController
+                                          .getWeatherByLocation(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          return homeWidgets
+                                              .currentLocationButton(snapshot
+                                                  .data as WeatherEntity);
+                                        } else {
+                                          return util.loaderBoxAnimation(
+                                              context,
+                                              20,
+                                              MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  .5);
+                                        }
+                                      }),
+                                  SizedBox(
+                                      width: 300,
+                                      child: Divider(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .inversePrimary,
+                                        thickness: .5,
+                                      )),
+                                  homeWidgets.modalBottomSheetLocations(),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+            }));
   }
 }

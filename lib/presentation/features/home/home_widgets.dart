@@ -19,97 +19,29 @@ class HomeWidgets {
   final MyUtil util = MyUtil.instance;
 
   Widget modalBottomSheetLocations() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              width: 30,
-              child: Divider(
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                  thickness: 3),
-            ),
-            global.smallBoxSpace,
-            Expanded(
-              flex: 2,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Builder(
-                              builder: (context) => IconButton(
-                                    icon: Icon(
-                                      Iconsax.search_normal,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .inversePrimary,
-                                    ),
-                                    onPressed: () {},
-                                  )),
-                        ],
-                      ),
-                    ],
-                  ),
-                  FutureBuilder(
-                      future: _weatherController.getWeatherByLocation(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return currentLocationButton(
-                              snapshot.data as WeatherEntity);
-                        } else {
-                          return util.loaderBoxAnimation(context, 20,
-                              MediaQuery.of(context).size.width * .5);
-                        }
-                      }),
-                  SizedBox(
-                      width: 300,
-                      child: Divider(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        thickness: .5,
-                      )),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 3,
-              child: ListView.builder(
-                itemCount: _weatherController.getUserLocations().length,
-                itemExtent: 80,
-                itemBuilder: (context, index) {
-                  final List<String> list =
-                      _weatherController.getUserLocations();
-                  if (list[index].isNotEmpty) {
-                    return FutureBuilder(
-                        future:
-                            _weatherController.getWeatherByCity(list[index]),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return changeToCityLocationButton(
-                                snapshot.data as WeatherEntity);
-                          } else {
-                            return util.loaderBoxAnimation(context, 20,
-                                MediaQuery.of(context).size.width * .5);
-                          }
-                        });
+    return Expanded(
+      flex: 3,
+      child: ListView.builder(
+        itemCount: _weatherController.getUserLocations().length,
+        itemExtent: 80,
+        itemBuilder: (context, index) {
+          final List<String> list = _weatherController.getUserLocations();
+          if (list[index].isNotEmpty) {
+            return FutureBuilder(
+                future: _weatherController.getWeatherByCity(list[index]),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return changeToCityLocationButton(
+                        snapshot.data as WeatherEntity);
                   } else {
-                    return const SizedBox();
+                    return util.loaderBoxAnimation(
+                        context, 20, MediaQuery.of(context).size.width * .5);
                   }
-                },
-              ),
-            ),
-          ],
-        ),
+                });
+          } else {
+            return const SizedBox();
+          }
+        },
       ),
     );
   }

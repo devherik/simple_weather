@@ -17,45 +17,17 @@ class _WidgetTreeState extends State<WidgetTree> {
         stream: Connectivity().onConnectivityChanged,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final result = snapshot.data!.first;
-            if (result == ConnectivityResult.vpn) {
-              if (snapshot.data!.contains(ConnectivityResult.mobile) ||
-                  snapshot.data!.contains(ConnectivityResult.wifi)) {
-                print('VPN with internet');
-                return HomePage();
-              } else {
-                return ErrorPage(errorMSG: 'Sem internet');
-              }
+            if (snapshot.data!.contains(ConnectivityResult.wifi) ||
+                snapshot.data!.contains(ConnectivityResult.mobile)) {
+              return HomePage(
+                key: widget.key,
+              );
             } else {
-              switch (result) {
-                case ConnectivityResult.wifi || ConnectivityResult.mobile:
-                  print('Conectado');
-                  return HomePage();
-                case ConnectivityResult.none:
-                  print('Sem conexão');
-                  return ErrorPage(errorMSG: result.toString());
-                case ConnectivityResult.other:
-                  print(ConnectivityResult.values);
-                  return ErrorPage(errorMSG: result.toString());
-                default:
-                  return Center(
-                    child: Text(
-                      'Loading Page',
-                      style: TextStyle(
-                        fontSize: 60,
-                      ),
-                    ),
-                  );
-              }
+              return ErrorPage(errorMSG: 'Sem internet');
             }
           } else {
-            return Center(
-              child: Text(
-                'Loading Page',
-                style: TextStyle(
-                  fontSize: 60,
-                ),
-              ),
+            return HomePage(
+              key: widget.key,
             );
           }
         });

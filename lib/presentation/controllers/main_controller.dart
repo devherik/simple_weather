@@ -61,5 +61,7 @@ class MainController {
     }
   }
 
-  eraseAllInformation() async {}
+  eraseAllInformation() async {
+    //_localstorageController.eraseAllData();
+  }
 }

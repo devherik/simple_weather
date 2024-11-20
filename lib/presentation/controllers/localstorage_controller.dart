@@ -55,16 +55,6 @@ class LocalstorageController {
 
   setDefaultTheme(String theme) => localStorage.setItem('DEFAULT_THEME', theme);
 
-  String getMainLocation() {
-    if (localStorage.getItem('MAIN_LOCATION') != null) {
-      return localStorage.getItem('MAIN_LOCATION')!;
-    } else {
-      return '';
-    }
-  }
-
-  setMainLocation(String value) => localStorage.setItem('MAIN_LOCATION', value);
-
   restoreUserLocations() {
     int index = 0;
     while (localStorage.getItem('LOCATION_$index') != null && index < 3) {

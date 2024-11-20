@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -28,26 +29,25 @@ class WeatherController {
   final String _weatherApiKey = dotenv.env['WEATHER_KEY']!;
 
   initController() async {
-    await _weatherApi.initAPI(_weatherApiKey);
-    if (localstorage.getMainLocation() == '') {
+    try {
+      await _weatherApi.initAPI(_weatherApiKey);
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+    try {
       currentWeather$.value = await getWeatherByLocation();
-    } else {
-      currentWeather$.value =
-          await getWeatherByCity(localstorage.getMainLocation());
+    } on Exception catch (e) {
+      log(e.toString());
     }
   }
 
   Future<void> updateWeather() async {
-    currentWeather$.value =
-        await getWeatherByCity(localstorage.getMainLocation());
+    try {
+      currentWeather$.value = await getWeatherByLocation();
+    } on Exception catch (e) {
+      log(e.toString());
+    }
   }
-
-  changeMainLocationWeather(String location) async {
-    localstorage.setMainLocation(location);
-    await updateWeather();
-  }
-
-  String getUserMainLocation() => localstorage.getMainLocation();
 
   List<String> getUserLocations() => localstorage.userLocations;
 
@@ -104,19 +104,6 @@ class WeatherController {
             value.tempMax!.celsius,
             value.tempMin!.celsius,
             value.tempFeelsLike!.celsius,
-            value.sunrise,
-            value.sunset);
-      case 'Kelvin':
-        weather = WeatherEntity(
-            value.areaName,
-            value.country,
-            value.date,
-            value.weatherDescription,
-            value.weatherConditionCode,
-            value.temperature!.kelvin,
-            value.tempMax!.kelvin,
-            value.tempMin!.kelvin,
-            value.tempFeelsLike!.kelvin,
             value.sunrise,
             value.sunset);
       case 'Fahrenheit':

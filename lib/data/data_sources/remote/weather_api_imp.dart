@@ -10,8 +10,8 @@ class WeatherApiImp implements WeatherApi {
   initAPI(String key) async {
     try {
       _factory = WeatherFactory(key);
-    } catch (e) {
-      throw e.toString();
+    } on Exception {
+      rethrow;
     }
   }
 

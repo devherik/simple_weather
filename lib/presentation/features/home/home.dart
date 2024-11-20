@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
-import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/presentation/features/home/home_widgets.dart';
@@ -24,10 +23,6 @@ class _HomePageState extends State<HomePage>
   late MainController _mainController;
   late AnimationController animationController;
 
-  bool searchState = false;
-
-  final _searchTextController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -37,10 +32,8 @@ class _HomePageState extends State<HomePage>
     _weatherController.initController();
     _mainController.weatherUnit$.addListener(
         () => setState(() async => await _weatherController.updateWeather()));
-    homeWidgets = HomeWidgets(
-        classContext: context,
-        wcontroll: _weatherController,
-        mcontroll: _mainController);
+    homeWidgets =
+        HomeWidgets(parentContext: context, wcontroll: _weatherController);
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1))
           ..stop();
@@ -53,6 +46,14 @@ class _HomePageState extends State<HomePage>
         CurvedAnimation(parent: animationController, curve: Curves.easeOutCirc);
 
     return Scaffold(
+        floatingActionButton: Builder(
+            builder: (context) => IconButton(
+                icon: Icon(
+                  Iconsax.search_normal,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                onPressed: () => context
+                    .push('/search', extra: {'weather': _weatherController}))),
         appBar: AppBar(
           leading: weatherPresentationModal(),
           actions: [
@@ -238,21 +239,6 @@ class _HomePageState extends State<HomePage>
                                   thickness: 3),
                             ),
                             global.smallBoxSpace,
-                            Expanded(
-                              flex: 1,
-                              child: Builder(
-                                  builder: (context) => IconButton(
-                                      icon: Icon(
-                                        Iconsax.search_normal,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .inversePrimary,
-                                      ),
-                                      onPressed: () => context.push('/search',
-                                              extra: {
-                                                'weather': _weatherController
-                                              }))),
-                            ),
                             Expanded(
                               flex: 3,
                               child: homeWidgets.modalBottomSheetLocations(),

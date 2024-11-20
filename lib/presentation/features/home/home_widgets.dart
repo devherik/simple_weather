@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
 
 class HomeWidgets {
-  HomeWidgets({required classContext, required wcontroll, required mcontroll})
-      : context = classContext,
-        _weatherController = wcontroll,
-        _mainController = mcontroll;
+  HomeWidgets({required parentContext, required wcontroll})
+      : context = parentContext,
+        _weatherController = wcontroll;
 
   final BuildContext context;
   final WeatherController _weatherController;
-  final MainController _mainController;
   final MyUtil util = MyUtil.instance;
 
   Widget modalBottomSheetLocations() {
@@ -31,7 +28,7 @@ class HomeWidgets {
                 future: _weatherController.getWeatherByCity(list[index]),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return changeToCityLocationButton(
+                    return openLocationWeatherDetails(
                         snapshot.data as WeatherEntity);
                   } else {
                     return util.loaderBoxAnimation(
@@ -46,13 +43,11 @@ class HomeWidgets {
     );
   }
 
-  Widget changeToCityLocationButton(WeatherEntity weather) => MaterialButton(
+  Widget openLocationWeatherDetails(WeatherEntity weather) => MaterialButton(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         minWidth: MediaQuery.of(context).size.width,
-        onPressed: () async {
-          await _weatherController.changeMainLocationWeather(weather.cityName!);
-          // ignore: use_build_context_synchronously
-          context.pop();
+        onPressed: () {
+          // open a page with details of this location
         },
         splashColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,
@@ -62,9 +57,7 @@ class HomeWidgets {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              _weatherController.getUserMainLocation() == weather.cityName
-                  ? Iconsax.location5
-                  : Iconsax.location,
+              Iconsax.location,
               color: Theme.of(context).colorScheme.inversePrimary,
             ),
             Text(
@@ -75,50 +68,6 @@ class HomeWidgets {
                   fontSize: 16),
             ),
             util.withWeatherIcon(weather.condition!),
-          ],
-        ),
-      );
-
-  Widget currentLocationButton(WeatherEntity weather) => MaterialButton(
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-        minWidth: MediaQuery.of(context).size.width,
-        onPressed: () async {
-          await _weatherController.changeMainLocationWeather(weather.cityName!);
-          // ignore: use_build_context_synchronously
-          context.pop();
-        },
-        splashColor: Theme.of(context).colorScheme.secondary,
-        elevation: 0,
-        color: Theme.of(context).colorScheme.primary,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Iconsax.location_add,
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                ),
-                Text(
-                  ' Localização atual   ${weather.temp!.toStringAsFixed(0)}° ',
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      letterSpacing: 3,
-                      fontSize: 16),
-                ),
-                util.withWeatherIcon(weather.condition!),
-              ],
-            ),
-            Text(
-              weather.cityName!,
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                  letterSpacing: 3,
-                  fontSize: 12),
-            )
           ],
         ),
       );

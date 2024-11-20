@@ -25,10 +25,7 @@ class AppRouter {
           name: 'settingsPage',
           builder: (context, state) {
             Map<String, dynamic> map = state.extra! as Map<String, dynamic>;
-            return SettingsPage(
-              mcontroll: map['main'],
-              wcontroll: map['weather'],
-            );
+            return SettingsPage(mcontroll: map['main']);
           },
         ),
         GoRoute(
@@ -36,9 +33,7 @@ class AppRouter {
           name: 'searchPage',
           builder: (context, state) {
             Map<String, dynamic> map = state.extra! as Map<String, dynamic>;
-            return SearchPage(
-              wcontroll: map['weather'],
-            );
+            return SearchPage(wcontroll: map['weather']);
           },
         ),
       ],
@@ -49,8 +44,7 @@ class AppRouter {
       builder: (context, state) {
         //Map<String, dynamic> map = state.extra! as Map<String, dynamic>;
         return const ErrorPage(
-          errorMSG: 'Um erro aconteceu. Estamos trabalhando para resolver.',
-        );
+            errorMSG: 'Um erro aconteceu. Estamos trabalhando para resolver.');
       },
     ),
     GoRoute(

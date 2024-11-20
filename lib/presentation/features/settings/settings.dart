@@ -2,18 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
-import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
 
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage(
-      {super.key,
-      required WeatherController wcontroll,
-      required MainController mcontroll})
-      : _weatherController = wcontroll,
-        _mainController = mcontroll;
-  final WeatherController _weatherController;
+  const SettingsPage({super.key, required MainController mcontroll})
+      : _mainController = mcontroll;
   final MainController _mainController;
 
   @override

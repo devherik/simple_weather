@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:simple_weather_app/config/mockup/weather_mockup_imp.dart';
 import 'package:simple_weather_app/data/data_sources/remote/location_api_imp.dart';
 import 'package:simple_weather_app/data/data_sources/remote/weather_api_imp.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
@@ -18,7 +19,8 @@ class WeatherController {
       WeatherController._privateConstructor();
 
   final LocationApi _locationApi = LocationApiImp.instance;
-  final WeatherApi _weatherApi = WeatherApiImp.instance;
+  //final WeatherApi _weatherApi = WeatherApiImp.instance;
+  final WeatherApi _weatherApi = WeatherMockupImp.instance;
   final MainController _mainController = MainController.instance;
   final LocalstorageController localstorage = LocalstorageController.instance;
 

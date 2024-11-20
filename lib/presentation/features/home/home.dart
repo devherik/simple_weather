@@ -181,7 +181,7 @@ class _HomePageState extends State<HomePage>
                                   width: MediaQuery.of(context).size.width,
                                   child: ListView.builder(
                                       padding: const EdgeInsets.all(8),
-                                      itemCount: 9,
+                                      itemCount: value.forecast.length,
                                       itemExtent:
                                           MediaQuery.of(context).size.width *
                                               .20,

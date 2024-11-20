@@ -9,10 +9,10 @@ import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 class SettingsPage extends StatefulWidget {
   const SettingsPage(
       {super.key,
-      required WeatherController wcontrol,
-      required MainController mcontrol})
-      : _weatherController = wcontrol,
-        _mainController = mcontrol;
+      required WeatherController wcontroll,
+      required MainController mcontroll})
+      : _weatherController = wcontroll,
+        _mainController = mcontroll;
   final WeatherController _weatherController;
   final MainController _mainController;
 

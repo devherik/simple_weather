@@ -26,6 +26,8 @@ class _HomePageState extends State<HomePage>
 
   bool searchState = false;
 
+  final _searchTextController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -56,17 +58,14 @@ class _HomePageState extends State<HomePage>
           actions: [
             Builder(
                 builder: (context) => IconButton(
-                      icon: Icon(
-                        Iconsax.setting,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                      onPressed: () {
-                        context.push('/settings', extra: {
+                    icon: Icon(
+                      Iconsax.setting,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                    onPressed: () => context.push('/settings', extra: {
                           'weather': _weatherController,
                           'main': _mainController
-                        });
-                      },
-                    )),
+                        }))),
           ],
         ),
         body: Container(
@@ -240,62 +239,24 @@ class _HomePageState extends State<HomePage>
                             ),
                             global.smallBoxSpace,
                             Expanded(
-                              flex: 2,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Builder(
-                                              builder: (context) => IconButton(
-                                                    icon: Icon(
-                                                      Iconsax.search_normal,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .inversePrimary,
-                                                    ),
-                                                    onPressed: () {},
-                                                  )),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  FutureBuilder(
-                                      future: _weatherController
-                                          .getWeatherByLocation(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return homeWidgets
-                                              .currentLocationButton(snapshot
-                                                  .data as WeatherEntity);
-                                        } else {
-                                          return util.loaderBoxAnimation(
-                                              context,
-                                              20,
-                                              MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  .5);
-                                        }
-                                      }),
-                                  SizedBox(
-                                      width: 300,
-                                      child: Divider(
+                              flex: 1,
+                              child: Builder(
+                                  builder: (context) => IconButton(
+                                      icon: Icon(
+                                        Iconsax.search_normal,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .inversePrimary,
-                                        thickness: .5,
-                                      )),
-                                  homeWidgets.modalBottomSheetLocations(),
-                                ],
-                              ),
+                                      ),
+                                      onPressed: () => context.push('/search',
+                                              extra: {
+                                                'weather': _weatherController
+                                              }))),
                             ),
+                            Expanded(
+                              flex: 3,
+                              child: homeWidgets.modalBottomSheetLocations(),
+                            )
                           ],
                         ),
                       ),

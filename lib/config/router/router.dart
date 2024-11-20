@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:simple_weather_app/presentation/features/error/error.dart';
 import 'package:simple_weather_app/presentation/features/home/home.dart';
+import 'package:simple_weather_app/presentation/features/search/search.dart';
 import 'package:simple_weather_app/presentation/features/settings/settings.dart';
 import 'package:simple_weather_app/widget_tree.dart';
 
@@ -25,8 +26,18 @@ class AppRouter {
           builder: (context, state) {
             Map<String, dynamic> map = state.extra! as Map<String, dynamic>;
             return SettingsPage(
-              mcontrol: map['main'],
-              wcontrol: map['weather'],
+              mcontroll: map['main'],
+              wcontroll: map['weather'],
+            );
+          },
+        ),
+        GoRoute(
+          path: 'search',
+          name: 'searchPage',
+          builder: (context, state) {
+            Map<String, dynamic> map = state.extra! as Map<String, dynamic>;
+            return SearchPage(
+              wcontroll: map['weather'],
             );
           },
         ),

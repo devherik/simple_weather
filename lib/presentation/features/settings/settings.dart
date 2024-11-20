@@ -318,43 +318,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.loose,
-              child: MaterialButton(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-                minWidth: MediaQuery.of(context).size.width,
-                onPressed: () {
-                  widget._mainController.changeWeatherUnit('Kelvin');
-                  context.pop();
-                },
-                splashColor: Theme.of(context).colorScheme.secondary,
-                elevation: 0,
-                color: Theme.of(context).colorScheme.primary,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Kelvin',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          letterSpacing: 3,
-                          fontSize: 16),
-                    ),
-                    Icon(
-                      widget._mainController.weatherUnit$.value == 'Kelvin'
-                          ? Iconsax.toggle_on_circle5
-                          : Iconsax.toggle_off_circle,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                  ],
-                ),
-              ),
-            )
           ],
         ),
       ),

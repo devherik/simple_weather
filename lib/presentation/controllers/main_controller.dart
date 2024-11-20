@@ -27,6 +27,7 @@ class MainController {
 
   setWeatherUnit() =>
       weatherUnit$.value = _localstorageController.getWeatherUnit();
+
   changeWeatherUnit(String value) {
     weatherUnit$.value = value;
     _localstorageController.setWeatherUnit(value);

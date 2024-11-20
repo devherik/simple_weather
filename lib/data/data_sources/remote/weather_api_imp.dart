@@ -8,32 +8,52 @@ class WeatherApiImp implements WeatherApi {
 
   @override
   initAPI(String key) async {
-    _factory = WeatherFactory(key);
+    try {
+      _factory = WeatherFactory(key);
+    } catch (e) {
+      throw e.toString();
+    }
   }
 
   @override
   getWeatherByCity(String city) async {
-    final Weather value = await _factory!.currentWeatherByCityName(city);
-    return value;
+    try {
+      final Weather value = await _factory!.currentWeatherByCityName(city);
+      return value;
+    } on Exception {
+      rethrow;
+    }
   }
 
   @override
   getWeatherByLocation(double lat, double lon) async {
-    final Weather value = await _factory!.currentWeatherByLocation(lat, lon);
-    return value;
+    try {
+      final Weather value = await _factory!.currentWeatherByLocation(lat, lon);
+      return value;
+    } on Exception {
+      rethrow;
+    }
   }
 
   @override
   getForecastByCity(String city) async {
-    final List<Weather> values =
-        await _factory!.fiveDayForecastByCityName(city);
-    return values;
+    try {
+      final List<Weather> values =
+          await _factory!.fiveDayForecastByCityName(city);
+      return values;
+    } on Exception {
+      rethrow;
+    }
   }
 
   @override
   getForecastByLocation(double lat, double lon) async {
-    final List<Weather> values =
-        await _factory!.fiveDayForecastByLocation(lat, lon);
-    return values;
+    try {
+      final List<Weather> values =
+          await _factory!.fiveDayForecastByLocation(lat, lon);
+      return values;
+    } on Exception {
+      rethrow;
+    }
   }
 }

@@ -16,38 +16,34 @@ class HomeWidgets {
   final MyUtil util = MyUtil.instance;
 
   Widget modalBottomSheetLocations() {
-    return Expanded(
-      flex: 3,
-      child: ListView.builder(
-        itemCount: _weatherController.getUserLocations().length,
-        itemExtent: 80,
-        itemBuilder: (context, index) {
-          final List<String> list = _weatherController.getUserLocations();
-          if (list[index].isNotEmpty) {
-            return FutureBuilder(
-                future: _weatherController.getWeatherByCity(list[index]),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return openLocationWeatherDetails(
-                        snapshot.data as WeatherEntity);
-                  } else {
-                    return util.loaderBoxAnimation(
-                        context, 20, MediaQuery.of(context).size.width * .5);
-                  }
-                });
-          } else {
-            return const SizedBox();
-          }
-        },
-      ),
+    return ListView.builder(
+      itemCount: _weatherController.getUserLocations().length,
+      itemExtent: 80,
+      itemBuilder: (context, index) {
+        final List<String> list = _weatherController.getUserLocations();
+        if (list[index].isNotEmpty) {
+          return FutureBuilder(
+              future: _weatherController.getWeatherByCity(list[index]),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return locationWeatherButton(snapshot.data as WeatherEntity);
+                } else {
+                  return util.loaderBoxAnimation(
+                      context, 20, MediaQuery.of(context).size.width * .5);
+                }
+              });
+        } else {
+          return const SizedBox();
+        }
+      },
     );
   }
 
-  Widget openLocationWeatherDetails(WeatherEntity weather) => MaterialButton(
+  Widget locationWeatherButton(WeatherEntity weather) => MaterialButton(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
-          // open a page with details of this location
+          // open a staless page with details of this location
         },
         splashColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,
@@ -69,6 +65,25 @@ class HomeWidgets {
             ),
             util.withWeatherIcon(weather.condition!),
           ],
+        ),
+      );
+
+  Widget locationsManagerButton() => MaterialButton(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+        minWidth: MediaQuery.of(context).size.width,
+        onPressed: () {
+          // open a stafull page locations configuration
+        },
+        splashColor: Theme.of(context).colorScheme.secondary,
+        elevation: 0.5,
+        color: Theme.of(context).colorScheme.primary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Text(
+          'Gerenciar localizações',
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.inversePrimary,
+              letterSpacing: 3,
+              fontSize: 16),
         ),
       );
 

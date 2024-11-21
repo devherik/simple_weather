@@ -46,28 +46,8 @@ class _HomePageState extends State<HomePage>
         CurvedAnimation(parent: animationController, curve: Curves.easeOutCirc);
 
     return Scaffold(
-        floatingActionButton: Builder(
-            builder: (context) => IconButton(
-                icon: Icon(
-                  Iconsax.search_normal,
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                ),
-                onPressed: () => context
-                    .push('/search', extra: {'weather': _weatherController}))),
         appBar: AppBar(
           leading: weatherPresentationModal(),
-          actions: [
-            Builder(
-                builder: (context) => IconButton(
-                    icon: Icon(
-                      Iconsax.setting,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                    onPressed: () => context.push('/settings', extra: {
-                          'weather': _weatherController,
-                          'main': _mainController
-                        }))),
-          ],
         ),
         body: Container(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -94,10 +74,24 @@ class _HomePageState extends State<HomePage>
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(
-                                    value.cityName!,
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        '${value.cityName!} ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall,
+                                      ),
+                                      Icon(
+                                        Iconsax.location5,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .inversePrimary,
+                                      ),
+                                    ],
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -240,9 +234,59 @@ class _HomePageState extends State<HomePage>
                             ),
                             global.smallBoxSpace,
                             Expanded(
-                              flex: 3,
-                              child: homeWidgets.modalBottomSheetLocations(),
-                            )
+                                flex: 1,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    Builder(
+                                        builder: (context) => IconButton(
+                                            icon: Icon(
+                                              Iconsax.setting,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .inversePrimary,
+                                            ),
+                                            onPressed: () => context
+                                                    .push('/settings', extra: {
+                                                  'weather': _weatherController,
+                                                  'main': _mainController
+                                                }))),
+                                    Builder(
+                                        builder: (context) => IconButton(
+                                            icon: Icon(
+                                              Iconsax.search_normal,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .inversePrimary,
+                                            ),
+                                            onPressed: () => context
+                                                    .push('/search', extra: {
+                                                  'weather': _weatherController
+                                                }))),
+                                  ],
+                                )),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Divider(
+                                thickness: .1,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                              ),
+                            ),
+                            Expanded(
+                                flex: 3,
+                                child: homeWidgets.modalBottomSheetLocations()),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Divider(
+                                thickness: .1,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                              ),
+                            ),
+                            homeWidgets.locationsManagerButton()
                           ],
                         ),
                       ),

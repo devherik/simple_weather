@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
 
 class SearchPage extends StatefulWidget {
@@ -13,40 +14,66 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final _searchTextController = TextEditingController();
   @override
+  void initState() {
+    super.initState();
+    _searchTextController.addListener(() => setState(() {}));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Center(
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 100,
+        title: TextFormField(
+          controller: _searchTextController,
+          maxLines: 1,
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.done,
+          textAlign: TextAlign.start,
+          style: Theme.of(context).textTheme.labelMedium,
+          decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+              label: Text('Pesquise aqui...',
+                  style: Theme.of(context).textTheme.labelLarge)),
+        ),
+      ),
+      floatingActionButton: Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          width: 200,
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.tertiary,
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Builder(
+                  builder: (context) => IconButton(
+                      icon: Icon(
+                        Iconsax.close_circle,
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                      onPressed: () => {})),
+              Builder(
+                  builder: (context) => IconButton(
+                      icon: Icon(
+                        Iconsax.save_2,
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                      onPressed: () {})),
+            ],
+          ),
+        ),
+      ),
+      body: Center(
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * .8,
-                      child: TextFormField(
-                        controller: _searchTextController,
-                        maxLines: 1,
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.done,
-                        textAlign: TextAlign.start,
-                        style: Theme.of(context).textTheme.labelMedium,
-                        decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                            label: Text('Pesquise aqui...')),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
             FutureBuilder(
-                future: widget._weatherController.getWeatherByLocation(),
+                future: widget._weatherController
+                    .getForecastByCity(_searchTextController.text.trim()),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Text(snapshot.data.toString());

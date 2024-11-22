@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
+import 'package:simple_weather_app/utils/constant/my_util.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key, required wcontroll})
@@ -13,10 +15,12 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final _searchTextController = TextEditingController();
+  late MyUtil _util;
   @override
   void initState() {
     super.initState();
     _searchTextController.addListener(() => setState(() {}));
+    _util = MyUtil.instance;
   }
 
   @override
@@ -68,28 +72,62 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            FutureBuilder(
-                future: widget._weatherController
-                    .getForecastByCity(_searchTextController.text.trim()),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(snapshot.data.toString());
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                }),
-            SizedBox(
-                width: 300,
-                child: Divider(
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                  thickness: .5,
-                )),
-          ],
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: FutureBuilder(
+              future: widget._weatherController
+                  .getForecastByCity(_searchTextController.text.trim()),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: snapshot.data!.length,
+                    itemExtent: MediaQuery.of(context).size.width * .20,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) =>
+                        weatherCard(snapshot.data![index]),
+                  );
+                } else {
+                  return CircularProgressIndicator();
+                }
+              }),
         ),
       ),
     );
   }
+
+  Widget weatherCard(WeatherEntity weather) => Card(
+        elevation: 1,
+        color: Theme.of(context).colorScheme.tertiary,
+        child: Row(
+          children: [
+            Column(
+              children: <Widget>[
+                Text(weather.cityName!,
+                    style: Theme.of(context).textTheme.titleSmall),
+                Text(weather.country!,
+                    style: Theme.of(context).textTheme.labelMedium),
+                Text(weather.getHour(),
+                    style: Theme.of(context).textTheme.labelMedium),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _util.withWeatherIcon(weather.condition!),
+                    Text(weather.temp!.toString(),
+                        style: Theme.of(context).textTheme.titleMedium)
+                  ],
+                ),
+                Text('${weather.minTemp!} / ${weather.maxTemp!}',
+                    style: Theme.of(context).textTheme.labelMedium),
+              ],
+            ),
+          ],
+        ),
+      );
 }

@@ -84,7 +84,7 @@ class _SearchPageState extends State<SearchPage> {
                   return ListView.builder(
                     padding: const EdgeInsets.all(8),
                     itemCount: snapshot.data!.length,
-                    itemExtent: MediaQuery.of(context).size.width * .20,
+                    itemExtent: MediaQuery.of(context).size.width * .40,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) =>
                         weatherCard(snapshot.data![index]),
@@ -99,35 +99,46 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget weatherCard(WeatherEntity weather) => Card(
-        elevation: 1,
-        color: Theme.of(context).colorScheme.tertiary,
-        child: Row(
-          children: [
-            Column(
-              children: <Widget>[
-                Text(weather.cityName!,
-                    style: Theme.of(context).textTheme.titleSmall),
-                Text(weather.country!,
-                    style: Theme.of(context).textTheme.labelMedium),
-                Text(weather.getHour(),
-                    style: Theme.of(context).textTheme.labelMedium),
-              ],
-            ),
-            Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _util.withWeatherIcon(weather.condition!),
-                    Text(weather.temp!.toString(),
-                        style: Theme.of(context).textTheme.titleMedium)
-                  ],
-                ),
-                Text('${weather.minTemp!} / ${weather.maxTemp!}',
-                    style: Theme.of(context).textTheme.labelMedium),
-              ],
-            ),
-          ],
+        elevation: 2,
+        color: Theme.of(context).colorScheme.primary,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(weather.cityName!,
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  Text(weather.country!,
+                      style: Theme.of(context).textTheme.labelLarge),
+                  Text(
+                      '${weather.dateTime!.day.toString()}/${weather.dateTime!.month.toString()} - ${weather.dateTime!.hour.toString()}:00',
+                      style: Theme.of(context).textTheme.labelLarge),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _util.withWeatherIcon(weather.condition!),
+                      Text(' ${weather.temp!.toStringAsFixed(0)}°',
+                          style: Theme.of(context).textTheme.titleMedium)
+                    ],
+                  ),
+                  Text(
+                      '${weather.minTemp!.toStringAsFixed(0)}°/${weather.maxTemp!.toStringAsFixed(0)}°',
+                      style: Theme.of(context).textTheme.labelLarge),
+                ],
+              ),
+            ],
+          ),
         ),
       );
 }

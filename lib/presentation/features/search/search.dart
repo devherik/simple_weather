@@ -42,35 +42,20 @@ class _SearchPageState extends State<SearchPage> {
                   style: Theme.of(context).textTheme.labelLarge)),
         ),
       ),
-      floatingActionButton: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          width: 200,
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.tertiary,
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Builder(
-                  builder: (context) => IconButton(
-                      icon: Icon(
-                        Iconsax.close_circle,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                      onPressed: () => {})),
-              Builder(
-                  builder: (context) => IconButton(
-                      icon: Icon(
-                        Iconsax.save_2,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                      onPressed: () {})),
-            ],
-          ),
+      floatingActionButton: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.inversePrimary,
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
         ),
+        child: Builder(
+            builder: (context) => IconButton(
+                icon: Icon(
+                  Iconsax.add,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 36,
+                ),
+                onPressed: () {})),
       ),
       body: SingleChildScrollView(
         child: SizedBox(
@@ -78,17 +63,10 @@ class _SearchPageState extends State<SearchPage> {
           width: MediaQuery.of(context).size.width,
           child: FutureBuilder(
               future: widget._weatherController
-                  .getForecastByCity(_searchTextController.text.trim()),
+                  .getWeatherByCity(_searchTextController.text.trim()),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: snapshot.data!.length,
-                    itemExtent: MediaQuery.of(context).size.width * .40,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) =>
-                        weatherCard(snapshot.data![index]),
-                  );
+                  return weatherCard(snapshot.data!);
                 } else {
                   return CircularProgressIndicator();
                 }
@@ -98,12 +76,20 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget weatherCard(WeatherEntity weather) => Card(
-        elevation: 2,
-        color: Theme.of(context).colorScheme.primary,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Row(
+  Widget weatherCard(WeatherEntity weather) {
+    final filteredForecast = <WeatherEntity>[weather.forecast[0]];
+    int day = weather.forecast[0].dateTime!.day;
+    for (var w in weather.forecast) {
+      if (w.dateTime!.day != day) {
+        filteredForecast.add(w);
+        day = w.dateTime!.day;
+      }
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: Column(
+        children: [
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
@@ -113,9 +99,6 @@ class _SearchPageState extends State<SearchPage> {
                   Text(weather.cityName!,
                       style: Theme.of(context).textTheme.bodyLarge),
                   Text(weather.country!,
-                      style: Theme.of(context).textTheme.labelLarge),
-                  Text(
-                      '${weather.dateTime!.day.toString()}/${weather.dateTime!.month.toString()} - ${weather.dateTime!.hour.toString()}:00',
                       style: Theme.of(context).textTheme.labelLarge),
                 ],
               ),
@@ -139,6 +122,18 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ],
           ),
-        ),
-      );
+          Expanded(
+            child: ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: filteredForecast.length,
+                itemBuilder: (context, index) {
+                  return Text(
+                      '${filteredForecast[index].dateTime!.day.toString()}/${filteredForecast[index].dateTime!.month.toString()} - ${filteredForecast[index].dateTime!.hour.toString()}:00',
+                      style: Theme.of(context).textTheme.labelLarge);
+                }),
+          ),
+        ],
+      ),
+    );
+  }
 }

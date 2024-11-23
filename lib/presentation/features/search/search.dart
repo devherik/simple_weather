@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
+import 'package:simple_weather_app/presentation/features/my_widgets.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 
 class SearchPage extends StatefulWidget {
@@ -16,11 +17,14 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final _searchTextController = TextEditingController();
   late MyUtil _util;
+  late MyWidgets _widgets;
   @override
   void initState() {
     super.initState();
     _searchTextController.addListener(() => setState(() {}));
     _util = MyUtil.instance;
+    _widgets =
+        MyWidgets(parentContext: context, wcontroll: widget._weatherController);
   }
 
   @override
@@ -57,21 +61,20 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 onPressed: () {})),
       ),
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: FutureBuilder(
-              future: widget._weatherController
-                  .getWeatherByCity(_searchTextController.text.trim()),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return weatherCard(snapshot.data!);
-                } else {
-                  return CircularProgressIndicator();
-                }
-              }),
-        ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: FutureBuilder(
+            future: widget._weatherController
+                .getWeatherByCity(_searchTextController.text.trim()),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return _widgets.detailedWeather(snapshot.data!);
+              } else {
+                return CircularProgressIndicator();
+              }
+            }),
       ),
     );
   }
@@ -85,54 +88,51 @@ class _SearchPageState extends State<SearchPage> {
         day = w.dateTime!.day;
       }
     }
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(weather.cityName!,
-                      style: Theme.of(context).textTheme.bodyLarge),
-                  Text(weather.country!,
-                      style: Theme.of(context).textTheme.labelLarge),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _util.withWeatherIcon(weather.condition!),
-                      Text(' ${weather.temp!.toStringAsFixed(0)}°',
-                          style: Theme.of(context).textTheme.titleMedium)
-                    ],
-                  ),
-                  Text(
-                      '${weather.minTemp!.toStringAsFixed(0)}°/${weather.maxTemp!.toStringAsFixed(0)}°',
-                      style: Theme.of(context).textTheme.labelLarge),
-                ],
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: filteredForecast.length,
-                itemBuilder: (context, index) {
-                  return Text(
-                      '${filteredForecast[index].dateTime!.day.toString()}/${filteredForecast[index].dateTime!.month.toString()} - ${filteredForecast[index].dateTime!.hour.toString()}:00',
-                      style: Theme.of(context).textTheme.labelLarge);
-                }),
-          ),
-        ],
+    return Card(
+      elevation: 2,
+      color: Theme.of(context).colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(weather.cityName!,
+                        style: Theme.of(context).textTheme.bodyLarge),
+                    Text(weather.country!,
+                        style: Theme.of(context).textTheme.labelLarge),
+                    Text(
+                        '${weather.dateTime!.day.toString()}/${weather.dateTime!.month.toString()}',
+                        style: Theme.of(context).textTheme.labelLarge)
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _util.withWeatherIcon(weather.condition!),
+                        Text(' ${weather.temp!.toStringAsFixed(0)}°',
+                            style: Theme.of(context).textTheme.titleMedium)
+                      ],
+                    ),
+                    Text(
+                        '${weather.minTemp!.toStringAsFixed(0)}°/${weather.maxTemp!.toStringAsFixed(0)}°',
+                        style: Theme.of(context).textTheme.labelLarge)
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

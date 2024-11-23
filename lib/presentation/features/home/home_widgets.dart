@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:go_router/go_router.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
@@ -41,7 +42,8 @@ class HomeWidgets {
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
-          // open a staless page with details of this location
+          context.push('/detailed',
+              extra: {'wcontroll': _weatherController, 'wentity': weather});
         },
         splashColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,

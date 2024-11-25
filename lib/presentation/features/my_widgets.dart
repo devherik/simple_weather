@@ -83,45 +83,49 @@ class MyWidgets {
           ),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(vertical: 16),
               itemCount: filteredForecast.length,
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                        util.weekDay(filteredForecast[index].dateTime!.weekday),
-                        style: Theme.of(context).textTheme.labelLarge),
-                    Row(
-                      children: <Widget>[
-                        Row(
-                          children: [
-                            util.withWeatherIcon(
-                                filteredForecast[index].condition!),
-                            Text(
-                                '  ${filteredForecast[index].maxTemp!.toStringAsFixed(0)}°',
-                                style: Theme.of(context).textTheme.bodyLarge),
-                            Icon(
-                              Icons.arrow_upward,
-                              color: global.red,
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                                ' | ${filteredForecast[index].minTemp!.toStringAsFixed(0)}°',
-                                style: Theme.of(context).textTheme.bodyLarge),
-                            Icon(
-                              Icons.arrow_downward,
-                              color: global.blue,
-                            )
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                          util.weekDay(
+                              filteredForecast[index].dateTime!.weekday),
+                          style: Theme.of(context).textTheme.labelLarge),
+                      Row(
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              util.withWeatherIcon(
+                                  filteredForecast[index].condition!),
+                              Text(
+                                  '  ${filteredForecast[index].maxTemp!.toStringAsFixed(0)}°',
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                              Icon(
+                                Icons.arrow_upward,
+                                color: global.red,
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                  ' | ${filteredForecast[index].minTemp!.toStringAsFixed(0)}°',
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                              Icon(
+                                Icons.arrow_downward,
+                                color: global.blue,
+                              )
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 );
               },
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
+import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/presentation/features/home/home_widgets.dart';
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    final String day = util.weekDay(DateTime.now().weekday);
+    final String today = util.weekDay(DateTime.now().weekday);
     final Animation<double> turnController =
         CurvedAnimation(parent: animationController, curve: Curves.easeOutCirc);
 
@@ -64,6 +65,16 @@ class _HomePageState extends State<HomePage>
                         ),
                       );
                     } else {
+                      final filteredForecast = <WeatherEntity>[
+                        value.forecast[0]
+                      ];
+                      int day = value.forecast[0].dateTime!.day;
+                      for (var w in value.forecast) {
+                        if (w.dateTime!.day != day) {
+                          filteredForecast.add(w);
+                          day = w.dateTime!.day;
+                        }
+                      }
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,7 +108,7 @@ class _HomePageState extends State<HomePage>
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        '$day - ${value.getHour()}',
+                                        '$today - ${value.getHour()}',
                                         textAlign: TextAlign.center,
                                         style: Theme.of(context)
                                             .textTheme
@@ -155,7 +166,7 @@ class _HomePageState extends State<HomePage>
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  'Próximas horas',
+                                  'Próximos dias',
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                                 global.verySmallBoxSpace,
@@ -175,7 +186,7 @@ class _HomePageState extends State<HomePage>
                                   width: MediaQuery.of(context).size.width,
                                   child: ListView.builder(
                                       padding: const EdgeInsets.all(8),
-                                      itemCount: value.forecast.length,
+                                      itemCount: filteredForecast.length,
                                       itemExtent:
                                           MediaQuery.of(context).size.width *
                                               .20,
@@ -183,7 +194,7 @@ class _HomePageState extends State<HomePage>
                                       itemBuilder: (context, index) {
                                         try {
                                           return homeWidgets.weatherCard(
-                                              value.forecast[index]);
+                                              filteredForecast[index]);
                                         } catch (e) {
                                           throw e.toString();
                                         }

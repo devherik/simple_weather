@@ -96,14 +96,14 @@ class HomeWidgets {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '${weather.temp!.toStringAsFixed(0)}° ',
+              '${weather.maxTemp!.toStringAsFixed(0)}° ',
               style: Theme.of(context).textTheme.labelLarge,
             ),
             util.withWeatherIcon(weather.condition!),
           ],
         ),
         Text(
-          '${weather.dateTime!.day.toString()}/${weather.dateTime!.month.toString()}\n${weather.dateTime!.hour.toString()}:00',
+          util.weekDay(weather.dateTime!.weekday),
           style: Theme.of(context).textTheme.labelMedium,
         ),
       ],

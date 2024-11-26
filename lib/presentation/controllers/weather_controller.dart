@@ -19,8 +19,8 @@ class WeatherController {
       WeatherController._privateConstructor();
 
   final LocationApi _locationApi = LocationApiImp.instance;
-  final WeatherApi _weatherApi = WeatherApiImp.instance;
-  //final WeatherApi _weatherApi = WeatherMockupImp.instance;
+  //final WeatherApi _weatherApi = WeatherApiImp.instance;
+  final WeatherApi _weatherApi = WeatherMockupImp.instance;
   final MainController _mainController = MainController.instance;
   final LocalstorageController localstorage = LocalstorageController.instance;
 
@@ -41,6 +41,7 @@ class WeatherController {
     } on Exception catch (e) {
       log(e.toString());
     }
+    return currentWeather$.value;
   }
 
   Future<void> updateWeather() async {
@@ -71,11 +72,37 @@ class WeatherController {
   }
 
   Future<List<WeatherEntity>> getForecastByCity(String city) async {
+    //TODO: filter isnt working
     final List<Weather> values = await _weatherApi.getForecastByCity(city);
     final List<WeatherEntity> forecast = [];
+    double min = 100.0, max = -100.0;
+    int day = DateTime.now().day;
     for (var value in values) {
-      final WeatherEntity weather = instanceAWeather(value);
-      forecast.add(weather);
+      if (value.date!.day == day) {
+        switch (_mainController.weatherUnit$.value) {
+          case 'Celcius':
+            min < value.tempMin!.celsius!
+                ? min = value.tempMin!.celsius!
+                : null;
+            max > value.tempMax!.celsius!
+                ? max = value.tempMax!.celsius!
+                : null;
+
+          case 'Fahrenheit':
+            min < value.tempMin!.fahrenheit!
+                ? min = value.tempMin!.fahrenheit!
+                : null;
+            max > value.tempMax!.fahrenheit!
+                ? max = value.tempMax!.fahrenheit!
+                : null;
+        }
+      } else {
+        day = value.date!.day;
+        final WeatherEntity weather = instanceAWeather(value);
+        weather.maxTemp = max;
+        weather.minTemp = min;
+        forecast.add(weather);
+      }
     }
     return forecast;
   }
@@ -85,9 +112,34 @@ class WeatherController {
     final List<Weather> values =
         await _weatherApi.getForecastByLocation(lat, lon);
     final List<WeatherEntity> forecast = [];
+    double min = 100.0, max = -100.0;
+    int day = DateTime.now().day;
     for (var value in values) {
-      final WeatherEntity weather = instanceAWeather(value);
-      forecast.add(weather);
+      if (value.date!.day == day) {
+        switch (_mainController.weatherUnit$.value) {
+          case 'Celcius':
+            min > value.tempMin!.celsius!
+                ? min = value.tempMin!.celsius!
+                : null;
+            max < value.tempMax!.celsius!
+                ? max = value.tempMax!.celsius!
+                : null;
+
+          case 'Fahrenheit':
+            min > value.tempMin!.fahrenheit!
+                ? min = value.tempMin!.fahrenheit!
+                : null;
+            max < value.tempMax!.fahrenheit!
+                ? max = value.tempMax!.fahrenheit!
+                : null;
+        }
+      } else {
+        day = value.date!.day;
+        final WeatherEntity weather = instanceAWeather(value);
+        weather.maxTemp = max;
+        weather.minTemp = min;
+        forecast.add(weather);
+      }
     }
     return forecast;
   }

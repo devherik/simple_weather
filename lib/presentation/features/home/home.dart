@@ -46,121 +46,104 @@ class _HomePageState extends State<HomePage>
     final Animation<double> turnController =
         CurvedAnimation(parent: animationController, curve: Curves.easeOutCirc);
 
-    return Scaffold(
-        appBar: AppBar(
-          leading: weatherPresentationModal(),
-        ),
-        body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: FutureBuilder(
-              future: _weatherController.initController(),
-              builder: (context, snapshot) {
-                return ValueListenableBuilder(
-                  valueListenable: _weatherController.currentWeather$,
-                  builder: (context, value, child) {
-                    if (value.condition == 0) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                        ),
-                      );
-                    } else {
-                      final filteredForecast = <WeatherEntity>[
-                        value.forecast[0]
-                      ];
-                      int day = value.forecast[0].dateTime!.day;
-                      for (var w in value.forecast) {
-                        if (w.dateTime!.day != day) {
-                          filteredForecast.add(w);
-                          day = w.dateTime!.day;
-                        }
-                      }
-                      return Column(
+    return FutureBuilder(
+        future: _weatherController.initController(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final WeatherEntity weatherEntity = snapshot.data as WeatherEntity;
+            return Scaffold(
+                appBar: AppBar(
+                  toolbarHeight: 100,
+                  title: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            '${weatherEntity.cityName!} ',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          Icon(
+                            Iconsax.location5,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            '$today | ${weatherEntity.getHour()}',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                          Builder(
+                            builder: (context) => IconButton(
+                                iconSize: 15,
+                                icon: RotationTransition(
+                                  turns: turnController,
+                                  child: Icon(
+                                    Iconsax.refresh,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  await _weatherController.updateWeather();
+                                  animationController.forward().whenComplete(
+                                        () => animationController.reset(),
+                                      );
+                                }),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  leading: weatherPresentationModal(),
+                ),
+                body: SingleChildScrollView(
+                  child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          //TODO: wrap every component on a Card
                           Expanded(
-                              flex: 3,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        '${value.cityName!} ',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall,
-                                      ),
-                                      Icon(
-                                        Iconsax.location5,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .inversePrimary,
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        '$today - ${value.getHour()}',
-                                        textAlign: TextAlign.center,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge,
-                                      ),
-                                      Builder(
-                                        builder: (context) => IconButton(
-                                            iconSize: 15,
-                                            icon: RotationTransition(
-                                              turns: turnController,
-                                              child: Icon(
-                                                Iconsax.refresh,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .inversePrimary,
-                                              ),
-                                            ),
-                                            onPressed: () async {
-                                              await _weatherController
-                                                  .updateWeather();
-                                              animationController
-                                                  .forward()
-                                                  .whenComplete(
-                                                    () => animationController
-                                                        .reset(),
-                                                  );
-                                            }),
-                                      ),
-                                    ],
-                                  ),
+                              child: Row(
+                            children: [
+                              Column(
+                                children: [
                                   Text(
-                                    '${value.temp!.toStringAsFixed(0)}°',
+                                    '${weatherEntity.temp!.toStringAsFixed(0)}°',
                                     textAlign: TextAlign.center,
                                     style:
                                         Theme.of(context).textTheme.titleLarge,
                                   ),
                                   Text(
-                                    util.withWeather(value.condition!),
+                                    util.withWeather(weatherEntity.condition!),
                                     textAlign: TextAlign.center,
                                     style:
                                         Theme.of(context).textTheme.bodyLarge,
-                                  )
+                                  ),
                                 ],
-                              )),
-                          Expanded(
-                            flex: 3,
-                            child: Lottie.asset(
-                                util.withWeatherAnimation(value.condition!),
-                                alignment: Alignment.center),
-                          ),
-                          Expanded(
-                            flex: 2,
+                              ),
+                              Flexible(
+                                child: Lottie.asset(
+                                    util.withWeatherAnimation(
+                                        weatherEntity.condition!),
+                                    alignment: Alignment.center),
+                              ),
+                            ],
+                          )),
+                          Flexible(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -186,7 +169,7 @@ class _HomePageState extends State<HomePage>
                                   width: MediaQuery.of(context).size.width,
                                   child: ListView.builder(
                                       padding: const EdgeInsets.all(8),
-                                      itemCount: filteredForecast.length,
+                                      itemCount: weatherEntity.forecast.length,
                                       itemExtent:
                                           MediaQuery.of(context).size.width *
                                               .20,
@@ -194,7 +177,7 @@ class _HomePageState extends State<HomePage>
                                       itemBuilder: (context, index) {
                                         try {
                                           return homeWidgets.weatherCard(
-                                              filteredForecast[index]);
+                                              weatherEntity.forecast[index]);
                                         } catch (e) {
                                           throw e.toString();
                                         }
@@ -202,14 +185,22 @@ class _HomePageState extends State<HomePage>
                                 )
                               ],
                             ),
-                          )
+                          ),
+                          Expanded(
+                              child: homeWidgets.modalBottomSheetLocations()),
                         ],
-                      );
-                    }
-                  },
-                );
-              }),
-        ));
+                      )),
+                ));
+          } else {
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
+            );
+          }
+        });
   }
 
   Widget weatherPresentationModal() {
@@ -285,9 +276,6 @@ class _HomePageState extends State<HomePage>
                                     .inversePrimary,
                               ),
                             ),
-                            Expanded(
-                                flex: 3,
-                                child: homeWidgets.modalBottomSheetLocations()),
                             SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: Divider(

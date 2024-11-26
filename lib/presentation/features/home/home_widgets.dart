@@ -17,6 +17,7 @@ class HomeWidgets {
   Widget modalBottomSheetLocations() {
     return ListView.builder(
       itemCount: _weatherController.getUserLocations().length,
+      physics: NeverScrollableScrollPhysics(),
       itemExtent: 80,
       itemBuilder: (context, index) {
         final List<String> list = _weatherController.getUserLocations();

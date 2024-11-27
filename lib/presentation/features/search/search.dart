@@ -80,17 +80,9 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget weatherCard(WeatherEntity weather) {
-    final filteredForecast = <WeatherEntity>[weather.forecast[0]];
-    int day = weather.forecast[0].dateTime!.day;
-    for (var w in weather.forecast) {
-      if (w.dateTime!.day != day) {
-        filteredForecast.add(w);
-        day = w.dateTime!.day;
-      }
-    }
     return Card(
       elevation: 2,
-      color: Theme.of(context).colorScheme.primary,
+      color: Colors.transparent.withOpacity(.5),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

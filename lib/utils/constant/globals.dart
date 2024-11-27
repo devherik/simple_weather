@@ -6,10 +6,10 @@ const green = Color.fromARGB(255, 135, 238, 188);
 const red = Color.fromARGB(255, 226, 141, 141);
 const blue = Color.fromARGB(255, 84, 189, 238);
 var primaryDarkColor = HexColor('522B5B');
-var secondaryDarkColor = HexColor('45624e');
+var secondaryDarkColor = HexColor('59415e');
 var terciaryDarkColor = HexColor('273526');
 var primaryLightColor = HexColor('f7fcfe');
-var secondaryLightColor = HexColor('6d877');
+var secondaryLightColor = HexColor('dce1e3');
 var terciaryLightColor = HexColor('c0cfb2');
 var neutralColor = HexColor('845F6C');
 

@@ -48,7 +48,6 @@ class HomeWidgets {
         },
         splashColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,
-        color: Theme.of(context).colorScheme.primary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

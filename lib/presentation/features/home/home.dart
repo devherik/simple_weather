@@ -144,50 +144,62 @@ class _HomePageState extends State<HomePage>
                             ],
                           )),
                           Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Próximos dias',
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                ),
-                                global.verySmallBoxSpace,
-                                SizedBox(
-                                    height: 2,
-                                    width:
-                                        MediaQuery.of(context).size.width * .7,
-                                    child: Divider(
-                                      thickness: .5,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .inversePrimary,
-                                    )),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * .10,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: ListView.builder(
-                                      padding: const EdgeInsets.all(8),
-                                      itemCount: weatherEntity.forecast.length,
-                                      itemExtent:
-                                          MediaQuery.of(context).size.width *
-                                              .20,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) {
-                                        try {
-                                          return homeWidgets.weatherCard(
-                                              weatherEntity.forecast[index]);
-                                        } catch (e) {
-                                          throw e.toString();
-                                        }
-                                      }),
-                                )
-                              ],
+                            child: Card(
+                              color: Theme.of(context).colorScheme.secondary,
+                              elevation: 5,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Próximos dias',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                  global.verySmallBoxSpace,
+                                  SizedBox(
+                                      height: 2,
+                                      width: MediaQuery.of(context).size.width *
+                                          .7,
+                                      child: Divider(
+                                        thickness: .5,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .inversePrimary,
+                                      )),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        .10,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: ListView.builder(
+                                        padding: const EdgeInsets.all(8),
+                                        itemCount:
+                                            weatherEntity.forecast.length,
+                                        itemExtent:
+                                            MediaQuery.of(context).size.width *
+                                                .20,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index) {
+                                          try {
+                                            return homeWidgets.weatherCard(
+                                                weatherEntity.forecast[index]);
+                                          } catch (e) {
+                                            throw e.toString();
+                                          }
+                                        }),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
+                          global.verySmallBoxSpace,
                           Expanded(
-                              child: homeWidgets.modalBottomSheetLocations()),
+                              child: Card(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  elevation: 5,
+                                  child:
+                                      homeWidgets.modalBottomSheetLocations())),
                         ],
                       )),
                 ));

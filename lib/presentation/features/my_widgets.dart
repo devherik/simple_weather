@@ -23,8 +23,8 @@ class MyWidgets {
           children: [
             Flexible(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
                     '${weather.cityName!} - ${weather.country!}',

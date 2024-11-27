@@ -19,8 +19,8 @@ class WeatherController {
       WeatherController._privateConstructor();
 
   final LocationApi _locationApi = LocationApiImp.instance;
-  //final WeatherApi _weatherApi = WeatherApiImp.instance;
-  final WeatherApi _weatherApi = WeatherMockupImp.instance;
+  final WeatherApi _weatherApi = WeatherApiImp.instance;
+  //final WeatherApi _weatherApi = WeatherMockupImp.instance;
   final MainController _mainController = MainController.instance;
   final LocalstorageController localstorage = LocalstorageController.instance;
 
@@ -59,24 +59,24 @@ class WeatherController {
     final Weather value = await _weatherApi.getWeatherByLocation(
         location.latitude, location.longitude);
     final WeatherEntity weather = instanceAWeather(value);
-    weather.forecast =
-        await getForecastByLocation(location.latitude, location.longitude);
+    weather.forecast = await getFilterdedForecastByLocation(
+        location.latitude, location.longitude);
     return weather;
   }
 
   Future<WeatherEntity> getWeatherByCity(String city) async {
     final Weather value = await _weatherApi.getWeatherByCity(city);
     final WeatherEntity weather = instanceAWeather(value);
-    weather.forecast = await getForecastByCity(city);
+    weather.forecast = await getFilteredForecastByCity(city);
     return weather;
   }
 
-  Future<List<WeatherEntity>> getForecastByCity(String city) async {
+  Future<List<WeatherEntity>> getFilteredForecastByCity(String city) async {
     //TODO: filter isnt working
     final List<Weather> values = await _weatherApi.getForecastByCity(city);
     final List<WeatherEntity> forecast = [];
     double min = 100.0, max = -100.0;
-    int day = DateTime.now().day;
+    int day = values[0].date!.day;
     for (var value in values) {
       if (value.date!.day == day) {
         switch (_mainController.weatherUnit$.value) {
@@ -102,18 +102,20 @@ class WeatherController {
         weather.maxTemp = max;
         weather.minTemp = min;
         forecast.add(weather);
+        min = 100.0;
+        max = -100.0;
       }
     }
     return forecast;
   }
 
-  Future<List<WeatherEntity>> getForecastByLocation(
+  Future<List<WeatherEntity>> getFilterdedForecastByLocation(
       double lat, double lon) async {
     final List<Weather> values =
         await _weatherApi.getForecastByLocation(lat, lon);
     final List<WeatherEntity> forecast = [];
     double min = 100.0, max = -100.0;
-    int day = DateTime.now().day;
+    int day = values[0].date!.day;
     for (var value in values) {
       if (value.date!.day == day) {
         switch (_mainController.weatherUnit$.value) {
@@ -139,6 +141,8 @@ class WeatherController {
         weather.maxTemp = max;
         weather.minTemp = min;
         forecast.add(weather);
+        min = 100.0;
+        max = -100.0;
       }
     }
     return forecast;

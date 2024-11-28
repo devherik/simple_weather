@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
+import 'package:simple_weather_app/presentation/features/my_widgets.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/presentation/features/home/home_widgets.dart';
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
@@ -21,6 +22,7 @@ class _HomePageState extends State<HomePage>
   late WeatherController _weatherController;
   late MyUtil util;
   late HomeWidgets homeWidgets;
+  late MyWidgets myWidgets;
   late MainController _mainController;
   late AnimationController animationController;
 
@@ -31,10 +33,14 @@ class _HomePageState extends State<HomePage>
     _mainController = MainController.instance;
     util = MyUtil.instance;
     _weatherController.initController();
+    myWidgets =
+        MyWidgets(parentContext: context, wcontroll: _weatherController);
     _mainController.weatherUnit$.addListener(
         () => setState(() async => await _weatherController.updateWeather()));
-    homeWidgets =
-        HomeWidgets(parentContext: context, wcontroll: _weatherController);
+    homeWidgets = HomeWidgets(
+        parentContext: context,
+        wcontroll: _weatherController,
+        mywidgets: myWidgets);
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1))
           ..stop();

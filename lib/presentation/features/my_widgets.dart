@@ -14,7 +14,7 @@ class MyWidgets {
   Widget detailedWeather(WeatherEntity weather) {
     return Card(
       color: Theme.of(context).colorScheme.secondary,
-      elevation: 5,
+      elevation: 1,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

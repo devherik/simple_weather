@@ -103,7 +103,16 @@ class _HomePageState extends State<HomePage>
                       ),
                     ],
                   ),
-                  leading: weatherPresentationModal(),
+                  leading: Builder(
+                      builder: (context) => IconButton(
+                          icon: Icon(
+                            Iconsax.setting,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                          onPressed: () => context.push('/settings', extra: {
+                                'weather': _weatherController,
+                                'main': _mainController
+                              }))),
                 ),
                 body: SingleChildScrollView(
                   child: Container(
@@ -115,7 +124,6 @@ class _HomePageState extends State<HomePage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          //TODO: wrap every component on a Card
                           Expanded(
                               child: Row(
                             children: [
@@ -143,63 +151,135 @@ class _HomePageState extends State<HomePage>
                               ),
                             ],
                           )),
-                          Flexible(
-                            child: Card(
-                              color: Theme.of(context).colorScheme.secondary,
-                              elevation: 5,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    'Próximos dias',
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                  ),
-                                  global.verySmallBoxSpace,
-                                  SizedBox(
-                                      height: 2,
-                                      width: MediaQuery.of(context).size.width *
-                                          .7,
-                                      child: Divider(
-                                        thickness: .5,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .inversePrimary,
-                                      )),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        .10,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: ListView.builder(
-                                        padding: const EdgeInsets.all(8),
-                                        itemCount:
-                                            weatherEntity.forecast.length,
-                                        itemExtent:
+                          global.verySmallBoxSpace,
+                          Card(
+                            color: Theme.of(context).colorScheme.secondary,
+                            elevation: 5,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * .20,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      'Próximos dias',
+                                      textAlign: TextAlign.start,
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                    global.verySmallBoxSpace,
+                                    SizedBox(
+                                        height: 2,
+                                        width:
                                             MediaQuery.of(context).size.width *
-                                                .20,
-                                        scrollDirection: Axis.horizontal,
-                                        itemBuilder: (context, index) {
-                                          try {
-                                            return homeWidgets.weatherCard(
-                                                weatherEntity.forecast[index]);
-                                          } catch (e) {
-                                            throw e.toString();
-                                          }
-                                        }),
-                                  )
-                                ],
+                                                .7,
+                                        child: Divider(
+                                          thickness: .5,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .inversePrimary,
+                                        )),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              .10,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: ListView.builder(
+                                          padding: const EdgeInsets.all(8),
+                                          itemCount:
+                                              weatherEntity.forecast.length,
+                                          itemExtent: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .20,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (context, index) {
+                                            try {
+                                              return homeWidgets.weatherCard(
+                                                  weatherEntity
+                                                      .forecast[index]);
+                                            } catch (e) {
+                                              throw e.toString();
+                                            }
+                                          }),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                           global.verySmallBoxSpace,
-                          Expanded(
-                              child: Card(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                  elevation: 5,
-                                  child:
-                                      homeWidgets.modalBottomSheetLocations())),
+                          Card(
+                              color: Theme.of(context).colorScheme.secondary,
+                              elevation: 1,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * .40,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Minhas cidades',
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge),
+                                          Builder(
+                                              builder: (context) => IconButton(
+                                                  icon: Icon(
+                                                    Iconsax.search_normal,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .inversePrimary,
+                                                  ),
+                                                  onPressed: () => context.push(
+                                                          '/search',
+                                                          extra: {
+                                                            'weather':
+                                                                _weatherController
+                                                          }))),
+                                        ],
+                                      ),
+                                      global.verySmallBoxSpace,
+                                      SizedBox(
+                                          height: 2,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .7,
+                                          child: Divider(
+                                            thickness: .5,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inversePrimary,
+                                          )),
+                                      global.verySmallBoxSpace,
+                                      Expanded(
+                                        child: homeWidgets
+                                            .modalBottomSheetLocations(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )),
+                          global.verySmallBoxSpace,
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'OpenWeatherMap',
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                          )
                         ],
                       )),
                 ));
@@ -213,96 +293,5 @@ class _HomePageState extends State<HomePage>
             );
           }
         });
-  }
-
-  Widget weatherPresentationModal() {
-    return Builder(
-        builder: (context) => IconButton(
-            icon: Icon(
-              Iconsax.menu_board,
-              color: Theme.of(context).colorScheme.inversePrimary,
-            ),
-            onPressed: () {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(16),
-                            topRight: Radius.circular(16)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        child: Column(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 30,
-                              child: Divider(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary,
-                                  thickness: 3),
-                            ),
-                            global.smallBoxSpace,
-                            Expanded(
-                                flex: 1,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    Builder(
-                                        builder: (context) => IconButton(
-                                            icon: Icon(
-                                              Iconsax.setting,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .inversePrimary,
-                                            ),
-                                            onPressed: () => context
-                                                    .push('/settings', extra: {
-                                                  'weather': _weatherController,
-                                                  'main': _mainController
-                                                }))),
-                                    Builder(
-                                        builder: (context) => IconButton(
-                                            icon: Icon(
-                                              Iconsax.search_normal,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .inversePrimary,
-                                            ),
-                                            onPressed: () => context
-                                                    .push('/search', extra: {
-                                                  'weather': _weatherController
-                                                }))),
-                                  ],
-                                )),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Divider(
-                                thickness: .1,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Divider(
-                                thickness: .1,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
-                              ),
-                            ),
-                            homeWidgets.locationsManagerButton()
-                          ],
-                        ),
-                      ),
-                    );
-                  });
-            }));
   }
 }

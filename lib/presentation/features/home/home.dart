@@ -128,19 +128,55 @@ class _HomePageState extends State<HomePage>
                               child: Row(
                             children: [
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     '${weatherEntity.temp!.toStringAsFixed(0)}°',
-                                    textAlign: TextAlign.center,
                                     style:
                                         Theme.of(context).textTheme.titleLarge,
                                   ),
-                                  Text(
-                                    util.withWeather(weatherEntity.condition!),
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                  ),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        util.withWeather(
+                                            weatherEntity.condition!),
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  '  ${weatherEntity.maxTemp!.toStringAsFixed(0)}°',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge),
+                                              Icon(
+                                                Icons.arrow_upward,
+                                                color: global.red,
+                                              )
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  ' | ${weatherEntity.minTemp!.toStringAsFixed(0)}°',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge),
+                                              Icon(
+                                                Icons.arrow_downward,
+                                                color: global.blue,
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  )
                                 ],
                               ),
                               Flexible(
@@ -151,7 +187,7 @@ class _HomePageState extends State<HomePage>
                               ),
                             ],
                           )),
-                          global.verySmallBoxSpace,
+                          global.smallBoxSpace,
                           Card(
                             color: Theme.of(context).colorScheme.secondary,
                             elevation: 5,
@@ -170,7 +206,7 @@ class _HomePageState extends State<HomePage>
                                       style:
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),
-                                    global.verySmallBoxSpace,
+                                    global.smallBoxSpace,
                                     SizedBox(
                                         height: 2,
                                         width:

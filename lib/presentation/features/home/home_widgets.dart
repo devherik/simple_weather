@@ -14,7 +14,7 @@ class HomeWidgets {
   final WeatherController _weatherController;
   final MyUtil util = MyUtil.instance;
 
-  Widget modalBottomSheetLocations() {
+  Widget userWeathersLocation() {
     return ListView.builder(
       itemCount: _weatherController.getUserLocations().length,
       physics: NeverScrollableScrollPhysics(),
@@ -57,7 +57,7 @@ class HomeWidgets {
               color: Theme.of(context).colorScheme.inversePrimary,
             ),
             Text(
-              ' ${weather.cityName!}   ${weather.temp!.toStringAsFixed(0)}°',
+              ' ${weather.cityName!} | ${weather.temp!.toStringAsFixed(0)}° ',
               style: TextStyle(
                   color: Theme.of(context).colorScheme.inversePrimary,
                   letterSpacing: 3,

@@ -81,18 +81,18 @@ class WeatherController {
       if (value.date!.day == day) {
         switch (_mainController.weatherUnit$.value) {
           case 'Celcius':
-            min < value.tempMin!.celsius!
+            min > value.tempMin!.celsius!
                 ? min = value.tempMin!.celsius!
                 : null;
-            max > value.tempMax!.celsius!
+            max < value.tempMax!.celsius!
                 ? max = value.tempMax!.celsius!
                 : null;
 
           case 'Fahrenheit':
-            min < value.tempMin!.fahrenheit!
+            min > value.tempMin!.fahrenheit!
                 ? min = value.tempMin!.fahrenheit!
                 : null;
-            max > value.tempMax!.fahrenheit!
+            max < value.tempMax!.fahrenheit!
                 ? max = value.tempMax!.fahrenheit!
                 : null;
         }

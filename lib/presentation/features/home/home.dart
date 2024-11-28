@@ -301,8 +301,8 @@ class _HomePageState extends State<HomePage>
                                           )),
                                       global.verySmallBoxSpace,
                                       Expanded(
-                                        child: homeWidgets
-                                            .modalBottomSheetLocations(),
+                                        child:
+                                            homeWidgets.userWeathersLocation(),
                                       ),
                                     ],
                                   ),

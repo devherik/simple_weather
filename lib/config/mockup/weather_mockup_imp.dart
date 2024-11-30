@@ -35,7 +35,7 @@ class WeatherMockupImp implements WeatherApi {
     },
     "timezone": 7200,
     "id": 3165523,
-    "name": "Province of Turin",
+    "name": "Province of Turin Turin",
     "cod": 200
   });
 

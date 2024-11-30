@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:simple_weather_app/presentation/features/detailed/detailed_weather.dart';
 import 'package:simple_weather_app/presentation/features/error/error.dart';
 import 'package:simple_weather_app/presentation/features/home/home.dart';
 import 'package:simple_weather_app/presentation/features/search/search.dart';
@@ -35,17 +34,6 @@ class AppRouter {
           builder: (context, state) {
             Map<String, dynamic> map = state.extra! as Map<String, dynamic>;
             return SearchPage(wcontroll: map['weather']);
-          },
-        ),
-        GoRoute(
-          path: 'detailed',
-          name: 'detailedPage',
-          builder: (context, state) {
-            Map<String, dynamic> map = state.extra! as Map<String, dynamic>;
-            return DetailedWeatherPage(
-              wcontroll: map['wcontroll'],
-              wentity: map['wentity'],
-            );
           },
         ),
       ],

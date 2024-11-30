@@ -55,8 +55,8 @@ class HomeWidgets {
         splashColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Wrap(
+          alignment: WrapAlignment.center,
           children: [
             Icon(
               Iconsax.location,

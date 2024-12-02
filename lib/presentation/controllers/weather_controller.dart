@@ -27,6 +27,7 @@ class WeatherController {
   ValueNotifier<WeatherEntity> currentWeather$ = ValueNotifier<WeatherEntity>(
       WeatherEntity('', '', DateTime.now(), '', 0, 20, 20, 20, 20,
           DateTime.now(), DateTime.now()));
+  final userWeathers$ = ValueNotifier<List<WeatherEntity>>([]);
 
   final String _weatherApiKey = dotenv.env['WEATHER_KEY']!;
 
@@ -41,7 +42,7 @@ class WeatherController {
     } on Exception catch (e) {
       log(e.toString());
     }
-    return currentWeather$.value;
+    await updateUserCities();
   }
 
   Future<void> updateWeather() async {
@@ -52,16 +53,52 @@ class WeatherController {
     }
   }
 
-  List<String> getUserLocations() => localstorage.userLocations;
+  addUserCity(String name) {
+    if (localstorage.userLocations.length < 2) {
+      localstorage.userLocations.add(name);
+    } else {
+      throw 'List is full';
+    }
+  }
+
+  updateUserCities() async {
+    try {
+      final cities = localstorage.userLocations;
+      if (cities.isNotEmpty) {
+        userWeathers$.value.clear();
+        for (var city in cities) {
+          userWeathers$.value.add(await getWeatherByCity(city));
+        }
+      }
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
+
+  removeUserCity(String name) {
+    try {
+      localstorage.userLocations.removeWhere((element) => element == name);
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+  }
 
   Future<WeatherEntity> getWeatherByLocation() async {
-    final location = await _locationApi.getCurrentLocation();
-    final Weather value = await _weatherApi.getWeatherByLocation(
-        location.latitude, location.longitude);
-    final WeatherEntity weather = instanceAWeather(value);
-    weather.forecast = await getFilterdedForecastByLocation(
-        location.latitude, location.longitude);
-    return weather;
+    final currentLocation = await _locationApi.getCurrentLocation();
+    late Weather value;
+    if (localstorage.lastLocation['latitude'] != currentLocation.latitude) {
+      value = await _weatherApi.getWeatherByLocation(
+          currentLocation.latitude, currentLocation.longitude);
+      final WeatherEntity weather = instanceAWeather(value);
+      weather.forecast = await getFilterdedForecastByLocation(
+          currentLocation.latitude, currentLocation.longitude);
+      localstorage.setLastLocation(currentLocation.latitude.toString(),
+          currentLocation.longitude.toString());
+      return weather;
+    } else {
+      await updateWeather();
+      return currentWeather$.value;
+    }
   }
 
   Future<WeatherEntity> getWeatherByCity(String city) async {
@@ -72,7 +109,6 @@ class WeatherController {
   }
 
   Future<List<WeatherEntity>> getFilteredForecastByCity(String city) async {
-    //TODO: filter isnt working
     final List<Weather> values = await _weatherApi.getForecastByCity(city);
     final List<WeatherEntity> forecast = [];
     double min = 100.0, max = -100.0;

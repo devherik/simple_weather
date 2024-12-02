@@ -6,6 +6,7 @@ class LocalstorageController {
   static final instance = LocalstorageController._privateConstructor();
 
   final userLocations = <String>[];
+  Map<String, String> lastLocation = {'latitude': '', 'longitude': ''};
 
   initController() async {
     await initLocalStorage().whenComplete(
@@ -15,9 +16,29 @@ class LocalstorageController {
         localStorage.setItem('LOCATION_2', 'Belo Horizonte');
         localStorage.setItem('MAIN_LOCATION', 'Timóteo');
         localStorage.setItem('WEATHER_UNIT', 'Celcius');
+
         restoreUserLocations();
       },
     );
+  }
+
+  getLastLocation() {
+    if (localStorage.getItem('LAST_LOCATION_LATITUDE') != null) {
+      lastLocation['latitude'] =
+          localStorage.getItem('LAST_LOCATION_LATITUDE')!;
+    } else {
+      lastLocation['latitude'] = '';
+    }
+    if (localStorage.getItem('LAST_LOCATION_LOBGITUDE') != null) {
+      lastLocation['longitude'] =
+          localStorage.getItem('LAST_LOCATION_LONGITUDE')!;
+    } else {
+      lastLocation['longitude'] = '';
+    }
+  }
+
+  setLastLocation(String lat, String lon) {
+    lastLocation = {'latitude': lat, 'longitude': lon};
   }
 
   String getWeatherUnit() {

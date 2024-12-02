@@ -18,25 +18,21 @@ class HomeWidgets {
   final MyWidgets myWidgets;
 
   Widget userWeathersLocation() {
-    return ListView.builder(
-      itemCount: _weatherController.getUserLocations().length,
-      physics: NeverScrollableScrollPhysics(),
-      itemExtent: 80,
-      itemBuilder: (context, index) {
-        final List<String> list = _weatherController.getUserLocations();
-        if (list[index].isNotEmpty) {
-          return FutureBuilder(
-              future: _weatherController.getWeatherByCity(list[index]),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return locationWeatherButton(snapshot.data as WeatherEntity);
-                } else {
-                  return util.loaderBoxAnimation(
-                      context, 20, MediaQuery.of(context).size.width * .5);
-                }
-              });
+    return ValueListenableBuilder(
+      valueListenable: _weatherController.userWeathers$,
+      builder: (context, value, child) {
+        if (value.isEmpty) {
+          return Center(
+              child: Text(
+                  'Acompanhe o tempo em outras cidades\nFaça uma pesquisa acima',
+                  style: Theme.of(context).textTheme.labelMedium));
         } else {
-          return const SizedBox();
+          return ListView.builder(
+              itemCount: value.length,
+              physics: NeverScrollableScrollPhysics(),
+              itemExtent: 80,
+              itemBuilder: (context, index) =>
+                  locationWeatherButton(value[index]));
         }
       },
     );

@@ -31,8 +31,8 @@ class _HomePageState extends State<HomePage>
     super.initState();
     _weatherController = WeatherController.instance;
     _mainController = MainController.instance;
-    util = MyUtil.instance;
     _weatherController.initController();
+    util = MyUtil.instance;
     myWidgets =
         MyWidgets(parentContext: context, wcontroll: _weatherController);
     _mainController.weatherUnit$.addListener(
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage>
         CurvedAnimation(parent: animationController, curve: Curves.easeOutCirc);
 
     return FutureBuilder(
-        future: _weatherController.initController(),
+        future: _weatherController.getWeatherByLocation(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final WeatherEntity weatherEntity = snapshot.data as WeatherEntity;

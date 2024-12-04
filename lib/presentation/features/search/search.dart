@@ -38,28 +38,13 @@ class _SearchPageState extends State<SearchPage> {
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
           textAlign: TextAlign.start,
-          style: Theme.of(context).textTheme.labelMedium,
+          style: Theme.of(context).textTheme.bodyLarge,
           decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
               label: Text('Pesquise aqui...',
                   style: Theme.of(context).textTheme.labelLarge)),
         ),
-      ),
-      floatingActionButton: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.inversePrimary,
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
-        ),
-        child: Builder(
-            builder: (context) => IconButton(
-                icon: Icon(
-                  Iconsax.add,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 36,
-                ),
-                onPressed: () {})),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

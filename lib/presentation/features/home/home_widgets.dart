@@ -44,8 +44,13 @@ class HomeWidgets {
         onPressed: () {
           showModalBottomSheet(
               context: context,
+              isScrollControlled: true,
+              scrollControlDisabledMaxHeightRatio:
+                  MediaQuery.of(context).size.height * .8,
               builder: (context) {
-                return weatherPresentationModal(weather);
+                return SizedBox(
+                    height: MediaQuery.of(context).size.height * .8,
+                    child: weatherPresentationModal(weather));
               });
         },
         splashColor: Theme.of(context).colorScheme.secondary,

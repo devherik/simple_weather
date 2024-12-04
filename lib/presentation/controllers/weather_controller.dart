@@ -58,6 +58,7 @@ class WeatherController {
   addUserCity(String name) {
     if (localstorage.userLocations.length < 2) {
       localstorage.userLocations.add(name);
+      updateUserCities();
     } else {
       throw 'List is full';
     }
@@ -81,6 +82,7 @@ class WeatherController {
   removeUserCity(String name) {
     try {
       localstorage.userLocations.removeWhere((element) => element == name);
+      updateUserCities();
     } on Exception catch (e) {
       log(e.toString());
     }

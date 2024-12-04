@@ -95,6 +95,10 @@ class HomeWidgets {
 
   Widget weatherPresentationModal(WeatherEntity weather) {
     //TODO: add a pinned buttom to save it
+    bool isFixed;
+    _weatherController.localstorage.userLocations.contains(weather.cityName!)
+        ? isFixed = true
+        : isFixed = false;
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
@@ -112,7 +116,7 @@ class HomeWidgets {
                   thickness: 3),
             ),
             global.smallBoxSpace,
-            Expanded(child: myWidgets.detailedWeather(weather)),
+            Expanded(child: myWidgets.detailedWeather(weather, isFixed)),
           ],
         ),
       ),

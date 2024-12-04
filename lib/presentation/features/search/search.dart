@@ -70,7 +70,12 @@ class _SearchPageState extends State<SearchPage> {
                 .getWeatherByCity(_searchTextController.text.trim()),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return _widgets.detailedWeather(snapshot.data!);
+                bool isFixed;
+                widget._weatherController.localstorage.userLocations
+                        .contains(snapshot.data!.cityName!)
+                    ? isFixed = true
+                    : isFixed = false;
+                return _widgets.detailedWeather(snapshot.data!, isFixed);
               } else {
                 return CircularProgressIndicator();
               }

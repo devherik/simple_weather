@@ -18,21 +18,21 @@ class HomeWidgets {
   final MyWidgets myWidgets;
 
   Widget userWeathersLocation() {
-    return ValueListenableBuilder(
-      valueListenable: _weatherController.userWeathers$,
-      builder: (context, value, child) {
-        if (value.isEmpty) {
+    return FutureBuilder(
+      future: _weatherController.getUserCitiesWeather(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
           return Center(
               child: Text(
                   'Acompanhe o tempo em outras cidades\nFaça uma pesquisa acima',
                   style: Theme.of(context).textTheme.labelMedium));
         } else {
           return ListView.builder(
-              itemCount: value.length,
+              itemCount: snapshot.data!.length,
               physics: NeverScrollableScrollPhysics(),
               itemExtent: 80,
               itemBuilder: (context, index) =>
-                  locationWeatherButton(value[index]));
+                  locationWeatherButton(snapshot.data![index]));
         }
       },
     );

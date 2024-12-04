@@ -12,17 +12,39 @@ class MyWidgets {
   final MyUtil util = MyUtil.instance;
 
   Widget detailedWeather(WeatherEntity weather) {
+    bool isFixed = true;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Flexible(
+          Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: MaterialButton(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 12),
+                    splashColor: Theme.of(context).colorScheme.secondary,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                    child: Row(
+                      children: [
+                        Icon(Icons.pin_drop),
+                        Text(
+                          isFixed ? 'Fixado' : 'Fixar',
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
                 Text(
                   '${weather.cityName!} - ${weather.country!}',
                   style: Theme.of(context).textTheme.titleSmall,

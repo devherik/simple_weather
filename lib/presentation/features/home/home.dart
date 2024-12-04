@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage>
                           global.smallBoxSpace,
                           Card(
                             color: Theme.of(context).colorScheme.secondary,
-                            elevation: 5,
+                            elevation: 1,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: SizedBox(
@@ -318,7 +318,7 @@ class _HomePageState extends State<HomePage>
                           Align(
                             alignment: Alignment.center,
                             child: Text(
-                              'OpenWeatherMap',
+                              'License by OpenWeatherMap',
                               style: Theme.of(context).textTheme.labelSmall,
                             ),
                           )

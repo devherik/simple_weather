@@ -24,9 +24,8 @@ class WeatherController {
   final MainController _mainController = MainController.instance;
   final LocalstorageController localstorage = LocalstorageController.instance;
 
-  ValueNotifier<WeatherEntity> currentWeather$ = ValueNotifier<WeatherEntity>(
-      WeatherEntity('', '', DateTime.now(), '', 0, 20, 20, 20, 20,
-          DateTime.now(), DateTime.now()));
+  WeatherEntity currentWeather = WeatherEntity('', '', DateTime.now(), '', 0,
+      20, 20, 20, 20, DateTime.now(), DateTime.now());
   final userWeathers$ = ValueNotifier<List<WeatherEntity>>([]);
 
   final String _weatherApiKey = dotenv.env['WEATHER_KEY']!;
@@ -38,16 +37,19 @@ class WeatherController {
       log(e.toString());
     }
     try {
-      currentWeather$.value = await getWeatherByLocation();
+      currentWeather = await getWeatherByLocation();
     } on Exception catch (e) {
       log(e.toString());
     }
     await updateUserCities();
   }
 
-  Future<void> updateWeather() async {
+  Future<List<WeatherEntity>> getUserCitiesWeather() async =>
+      userWeathers$.value;
+
+  updateWeather() async {
     try {
-      currentWeather$.value = await getWeatherByLocation();
+      currentWeather = await getWeatherByLocation();
     } on Exception catch (e) {
       log(e.toString());
     }
@@ -67,7 +69,8 @@ class WeatherController {
       if (cities.isNotEmpty) {
         userWeathers$.value.clear();
         for (var city in cities) {
-          userWeathers$.value.add(await getWeatherByCity(city));
+          final w = await getWeatherByCity(city);
+          userWeathers$.value.add(w);
         }
       }
     } on Exception catch (e) {
@@ -97,7 +100,7 @@ class WeatherController {
       return weather;
     } else {
       await updateWeather();
-      return currentWeather$.value;
+      return currentWeather;
     }
   }
 

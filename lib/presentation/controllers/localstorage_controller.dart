@@ -16,7 +16,7 @@ class LocalstorageController {
         localStorage.setItem('LOCATION_2', 'Belo Horizonte');
         localStorage.setItem('MAIN_LOCATION', 'Timóteo');
         localStorage.setItem('WEATHER_UNIT', 'Celcius');
-
+        getLastLocation();
         restoreUserLocations();
       },
     );
@@ -27,12 +27,14 @@ class LocalstorageController {
       lastLocation['latitude'] =
           localStorage.getItem('LAST_LOCATION_LATITUDE')!;
     } else {
+      localStorage.setItem('LAST_LOCATION_LATITUDE', '');
       lastLocation['latitude'] = '';
     }
-    if (localStorage.getItem('LAST_LOCATION_LOBGITUDE') != null) {
+    if (localStorage.getItem('LAST_LOCATION_LONGITUDE') != null) {
       lastLocation['longitude'] =
           localStorage.getItem('LAST_LOCATION_LONGITUDE')!;
     } else {
+      localStorage.setItem('LAST_LOCATION_LONGITUDE', '');
       lastLocation['longitude'] = '';
     }
   }
@@ -45,6 +47,7 @@ class LocalstorageController {
     if (localStorage.getItem('WEATHER_UNIT') != null) {
       return localStorage.getItem('WEATHER_UNIT')!;
     } else {
+      localStorage.setItem('WEATHER_UNIT', 'Celcius');
       return 'Celcius';
     }
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
 import 'package:simple_weather_app/presentation/features/my_widgets.dart';

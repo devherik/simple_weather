@@ -53,10 +53,10 @@ class _HomePageState extends State<HomePage>
         CurvedAnimation(parent: animationController, curve: Curves.easeOutCirc);
 
     return FutureBuilder(
-        future: _weatherController.getWeatherByLocation(),
+        future: _weatherController.initController(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final WeatherEntity weatherEntity = snapshot.data as WeatherEntity;
+            final WeatherEntity weatherEntity = snapshot.data!;
             return Scaffold(
                 appBar: AppBar(
                   toolbarHeight: 100,

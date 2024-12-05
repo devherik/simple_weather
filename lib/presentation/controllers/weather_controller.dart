@@ -26,11 +26,11 @@ class WeatherController {
 
   WeatherEntity currentWeather = WeatherEntity('', '', DateTime.now(), '', 0,
       20, 20, 20, 20, DateTime.now(), DateTime.now());
-  final userWeathers$ = ValueNotifier<List<WeatherEntity>>([]);
+  List<WeatherEntity> userWeathers = <WeatherEntity>[];
 
   final String _weatherApiKey = dotenv.env['WEATHER_KEY']!;
 
-  initController() async {
+  Future<WeatherEntity> initController() async {
     try {
       await _weatherApi.initAPI(_weatherApiKey);
     } on Exception catch (e) {
@@ -41,11 +41,13 @@ class WeatherController {
     } on Exception catch (e) {
       log(e.toString());
     }
-    await updateUserCities();
+    return currentWeather;
   }
 
-  Future<List<WeatherEntity>> getUserCitiesWeather() async =>
-      userWeathers$.value;
+  Future<List<WeatherEntity>> getUserCitiesWeather() async {
+    await updateUserCities();
+    return userWeathers;
+  }
 
   updateWeather() async {
     try {
@@ -68,10 +70,13 @@ class WeatherController {
     try {
       final cities = localstorage.userLocations;
       if (cities.isNotEmpty) {
-        userWeathers$.value.clear();
+        userWeathers.clear();
         for (var city in cities) {
-          final w = await getWeatherByCity(city);
-          userWeathers$.value.add(w);
+          await getWeatherByCity(city).then(
+            (value) {
+              userWeathers.add(value);
+            },
+          );
         }
       }
     } on Exception catch (e) {

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:simple_weather_app/config/mockup/weather_mockup_imp.dart';
 import 'package:simple_weather_app/data/data_sources/remote/location_api_imp.dart';
@@ -19,8 +18,8 @@ class WeatherController {
       WeatherController._privateConstructor();
 
   final LocationApi _locationApi = LocationApiImp.instance;
-  final WeatherApi _weatherApi = WeatherApiImp.instance;
-  //final WeatherApi _weatherApi = WeatherMockupImp.instance;
+  //final WeatherApi _weatherApi = WeatherApiImp.instance;
+  final WeatherApi _weatherApi = WeatherMockupImp.instance;
   final MainController _mainController = MainController.instance;
   final LocalstorageController localstorage = LocalstorageController.instance;
 
@@ -57,20 +56,20 @@ class WeatherController {
     }
   }
 
-  addUserCity(String name) {
+  addUserCity(String name) async {
     if (localstorage.userLocations.length < 2) {
-      localstorage.userLocations.add(name);
-      updateUserCities();
+      localstorage.addLocation(name);
+      await updateUserCities();
     } else {
-      throw 'List is full';
+      throw Exception('List is full');
     }
   }
 
   updateUserCities() async {
     try {
+      userWeathers.clear();
       final cities = localstorage.userLocations;
       if (cities.isNotEmpty) {
-        userWeathers.clear();
         for (var city in cities) {
           await getWeatherByCity(city).then(
             (value) {
@@ -84,10 +83,10 @@ class WeatherController {
     }
   }
 
-  removeUserCity(String name) {
+  removeUserCity(String name) async {
     try {
-      localstorage.userLocations.removeWhere((element) => element == name);
-      updateUserCities();
+      localstorage.removeUserLocation(name);
+      await updateUserCities();
     } on Exception catch (e) {
       log(e.toString());
     }

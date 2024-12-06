@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
@@ -46,12 +48,22 @@ class MyWidgets {
                                       .colorScheme
                                       .inversePrimary,
                                 ),
-                                onPressed: () {
-                                  isFixed
-                                      ? weatherController
-                                          .removeUserCity(weather.cityName!)
-                                      : weatherController
+                                onPressed: () async {
+                                  if (isFixed) {
+                                    try {
+                                      await weatherController
+                                          .removeUserCity(weather.cityName!);
+                                    } on Exception catch (e) {
+                                      log(e.toString());
+                                    }
+                                  } else {
+                                    try {
+                                      await weatherController
                                           .addUserCity(weather.cityName!);
+                                    } on Exception catch (e) {
+                                      log(e.toString());
+                                    }
+                                  }
                                 })),
                       ),
                       Text(

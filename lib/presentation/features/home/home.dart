@@ -58,7 +58,6 @@ class _HomePageState extends State<HomePage>
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-          height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -74,8 +73,9 @@ class _HomePageState extends State<HomePage>
                           final WeatherEntity weatherEntity = snapshot.data!;
                           return Column(
                             children: <Widget>[
-                              currentWeatherDescription(weatherEntity),
                               global.smallBoxSpace,
+                              currentWeatherDescription(weatherEntity),
+                              global.mediumBoxSpace,
                               currentWeatherForecast(weatherEntity),
                             ],
                           );
@@ -85,8 +85,10 @@ class _HomePageState extends State<HomePage>
                       }),
                 ),
               ),
-              Expanded(flex: 4, child: userWeathersLocation()),
-              Flexible(child: apiLicenseDescription())
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * .6,
+                  child: userWeathersLocation()),
+              apiLicenseDescription()
             ],
           ),
         ),
@@ -150,6 +152,7 @@ class _HomePageState extends State<HomePage>
             ),
           ],
         ),
+        global.verySmallBoxSpace,
         Row(
           children: [
             Column(
@@ -258,6 +261,8 @@ class _HomePageState extends State<HomePage>
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

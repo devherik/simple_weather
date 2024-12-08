@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
-import 'package:simple_weather_app/presentation/features/my_widgets.dart';
+import 'package:simple_weather_app/presentation/features/detailed/detailed.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 
 class SearchPage extends StatefulWidget {
@@ -16,14 +16,11 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final _searchTextController = TextEditingController();
   late MyUtil _util;
-  late MyWidgets _widgets;
   @override
   void initState() {
     super.initState();
     _searchTextController.addListener(() => setState(() {}));
     _util = MyUtil.instance;
-    _widgets =
-        MyWidgets(parentContext: context, wcontroll: widget._weatherController);
   }
 
   @override
@@ -45,25 +42,28 @@ class _SearchPageState extends State<SearchPage> {
                   style: Theme.of(context).textTheme.labelLarge)),
         ),
       ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: FutureBuilder(
-            future: widget._weatherController
-                .getWeatherByCity(_searchTextController.text.trim()),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                bool isFixed;
-                widget._weatherController.localstorage.userLocations
-                        .contains(snapshot.data!.cityName!)
-                    ? isFixed = true
-                    : isFixed = false;
-                return _widgets.detailedWeather(snapshot.data!, isFixed);
-              } else {
-                return CircularProgressIndicator();
-              }
-            }),
+      body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: FutureBuilder(
+              future: widget._weatherController
+                  .getWeatherByCity(_searchTextController.text.trim()),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return DetailedPage(
+                    parentContext: context,
+                    wcontroll: widget._weatherController,
+                    weatherData: snapshot.data,
+                  );
+                } else {
+                  return CircularProgressIndicator();
+                }
+              }),
+        ),
       ),
     );
   }

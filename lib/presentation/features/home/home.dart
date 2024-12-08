@@ -4,7 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
-import 'package:simple_weather_app/presentation/features/my_widgets.dart';
+import 'package:simple_weather_app/presentation/features/detailed/detailed.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
@@ -20,7 +20,6 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late WeatherController _weatherController;
   late MyUtil util;
-  late MyWidgets myWidgets;
   late MainController _mainController;
 
   late AnimationController animationController;
@@ -36,8 +35,6 @@ class _HomePageState extends State<HomePage>
     util = MyUtil.instance;
 
     _weatherController.initController();
-    myWidgets =
-        MyWidgets(parentContext: context, wcontroll: _weatherController);
 
     _mainController.weatherUnit$.addListener(
         () => setState(() async => await _weatherController.updateWeather()));
@@ -88,6 +85,7 @@ class _HomePageState extends State<HomePage>
               SizedBox(
                   height: MediaQuery.of(context).size.height * .6,
                   child: userWeathersLocation()),
+              global.smallBoxSpace,
               apiLicenseDescription()
             ],
           ),
@@ -423,10 +421,6 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget weatherPresentationModal(WeatherEntity weather) {
-    bool isFixed;
-    _weatherController.localstorage.userLocations.contains(weather.cityName!)
-        ? isFixed = true
-        : isFixed = false;
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
@@ -444,7 +438,13 @@ class _HomePageState extends State<HomePage>
                   thickness: 3),
             ),
             global.smallBoxSpace,
-            Expanded(child: myWidgets.detailedWeather(weather, isFixed)),
+            Expanded(
+              child: DetailedPage(
+                parentContext: context,
+                wcontroll: _weatherController,
+                weatherData: weather,
+              ),
+            )
           ],
         ),
       ),

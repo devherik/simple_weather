@@ -8,16 +8,38 @@ import 'package:simple_weather_app/utils/constant/my_util.dart';
 
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 
-class MyWidgets {
-  MyWidgets({required parentContext, required wcontroll})
+class DetailedPage extends StatefulWidget {
+  DetailedPage(
+      {super.key,
+      required parentContext,
+      required wcontroll,
+      required weatherData})
       : context = parentContext,
-        weatherController = wcontroll;
+        weatherController = wcontroll,
+        weather = weatherData;
 
   final BuildContext context;
   final WeatherController weatherController;
   final MyUtil util = MyUtil.instance;
+  final WeatherEntity weather;
 
-  Widget detailedWeather(WeatherEntity weather, bool isFixed) {
+  @override
+  State<DetailedPage> createState() => _DetailedPageState();
+}
+
+class _DetailedPageState extends State<DetailedPage> {
+  late bool isFixed;
+  @override
+  void initState() {
+    super.initState();
+    widget.weatherController.localstorage.userLocations
+            .contains(widget.weather.cityName!)
+        ? isFixed = true
+        : isFixed = false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(18.0),
       child: Column(children: <Widget>[
@@ -51,15 +73,19 @@ class MyWidgets {
                                 onPressed: () async {
                                   if (isFixed) {
                                     try {
-                                      await weatherController
-                                          .removeUserCity(weather.cityName!);
+                                      await widget.weatherController
+                                          .removeUserCity(
+                                              widget.weather.cityName!);
+                                      setState(() {});
                                     } on Exception catch (e) {
                                       log(e.toString());
                                     }
                                   } else {
                                     try {
-                                      await weatherController
-                                          .addUserCity(weather.cityName!);
+                                      await widget.weatherController
+                                          .addUserCity(
+                                              widget.weather.cityName!);
+                                      setState(() {});
                                     } on Exception catch (e) {
                                       log(e.toString());
                                     }
@@ -67,14 +93,14 @@ class MyWidgets {
                                 })),
                       ),
                       Text(
-                        '${weather.cityName!} - ${weather.country!}',
+                        '${widget.weather.cityName!} - ${widget.weather.country!}',
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                       global.verySmallBoxSpace,
                       Row(
                         children: <Widget>[
                           Text(
-                            '${weather.temp!.toStringAsFixed(0)}°  ',
+                            '${widget.weather.temp!.toStringAsFixed(0)}°  ',
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
@@ -83,7 +109,7 @@ class MyWidgets {
                               Row(
                                 children: [
                                   Text(
-                                      '${weather.maxTemp!.toStringAsFixed(0)}°',
+                                      '${widget.weather.maxTemp!.toStringAsFixed(0)}°',
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge),
@@ -96,7 +122,7 @@ class MyWidgets {
                               Row(
                                 children: [
                                   Text(
-                                      '${weather.minTemp!.toStringAsFixed(0)}°',
+                                      '${widget.weather.minTemp!.toStringAsFixed(0)}°',
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge),
@@ -123,7 +149,7 @@ class MyWidgets {
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    itemCount: weather.forecast.length,
+                    itemCount: widget.weather.forecast.length,
                     physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return Padding(
@@ -132,17 +158,17 @@ class MyWidgets {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                                util.weekDay(
-                                    weather.forecast[index].dateTime!.weekday),
+                                widget.util.weekDay(widget
+                                    .weather.forecast[index].dateTime!.weekday),
                                 style: Theme.of(context).textTheme.labelLarge),
                             Row(
                               children: <Widget>[
                                 Row(
                                   children: [
-                                    util.withWeatherIcon(
-                                        weather.forecast[index].condition!),
+                                    widget.util.withWeatherIcon(widget
+                                        .weather.forecast[index].condition!),
                                     Text(
-                                        '  ${weather.forecast[index].maxTemp!.toStringAsFixed(0)}°',
+                                        '  ${widget.weather.forecast[index].maxTemp!.toStringAsFixed(0)}°',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge),
@@ -155,7 +181,7 @@ class MyWidgets {
                                 Row(
                                   children: [
                                     Text(
-                                        ' | ${weather.forecast[index].minTemp!.toStringAsFixed(0)}°',
+                                        ' | ${widget.weather.forecast[index].minTemp!.toStringAsFixed(0)}°',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge),

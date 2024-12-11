@@ -56,38 +56,43 @@ class _HomePageState extends State<HomePage>
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           width: MediaQuery.of(context).size.width,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SafeArea(
-                child: Expanded(
-                  flex: 4,
-                  child: FutureBuilder(
-                      future: _weatherController.initController(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final WeatherEntity weatherEntity = snapshot.data!;
-                          return Column(
-                            children: <Widget>[
-                              global.smallBoxSpace,
-                              currentWeatherDescription(weatherEntity),
-                              global.mediumBoxSpace,
-                              currentWeatherForecast(weatherEntity),
-                            ],
-                          );
-                        } else {
-                          return Center();
-                        }
-                      }),
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                FutureBuilder(
+                    future: _weatherController.initController(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final WeatherEntity weatherEntity = snapshot.data!;
+                        return Column(
+                          children: <Widget>[
+                            global.smallBoxSpace,
+                            currentWeatherDescription(weatherEntity),
+                            global.mediumBoxSpace,
+                            currentWeatherForecast(weatherEntity),
+                          ],
+                        );
+                      } else {
+                        return Center();
+                      }
+                    }),
+                FutureBuilder(
+                  future: _weatherController.getUserCitiesWeather(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final List<WeatherEntity> weathers = snapshot.data!;
+                      return userWeathersLocation(weathers);
+                    } else {
+                      return Center();
+                    }
+                  },
                 ),
-              ),
-              SizedBox(
-                  height: MediaQuery.of(context).size.height * .6,
-                  child: userWeathersLocation()),
-              global.smallBoxSpace,
-              apiLicenseDescription()
-            ],
+                global.smallBoxSpace,
+                apiLicenseDescription()
+              ],
+            ),
           ),
         ),
       ),
@@ -252,7 +257,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget userWeathersLocation() {
+  Widget userWeathersLocation(List<WeatherEntity> weathers) {
     return Card(
       color: Theme.of(context).colorScheme.secondary,
       elevation: 1,
@@ -260,7 +265,7 @@ class _HomePageState extends State<HomePage>
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -287,26 +292,16 @@ class _HomePageState extends State<HomePage>
                   color: Theme.of(context).colorScheme.inversePrimary,
                 )),
             global.verySmallBoxSpace,
-            FutureBuilder(
-              future: _weatherController.getUserCitiesWeather(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                      child: Text(
-                          'Acompanhe o tempo em outras cidades\nFaça uma pesquisa acima',
-                          style: Theme.of(context).textTheme.labelMedium));
-                } else {
-                  return Flexible(
-                    child: ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemExtent: 80,
-                        itemBuilder: (context, index) =>
-                            locationWeatherButton(snapshot.data![index])),
-                  );
-                }
-              },
-            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * .5,
+              width: MediaQuery.of(context).size.width,
+              child: ListView.builder(
+                  itemCount: weathers.length,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemExtent: 80,
+                  itemBuilder: (context, index) =>
+                      locationWeatherButton(weathers[index])),
+            )
           ],
         ),
       ),
@@ -373,79 +368,34 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget citiesWeatherCard() {
-    return Card(
-        color: Theme.of(context).colorScheme.secondary,
-        elevation: 1,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * .40,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Minhas cidades',
-                        textAlign: TextAlign.start,
-                        style: Theme.of(context).textTheme.bodyLarge),
-                    Builder(
-                        builder: (context) => IconButton(
-                            icon: Icon(
-                              Iconsax.search_normal,
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary,
-                            ),
-                            onPressed: () => context.push('/search',
-                                extra: {'weather': _weatherController}))),
-                  ],
-                ),
-                global.verySmallBoxSpace,
-                SizedBox(
-                    height: 2,
-                    width: MediaQuery.of(context).size.width * .7,
-                    child: Divider(
-                      thickness: .5,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    )),
-                global.verySmallBoxSpace,
-                Expanded(
-                  child: userWeathersLocation(),
-                ),
-              ],
-            ),
-          ),
-        ));
-  }
-
   Widget weatherPresentationModal(WeatherEntity weather) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              width: 30,
-              child: Divider(
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                  thickness: 3),
-            ),
-            global.smallBoxSpace,
-            Expanded(
-              child: DetailedPage(
-                parentContext: context,
-                wcontroll: _weatherController,
-                weatherData: weather,
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                width: 30,
+                child: Divider(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                    thickness: 3),
               ),
-            )
-          ],
+              global.smallBoxSpace,
+              Expanded(
+                child: DetailedPage(
+                  parentContext: context,
+                  wcontroll: _weatherController,
+                  weatherData: weather,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
@@ -76,18 +74,36 @@ class _DetailedPageState extends State<DetailedPage> {
                                       await widget.weatherController
                                           .removeUserCity(
                                               widget.weather.cityName!);
+                                      widget.util.notificationToast(
+                                          // ignore: use_build_context_synchronously
+                                          context,
+                                          'Removido dos favoritos',
+                                          global.green);
                                       setState(() {});
                                     } on Exception catch (e) {
-                                      log(e.toString());
+                                      widget.util.notificationToast(
+                                          // ignore: use_build_context_synchronously
+                                          context,
+                                          e.toString(),
+                                          global.red);
                                     }
                                   } else {
                                     try {
                                       await widget.weatherController
                                           .addUserCity(
                                               widget.weather.cityName!);
+                                      widget.util.notificationToast(
+                                          // ignore: use_build_context_synchronously
+                                          context,
+                                          'Adicionado aos favoritos',
+                                          global.green);
                                       setState(() {});
                                     } on Exception catch (e) {
-                                      log(e.toString());
+                                      widget.util.notificationToast(
+                                          // ignore: use_build_context_synchronously
+                                          context,
+                                          e.toString(),
+                                          global.red);
                                     }
                                   }
                                 })),

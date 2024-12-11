@@ -99,6 +99,18 @@ class MyUtil {
     }
   }
 
+  void notificationToast(BuildContext context, String label, Color color) {
+    final snack = SnackBar(
+      content: Text(
+        label,
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.labelMedium,
+      ),
+      backgroundColor: color.withOpacity(.5),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snack);
+  }
+
   loaderBoxAnimation(BuildContext context, double heigh, double widght) =>
       SizedBox(
           width: widght,

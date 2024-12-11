@@ -18,14 +18,14 @@ class WeatherController {
       WeatherController._privateConstructor();
 
   final LocationApi _locationApi = LocationApiImp.instance;
-  //final WeatherApi _weatherApi = WeatherApiImp.instance;
-  final WeatherApi _weatherApi = WeatherMockupImp.instance;
+  final WeatherApi _weatherApi = WeatherApiImp.instance;
+  //final WeatherApi _weatherApi = WeatherMockupImp.instance;
   final MainController _mainController = MainController.instance;
   final LocalstorageController localstorage = LocalstorageController.instance;
 
   WeatherEntity _currentWeather = WeatherEntity('', '', DateTime.now(), '', 0,
       20, 20, 20, 20, DateTime.now(), DateTime.now());
-  final List<WeatherEntity> _userWeathers = <WeatherEntity>[];
+  final List<WeatherEntity> userWeathers = <WeatherEntity>[];
 
   final String _weatherApiKey = dotenv.env['WEATHER_KEY']!;
 
@@ -45,10 +45,10 @@ class WeatherController {
 
   Future<List<WeatherEntity>> getUserCitiesWeather() async {
     await updateUserCities();
-    return _userWeathers;
+    return userWeathers;
   }
 
-  updateWeather() async {
+  Future<void> updateWeather() async {
     try {
       _currentWeather = await getWeatherByLocation();
     } on Exception catch (e) {
@@ -56,24 +56,28 @@ class WeatherController {
     }
   }
 
-  addUserCity(String name) async {
-    if (localstorage.userLocations.length < 2) {
-      localstorage.addLocation(name);
-      await updateUserCities();
+  Future<void> addUserCity(String name) async {
+    if (localstorage.userLocations.length < 3) {
+      if (localstorage.userLocations.contains(name)) {
+        throw Exception('Alread have this city');
+      } else {
+        localstorage.addLocation(name);
+        await updateUserCities();
+      }
     } else {
       throw Exception('List is full');
     }
   }
 
-  updateUserCities() async {
+  Future<void> updateUserCities() async {
     try {
-      _userWeathers.clear();
+      userWeathers.clear();
       final cities = localstorage.userLocations;
       if (cities.isNotEmpty) {
         for (var city in cities) {
           await getWeatherByCity(city).then(
             (value) {
-              _userWeathers.add(value);
+              userWeathers.add(value);
             },
           );
         }
@@ -83,7 +87,7 @@ class WeatherController {
     }
   }
 
-  removeUserCity(String name) async {
+  Future<void> removeUserCity(String name) async {
     try {
       localstorage.removeUserLocation(name);
       await updateUserCities();
@@ -95,19 +99,14 @@ class WeatherController {
   Future<WeatherEntity> getWeatherByLocation() async {
     final currentLocation = await _locationApi.getCurrentLocation();
     late Weather value;
-    if (localstorage.lastLocation['latitude'] != currentLocation.latitude) {
-      value = await _weatherApi.getWeatherByLocation(
-          currentLocation.latitude, currentLocation.longitude);
-      final WeatherEntity weather = instanceAWeather(value);
-      weather.forecast = await getFilterdedForecastByLocation(
-          currentLocation.latitude, currentLocation.longitude);
-      localstorage.setLastLocation(currentLocation.latitude.toString(),
-          currentLocation.longitude.toString());
-      return weather;
-    } else {
-      await updateWeather();
-      return _currentWeather;
-    }
+    value = await _weatherApi.getWeatherByLocation(
+        currentLocation.latitude, currentLocation.longitude);
+    final WeatherEntity weather = instanceAWeather(value);
+    weather.forecast = await getFilterdedForecastByLocation(
+        currentLocation.latitude, currentLocation.longitude);
+    localstorage.setLastLocation(currentLocation.latitude.toString(),
+        currentLocation.longitude.toString());
+    return weather;
   }
 
   Future<WeatherEntity> getWeatherByCity(String city) async {

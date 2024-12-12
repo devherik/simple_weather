@@ -72,23 +72,65 @@ class _HomePageState extends State<HomePage>
                             currentWeatherDescription(weatherEntity),
                             global.mediumBoxSpace,
                             currentWeatherForecast(weatherEntity),
+                            global.smallBoxSpace,
+                            Card(
+                              color: Theme.of(context).colorScheme.secondary,
+                              elevation: 1,
+                              child: Flexible(
+                                  child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: MaterialButton(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 24, horizontal: 12),
+                                  minWidth: MediaQuery.of(context).size.width,
+                                  onPressed: () {
+                                    context.push('/search',
+                                        extra: {'weather': _weatherController});
+                                  },
+                                  splashColor:
+                                      Theme.of(context).colorScheme.secondary,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16)),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Iconsax.search_favorite,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .inversePrimary,
+                                      ),
+                                      Text(
+                                        ' Pesquisar',
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inversePrimary,
+                                            letterSpacing: 3,
+                                            fontSize: 16),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )),
+                            )
                           ],
                         );
                       } else {
                         return Center();
                       }
                     }),
-                FutureBuilder(
-                  future: _weatherController.getUserCitiesWeather(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      final List<WeatherEntity> weathers = snapshot.data!;
-                      return userWeathersLocation(weathers);
-                    } else {
-                      return Center();
-                    }
-                  },
-                ),
+                // FutureBuilder(
+                //   future: _weatherController.getUserCitiesWeather(),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.hasData) {
+                //       final List<WeatherEntity> weathers = snapshot.data!;
+                //       return userWeathersLocation(weathers);
+                //     } else {
+                //       return Center();
+                //     }
+                //   },
+                // ),
                 global.smallBoxSpace,
                 apiLicenseDescription()
               ],
@@ -217,10 +259,9 @@ class _HomePageState extends State<HomePage>
     return Card(
       color: Theme.of(context).colorScheme.secondary,
       elevation: 1,
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * .20,
+      child: Flexible(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -238,16 +279,20 @@ class _HomePageState extends State<HomePage>
                     thickness: .5,
                     color: Theme.of(context).colorScheme.inversePrimary,
                   )),
+              global.verySmallBoxSpace,
               SizedBox(
-                height: MediaQuery.of(context).size.height * .10,
+                height: MediaQuery.of(context).size.height * .30,
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                     padding: const EdgeInsets.all(8),
                     itemCount: weatherEntity.forecast.length,
-                    itemExtent: MediaQuery.of(context).size.width * .20,
-                    scrollDirection: Axis.horizontal,
+                    scrollDirection: Axis.vertical,
+                    physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
-                      return weatherCard(weatherEntity.forecast[index]);
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: weatherCard(weatherEntity.forecast[index]),
+                      );
                     }),
               )
             ],
@@ -346,23 +391,42 @@ class _HomePageState extends State<HomePage>
       );
 
   Widget weatherCard(WeatherEntity weather) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
             Text(
-              '${weather.maxTemp!.toStringAsFixed(0)}° ',
+              util.weekDay(weather.dateTime!.weekday),
               style: Theme.of(context).textTheme.labelLarge,
             ),
-            util.withWeatherIcon(weather.condition!),
           ],
         ),
-        Text(
-          util.weekDay(weather.dateTime!.weekday),
-          style: Theme.of(context).textTheme.labelMedium,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            util.withWeatherIcon(weather.condition!),
+            const SizedBox(
+              width: 15,
+            ),
+            Text('${weather.maxTemp!.toStringAsFixed(0)}°',
+                style: Theme.of(context).textTheme.labelLarge),
+            Icon(
+              Icons.arrow_upward,
+              color: global.red,
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            Text('${weather.minTemp!.toStringAsFixed(0)}°',
+                style: Theme.of(context).textTheme.labelLarge),
+            Icon(
+              Icons.arrow_downward,
+              color: global.blue,
+            )
+          ],
         ),
       ],
     );

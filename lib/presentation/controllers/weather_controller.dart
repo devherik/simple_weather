@@ -62,17 +62,17 @@ class WeatherController {
         throw Exception('Alread have this city');
       } else {
         localstorage.addLocation(name);
-        await updateUserCities();
       }
     } else {
       throw Exception('List is full');
     }
+    await updateUserCities();
   }
 
   Future<void> updateUserCities() async {
     try {
       userWeathers.clear();
-      final cities = localstorage.userLocations;
+      final cities = localstorage.getUserLocations();
       if (cities.isNotEmpty) {
         for (var city in cities) {
           await getWeatherByCity(city).then(
@@ -90,10 +90,10 @@ class WeatherController {
   Future<void> removeUserCity(String name) async {
     try {
       localstorage.removeUserLocation(name);
-      await updateUserCities();
     } on Exception catch (e) {
       log(e.toString());
     }
+    await updateUserCities();
   }
 
   Future<WeatherEntity> getWeatherByLocation() async {

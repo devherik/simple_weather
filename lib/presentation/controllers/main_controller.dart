@@ -61,9 +61,9 @@ class MainController {
     }
   }
 
-  eraseAllInformation() async {
+  eraseAllInformation() {
     try {
-      await _localstorageController.eraseAllData();
+      _localstorageController.eraseAllData();
     } on Exception catch (e) {
       throw e.toString();
     }

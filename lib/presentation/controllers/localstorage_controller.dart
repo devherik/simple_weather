@@ -8,17 +8,17 @@ class LocalstorageController {
   final userLocations = <String>[];
   Map<String, String> lastLocation = {'latitude': '', 'longitude': ''};
 
-  initController() async {
+  Future<void> initController() async {
     await initLocalStorage().whenComplete(
       () {
         localStorage.setItem('WEATHER_UNIT', 'Celcius');
-        getLastLocation();
+        retrieveLastLocation();
         restoreUserLocations();
       },
     );
   }
 
-  getLastLocation() {
+  void retrieveLastLocation() {
     if (localStorage.getItem('LAST_LOCATION_LATITUDE') != null) {
       lastLocation['latitude'] =
           localStorage.getItem('LAST_LOCATION_LATITUDE')!;
@@ -35,7 +35,7 @@ class LocalstorageController {
     }
   }
 
-  setLastLocation(String lat, String lon) {
+  void setLastLocation(String lat, String lon) {
     lastLocation = {'latitude': lat, 'longitude': lon};
   }
 
@@ -48,7 +48,8 @@ class LocalstorageController {
     }
   }
 
-  setWeatherUnit(String value) => localStorage.setItem('WEATHER_UNIT', value);
+  void setWeatherUnit(String value) =>
+      localStorage.setItem('WEATHER_UNIT', value);
 
   ThemeMode getDefaultTheme() {
     ThemeMode theme;
@@ -73,9 +74,10 @@ class LocalstorageController {
     }
   }
 
-  setDefaultTheme(String theme) => localStorage.setItem('DEFAULT_THEME', theme);
+  void setDefaultTheme(String theme) =>
+      localStorage.setItem('DEFAULT_THEME', theme);
 
-  restoreUserLocations() {
+  void restoreUserLocations() {
     int index = 0;
     while (localStorage.getItem('LOCATION_$index') != null && index < 3) {
       userLocations.add(localStorage.getItem('LOCATION_$index') ?? '');
@@ -83,7 +85,7 @@ class LocalstorageController {
     }
   }
 
-  updateUserLocations() {
+  void updateUserLocations() {
     removeAllUserLocations();
     int index = 0;
     for (var location in userLocations) {
@@ -92,25 +94,30 @@ class LocalstorageController {
     }
   }
 
-  addLocation(String name) {
+  List<String> getUserLocations() {
+    updateUserLocations();
+    return userLocations;
+  }
+
+  void addLocation(String name) {
     userLocations.add(name);
     updateUserLocations();
   }
 
-  removeUserLocation(String name) {
+  void removeUserLocation(String name) {
     final index = userLocations.indexOf(name);
     localStorage.removeItem('LOCATION_$index');
     userLocations.removeWhere((element) => element == name);
     updateUserLocations();
   }
 
-  removeAllUserLocations() {
+  void removeAllUserLocations() {
     for (var i = 0; i < 3; i++) {
       localStorage.removeItem('LOCATION_$i');
     }
   }
 
-  eraseAllData() {
+  void eraseAllData() {
     localStorage.clear();
   }
 }

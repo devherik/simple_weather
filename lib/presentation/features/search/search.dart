@@ -38,7 +38,7 @@ class _SearchPageState extends State<SearchPage> {
           decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-              label: Text('Pesquise aqui...',
+              label: Text('Digite uma cidade ou local',
                   style: Theme.of(context).textTheme.labelLarge)),
         ),
       ),

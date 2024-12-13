@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
@@ -30,10 +29,6 @@ class _DetailedPageState extends State<DetailedPage> {
   @override
   void initState() {
     super.initState();
-    widget.weatherController.localstorage.userLocations
-            .contains(widget.weather.cityName!)
-        ? isFixed = true
-        : isFixed = false;
   }
 
   @override
@@ -48,113 +43,7 @@ class _DetailedPageState extends State<DetailedPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Builder(
-                            builder: (context) => IconButton(
-                                tooltip: isFixed
-                                    ? 'Remover dos favoritos'
-                                    : 'Adcionar aos favoritos',
-                                icon: Icon(
-                                  isFixed
-                                      ? Iconsax.save_minus5
-                                      : Iconsax.save_add5,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary,
-                                ),
-                                onPressed: () async {
-                                  if (isFixed) {
-                                    try {
-                                      await widget.weatherController
-                                          .removeUserCity(
-                                              widget.weather.cityName!);
-                                      widget.util.notificationToast(
-                                          // ignore: use_build_context_synchronously
-                                          context,
-                                          'Removido dos favoritos',
-                                          global.green);
-                                      setState(() {});
-                                    } on Exception catch (e) {
-                                      widget.util.notificationToast(
-                                          // ignore: use_build_context_synchronously
-                                          context,
-                                          e.toString(),
-                                          global.red);
-                                    }
-                                  } else {
-                                    try {
-                                      await widget.weatherController
-                                          .addUserCity(
-                                              widget.weather.cityName!);
-                                      widget.util.notificationToast(
-                                          // ignore: use_build_context_synchronously
-                                          context,
-                                          'Adicionado aos favoritos',
-                                          global.green);
-                                      setState(() {});
-                                    } on Exception catch (e) {
-                                      widget.util.notificationToast(
-                                          // ignore: use_build_context_synchronously
-                                          context,
-                                          e.toString(),
-                                          global.red);
-                                    }
-                                  }
-                                })),
-                      ),
-                      Text(
-                        '${widget.weather.cityName!} - ${widget.weather.country!}',
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      global.verySmallBoxSpace,
-                      Row(
-                        children: <Widget>[
-                          Text(
-                            '${widget.weather.temp!.toStringAsFixed(0)}°  ',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Row(
-                                children: [
-                                  Text(
-                                      '${widget.weather.maxTemp!.toStringAsFixed(0)}°',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge),
-                                  Icon(
-                                    Icons.arrow_upward,
-                                    color: global.red,
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                      '${widget.weather.minTemp!.toStringAsFixed(0)}°',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge),
-                                  Icon(
-                                    Icons.arrow_downward,
-                                    color: global.blue,
-                                  )
-                                ],
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                locationWeatherPanel(),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Divider(
@@ -162,59 +51,7 @@ class _DetailedPageState extends State<DetailedPage> {
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    itemCount: widget.weather.forecast.length,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                                widget.util.weekDay(widget
-                                    .weather.forecast[index].dateTime!.weekday),
-                                style: Theme.of(context).textTheme.labelLarge),
-                            Row(
-                              children: <Widget>[
-                                Row(
-                                  children: [
-                                    widget.util.withWeatherIcon(widget
-                                        .weather.forecast[index].condition!),
-                                    Text(
-                                        '  ${widget.weather.forecast[index].maxTemp!.toStringAsFixed(0)}°',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge),
-                                    Icon(
-                                      Icons.arrow_upward,
-                                      color: global.red,
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                        ' | ${widget.weather.forecast[index].minTemp!.toStringAsFixed(0)}°',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge),
-                                    Icon(
-                                      Icons.arrow_downward,
-                                      color: global.blue,
-                                    )
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                )
+                forecastWeatherPanel()
               ],
             ),
           ),
@@ -222,4 +59,101 @@ class _DetailedPageState extends State<DetailedPage> {
       ]),
     );
   }
+
+  Widget locationWeatherPanel() => Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '${widget.weather.cityName!} - ${widget.weather.country!}',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            global.verySmallBoxSpace,
+            Row(
+              children: <Widget>[
+                Text(
+                  '${widget.weather.temp!.toStringAsFixed(0)}°  ',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                Column(
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Text('${widget.weather.maxTemp!.toStringAsFixed(0)}°',
+                            style: Theme.of(context).textTheme.labelLarge),
+                        Icon(
+                          Icons.arrow_upward,
+                          color: global.red,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('${widget.weather.minTemp!.toStringAsFixed(0)}°',
+                            style: Theme.of(context).textTheme.labelLarge),
+                        Icon(
+                          Icons.arrow_downward,
+                          color: global.blue,
+                        )
+                      ],
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
+      );
+
+  Widget forecastWeatherPanel() => Expanded(
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          itemCount: widget.weather.forecast.length,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                      widget.util.weekDay(
+                          widget.weather.forecast[index].dateTime!.weekday),
+                      style: Theme.of(context).textTheme.labelLarge),
+                  Row(
+                    children: <Widget>[
+                      Row(
+                        children: [
+                          widget.util.withWeatherIcon(
+                              widget.weather.forecast[index].condition!),
+                          Text(
+                              '  ${widget.weather.forecast[index].maxTemp!.toStringAsFixed(0)}°',
+                              style: Theme.of(context).textTheme.bodyLarge),
+                          Icon(
+                            Icons.arrow_upward,
+                            color: global.red,
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                              ' | ${widget.weather.forecast[index].minTemp!.toStringAsFixed(0)}°',
+                              style: Theme.of(context).textTheme.bodyLarge),
+                          Icon(
+                            Icons.arrow_downward,
+                            color: global.blue,
+                          )
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
+          },
+        ),
+      );
 }

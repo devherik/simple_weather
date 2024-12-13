@@ -4,7 +4,6 @@ import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
 import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
-import 'package:simple_weather_app/presentation/features/detailed/detailed.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
@@ -73,64 +72,13 @@ class _HomePageState extends State<HomePage>
                             global.mediumBoxSpace,
                             currentWeatherForecast(weatherEntity),
                             global.smallBoxSpace,
-                            Card(
-                              color: Theme.of(context).colorScheme.secondary,
-                              elevation: 1,
-                              child: Flexible(
-                                  child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: MaterialButton(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 24, horizontal: 12),
-                                  minWidth: MediaQuery.of(context).size.width,
-                                  onPressed: () {
-                                    context.push('/search',
-                                        extra: {'weather': _weatherController});
-                                  },
-                                  splashColor:
-                                      Theme.of(context).colorScheme.secondary,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16)),
-                                  child: Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Iconsax.search_favorite,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .inversePrimary,
-                                      ),
-                                      Text(
-                                        ' Pesquisar',
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .inversePrimary,
-                                            letterSpacing: 3,
-                                            fontSize: 16),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              )),
-                            )
+                            weatherSearchButtom()
                           ],
                         );
                       } else {
                         return Center();
                       }
                     }),
-                // FutureBuilder(
-                //   future: _weatherController.getUserCitiesWeather(),
-                //   builder: (context, snapshot) {
-                //     if (snapshot.hasData) {
-                //       final List<WeatherEntity> weathers = snapshot.data!;
-                //       return userWeathersLocation(weathers);
-                //     } else {
-                //       return Center();
-                //     }
-                //   },
-                // ),
                 global.smallBoxSpace,
                 apiLicenseDescription()
               ],
@@ -302,92 +250,39 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget userWeathersLocation(List<WeatherEntity> weathers) {
-    return Card(
-      color: Theme.of(context).colorScheme.secondary,
-      elevation: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Minhas cidades',
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.bodyLarge),
-                Builder(
-                    builder: (context) => IconButton(
-                        icon: Icon(
-                          Iconsax.search_normal,
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                        ),
-                        onPressed: () => context.push('/search',
-                            extra: {'weather': _weatherController}))),
+  Widget weatherSearchButtom() => Card(
+        color: Theme.of(context).colorScheme.secondary,
+        elevation: 1,
+        child: Flexible(
+            child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: MaterialButton(
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+            minWidth: MediaQuery.of(context).size.width,
+            onPressed: () {
+              context.push('/search', extra: {'weather': _weatherController});
+            },
+            splashColor: Theme.of(context).colorScheme.secondary,
+            elevation: 0,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Iconsax.search_normal,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                Text(
+                  ' Pesquisar',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      letterSpacing: 3,
+                      fontSize: 16),
+                )
               ],
             ),
-            global.verySmallBoxSpace,
-            SizedBox(
-                height: 2,
-                width: MediaQuery.of(context).size.width * .7,
-                child: Divider(
-                  thickness: .5,
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                )),
-            global.verySmallBoxSpace,
-            SizedBox(
-              height: MediaQuery.of(context).size.height * .5,
-              width: MediaQuery.of(context).size.width,
-              child: ListView.builder(
-                  itemCount: weathers.length,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemExtent: 80,
-                  itemBuilder: (context, index) =>
-                      locationWeatherButton(weathers[index])),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget locationWeatherButton(WeatherEntity weather) => MaterialButton(
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-        minWidth: MediaQuery.of(context).size.width,
-        onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              scrollControlDisabledMaxHeightRatio:
-                  MediaQuery.of(context).size.height * .8,
-              builder: (context) {
-                return SizedBox(
-                    height: MediaQuery.of(context).size.height * .8,
-                    child: weatherPresentationModal(weather));
-              });
-        },
-        splashColor: Theme.of(context).colorScheme.secondary,
-        elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          children: [
-            Icon(
-              Iconsax.location,
-              color: Theme.of(context).colorScheme.inversePrimary,
-            ),
-            Text(
-              ' ${weather.cityName!} | ${weather.temp!.toStringAsFixed(0)}° ',
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                  letterSpacing: 3,
-                  fontSize: 16),
-            ),
-            util.withWeatherIcon(weather.condition!),
-          ],
-        ),
+          ),
+        )),
       );
 
   Widget weatherCard(WeatherEntity weather) {
@@ -429,39 +324,6 @@ class _HomePageState extends State<HomePage>
           ],
         ),
       ],
-    );
-  }
-
-  Widget weatherPresentationModal(WeatherEntity weather) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                width: 30,
-                child: Divider(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    thickness: 3),
-              ),
-              global.smallBoxSpace,
-              Expanded(
-                child: DetailedPage(
-                  parentContext: context,
-                  wcontroll: _weatherController,
-                  weatherData: weather,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
     );
   }
 

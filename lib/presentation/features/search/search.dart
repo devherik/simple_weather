@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:simple_weather_app/domain/entities/weather_entity.dart';
 import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
 import 'package:simple_weather_app/presentation/features/detailed/detailed.dart';
-import 'package:simple_weather_app/utils/constant/my_util.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key, required wcontroll})
@@ -15,12 +13,10 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final _searchTextController = TextEditingController();
-  late MyUtil _util;
   @override
   void initState() {
     super.initState();
     _searchTextController.addListener(() => setState(() {}));
-    _util = MyUtil.instance;
   }
 
   @override
@@ -29,6 +25,8 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         toolbarHeight: 100,
         title: TextFormField(
+          focusNode: FocusNode(),
+          autofocus: true,
           controller: _searchTextController,
           maxLines: 1,
           keyboardType: TextInputType.text,
@@ -63,56 +61,6 @@ class _SearchPageState extends State<SearchPage> {
                   return CircularProgressIndicator();
                 }
               }),
-        ),
-      ),
-    );
-  }
-
-  Widget weatherCard(WeatherEntity weather) {
-    return Card(
-      elevation: 2,
-      color: Colors.transparent.withOpacity(.5),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(weather.cityName!,
-                        style: Theme.of(context).textTheme.bodyLarge),
-                    Text(weather.country!,
-                        style: Theme.of(context).textTheme.labelLarge),
-                    Text(
-                        '${weather.dateTime!.day.toString()}/${weather.dateTime!.month.toString()}',
-                        style: Theme.of(context).textTheme.labelLarge)
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _util.withWeatherIcon(weather.condition!),
-                        Text(' ${weather.temp!.toStringAsFixed(0)}°',
-                            style: Theme.of(context).textTheme.titleMedium)
-                      ],
-                    ),
-                    Text(
-                        '${weather.minTemp!.toStringAsFixed(0)}°/${weather.maxTemp!.toStringAsFixed(0)}°',
-                        style: Theme.of(context).textTheme.labelLarge)
-                  ],
-                ),
-              ],
-            ),
-          ],
         ),
       ),
     );

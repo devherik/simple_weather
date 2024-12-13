@@ -25,7 +25,6 @@ class WeatherController {
 
   WeatherEntity _currentWeather = WeatherEntity('', '', DateTime.now(), '', 0,
       20, 20, 20, 20, DateTime.now(), DateTime.now());
-  final List<WeatherEntity> userWeathers = <WeatherEntity>[];
 
   final String _weatherApiKey = dotenv.env['WEATHER_KEY']!;
 
@@ -43,57 +42,12 @@ class WeatherController {
     return _currentWeather;
   }
 
-  Future<List<WeatherEntity>> getUserCitiesWeather() async {
-    await updateUserCities();
-    return userWeathers;
-  }
-
   Future<void> updateWeather() async {
     try {
       _currentWeather = await getWeatherByLocation();
     } on Exception catch (e) {
       log(e.toString());
     }
-  }
-
-  Future<void> addUserCity(String name) async {
-    if (localstorage.userLocations.length < 3) {
-      if (localstorage.userLocations.contains(name)) {
-        throw Exception('Alread have this city');
-      } else {
-        localstorage.addLocation(name);
-      }
-    } else {
-      throw Exception('List is full');
-    }
-    await updateUserCities();
-  }
-
-  Future<void> updateUserCities() async {
-    try {
-      userWeathers.clear();
-      final cities = localstorage.getUserLocations();
-      if (cities.isNotEmpty) {
-        for (var city in cities) {
-          await getWeatherByCity(city).then(
-            (value) {
-              userWeathers.add(value);
-            },
-          );
-        }
-      }
-    } on Exception catch (e) {
-      log(e.toString());
-    }
-  }
-
-  Future<void> removeUserCity(String name) async {
-    try {
-      localstorage.removeUserLocation(name);
-    } on Exception catch (e) {
-      log(e.toString());
-    }
-    await updateUserCities();
   }
 
   Future<WeatherEntity> getWeatherByLocation() async {

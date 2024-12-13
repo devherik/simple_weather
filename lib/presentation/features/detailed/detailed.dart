@@ -25,12 +25,6 @@ class DetailedPage extends StatefulWidget {
 }
 
 class _DetailedPageState extends State<DetailedPage> {
-  late bool isFixed;
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -60,51 +54,49 @@ class _DetailedPageState extends State<DetailedPage> {
     );
   }
 
-  Widget locationWeatherPanel() => Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '${widget.weather.cityName!} - ${widget.weather.country!}',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            global.verySmallBoxSpace,
-            Row(
-              children: <Widget>[
-                Text(
-                  '${widget.weather.temp!.toStringAsFixed(0)}°  ',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Text('${widget.weather.maxTemp!.toStringAsFixed(0)}°',
-                            style: Theme.of(context).textTheme.labelLarge),
-                        Icon(
-                          Icons.arrow_upward,
-                          color: global.red,
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text('${widget.weather.minTemp!.toStringAsFixed(0)}°',
-                            style: Theme.of(context).textTheme.labelLarge),
-                        Icon(
-                          Icons.arrow_downward,
-                          color: global.blue,
-                        )
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ],
-        ),
+  Widget locationWeatherPanel() => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '${widget.weather.cityName!} - ${widget.weather.country!}',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          global.verySmallBoxSpace,
+          Row(
+            children: <Widget>[
+              Text(
+                '${widget.weather.temp!.toStringAsFixed(0)}°  ',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Text('${widget.weather.maxTemp!.toStringAsFixed(0)}°',
+                          style: Theme.of(context).textTheme.labelLarge),
+                      Icon(
+                        Icons.arrow_upward,
+                        color: global.red,
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('${widget.weather.minTemp!.toStringAsFixed(0)}°',
+                          style: Theme.of(context).textTheme.labelLarge),
+                      Icon(
+                        Icons.arrow_downward,
+                        color: global.blue,
+                      )
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
+        ],
       );
 
   Widget forecastWeatherPanel() => Expanded(

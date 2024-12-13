@@ -5,7 +5,6 @@ class LocalstorageController {
   LocalstorageController._privateConstructor();
   static final instance = LocalstorageController._privateConstructor();
 
-  final userLocations = <String>[];
   Map<String, String> lastLocation = {'latitude': '', 'longitude': ''};
 
   Future<void> initController() async {
@@ -13,7 +12,6 @@ class LocalstorageController {
       () {
         localStorage.setItem('WEATHER_UNIT', 'Celcius');
         retrieveLastLocation();
-        restoreUserLocations();
       },
     );
   }
@@ -77,47 +75,11 @@ class LocalstorageController {
   void setDefaultTheme(String theme) =>
       localStorage.setItem('DEFAULT_THEME', theme);
 
-  void restoreUserLocations() {
-    int index = 0;
-    while (localStorage.getItem('LOCATION_$index') != null && index < 3) {
-      userLocations.add(localStorage.getItem('LOCATION_$index') ?? '');
-      index++;
-    }
-  }
-
-  void updateUserLocations() {
-    removeAllUserLocations();
-    int index = 0;
-    for (var location in userLocations) {
-      localStorage.setItem('LOCATION_$index', location);
-      index++;
-    }
-  }
-
-  List<String> getUserLocations() {
-    updateUserLocations();
-    return userLocations;
-  }
-
-  void addLocation(String name) {
-    userLocations.add(name);
-    updateUserLocations();
-  }
-
-  void removeUserLocation(String name) {
-    final index = userLocations.indexOf(name);
-    localStorage.removeItem('LOCATION_$index');
-    userLocations.removeWhere((element) => element == name);
-    updateUserLocations();
-  }
-
-  void removeAllUserLocations() {
-    for (var i = 0; i < 3; i++) {
-      localStorage.removeItem('LOCATION_$i');
-    }
-  }
-
   void eraseAllData() {
-    localStorage.clear();
+    try {
+      localStorage.clear();
+    } on Exception catch (e) {
+      throw e.toString();
+    }
   }
 }

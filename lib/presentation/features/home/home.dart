@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage>
                             global.mediumBoxSpace,
                             currentWeatherForecast(weatherEntity),
                             global.smallBoxSpace,
-                            weatherSearchButtom()
+                            weatherSearchButton()
                           ],
                         );
                       } else {
@@ -250,7 +250,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget weatherSearchButtom() => Card(
+  Widget weatherSearchButton() => Card(
         color: Theme.of(context).colorScheme.secondary,
         elevation: 1,
         child: Flexible(
@@ -267,6 +267,8 @@ class _HomePageState extends State<HomePage>
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Icon(
                   Iconsax.search_normal,

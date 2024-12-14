@@ -72,15 +72,17 @@ class _HomePageState extends State<HomePage>
                             global.mediumBoxSpace,
                             currentWeatherForecast(weatherEntity),
                             global.smallBoxSpace,
-                            weatherSearchButton()
+                            weatherSearchButton(),
+                            global.smallBoxSpace,
+                            apiLicenseDescription()
                           ],
                         );
                       } else {
-                        return Center();
+                        return Center(
+                          child: apiLicenseDescription(),
+                        );
                       }
                     }),
-                global.smallBoxSpace,
-                apiLicenseDescription()
               ],
             ),
           ),
@@ -250,41 +252,36 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget weatherSearchButton() => Card(
-        color: Theme.of(context).colorScheme.secondary,
-        elevation: 1,
-        child: Flexible(
-            child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: MaterialButton(
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-            minWidth: MediaQuery.of(context).size.width,
-            onPressed: () {
-              context.push('/search', extra: {'weather': _weatherController});
-            },
-            splashColor: Theme.of(context).colorScheme.secondary,
-            elevation: 0,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  Iconsax.search_normal,
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                ),
-                Text(
-                  ' Pesquisar',
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      letterSpacing: 3,
-                      fontSize: 16),
-                )
-              ],
-            ),
+  Widget weatherSearchButton() => Padding(
+        padding: const EdgeInsets.all(8),
+        child: MaterialButton(
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+          minWidth: MediaQuery.of(context).size.width,
+          onPressed: () {
+            context.push('/search', extra: {'weather': _weatherController});
+          },
+          splashColor: Theme.of(context).colorScheme.secondary,
+          elevation: 0,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Iconsax.search_normal,
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+              Text(
+                ' Pesquisar',
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                    letterSpacing: 3,
+                    fontSize: 16),
+              )
+            ],
           ),
-        )),
+        ),
       );
 
   Widget weatherCard(WeatherEntity weather) {
@@ -332,7 +329,7 @@ class _HomePageState extends State<HomePage>
   Widget apiLicenseDescription() => Align(
         alignment: Alignment.center,
         child: Text(
-          'License by OpenWeatherMap',
+          'Privided by OpenWeatherMap',
           style: Theme.of(context).textTheme.labelSmall,
         ),
       );

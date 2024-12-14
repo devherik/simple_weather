@@ -18,8 +18,8 @@ class WeatherController {
       WeatherController._privateConstructor();
 
   final LocationApi _locationApi = LocationApiImp.instance;
-  //final WeatherApi _weatherApi = WeatherApiImp.instance;
-  final WeatherApi _weatherApi = WeatherMockupImp.instance;
+  final WeatherApi _weatherApi = WeatherApiImp.instance;
+  //final WeatherApi _weatherApi = WeatherMockupImp.instance;
   final MainController _mainController = MainController.instance;
   final LocalstorageController localstorage = LocalstorageController.instance;
 

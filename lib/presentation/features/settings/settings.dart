@@ -208,12 +208,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
-                        Iconsax.box,
-                        size: 8,
-                      ),
+                      SizedBox(
+                          height: 15,
+                          width: 15,
+                          child: Center(
+                              child: Image.asset(
+                                  'assets/icons/github_light.png'))),
                       Text(
-                        '  devherik',
+                        ' devherik',
                         style: Theme.of(context).textTheme.labelSmall,
                       ),
                     ],

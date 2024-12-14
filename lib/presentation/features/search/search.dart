@@ -25,20 +25,19 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         toolbarHeight: 100,
         title: TextFormField(
-          focusNode: FocusNode(),
-          autofocus: true,
-          controller: _searchTextController,
-          maxLines: 1,
-          keyboardType: TextInputType.text,
-          textInputAction: TextInputAction.done,
-          textAlign: TextAlign.start,
-          style: Theme.of(context).textTheme.bodyLarge,
-          decoration: InputDecoration(
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-              label: Text('Digite uma cidade ou local',
-                  style: Theme.of(context).textTheme.labelLarge)),
-        ),
+            focusNode: FocusNode(),
+            autofocus: true,
+            controller: _searchTextController,
+            maxLines: 1,
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            textAlign: TextAlign.start,
+            style: Theme.of(context).textTheme.bodyLarge,
+            decoration: InputDecoration(
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                hintText: 'Digite uma cidade ou local',
+                hintStyle: Theme.of(context).textTheme.labelLarge)),
       ),
       body: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),

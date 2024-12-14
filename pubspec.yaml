@@ -89,6 +89,8 @@ flutter:
     - .env
     - assets/images/icons/sun.png
     - assets/images/icons/moon.png
+    - assets/icons/github_dark.png
+    - assets/icons/github_light.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -209,44 +209,42 @@ class _HomePageState extends State<HomePage>
     return Card(
       color: Theme.of(context).colorScheme.secondary,
       elevation: 1,
-      child: Flexible(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Próximos dias',
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              global.smallBoxSpace,
-              SizedBox(
-                  height: 2,
-                  width: MediaQuery.of(context).size.width * .7,
-                  child: Divider(
-                    thickness: .5,
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                  )),
-              global.verySmallBoxSpace,
-              SizedBox(
-                height: MediaQuery.of(context).size.height * .30,
-                width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: weatherEntity.forecast.length,
-                    scrollDirection: Axis.vertical,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: weatherCard(weatherEntity.forecast[index]),
-                      );
-                    }),
-              )
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Próximos dias',
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            global.smallBoxSpace,
+            SizedBox(
+                height: 2,
+                width: MediaQuery.of(context).size.width * .7,
+                child: Divider(
+                  thickness: .5,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                )),
+            global.verySmallBoxSpace,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * .30,
+              width: MediaQuery.of(context).size.width,
+              child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: weatherEntity.forecast.length,
+                  scrollDirection: Axis.vertical,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: weatherCard(weatherEntity.forecast[index]),
+                    );
+                  }),
+            )
+          ],
         ),
       ),
     );

@@ -1,16 +1,31 @@
-# simple_weather_app
+Project Title: Simple Weather
 
-A new Flutter project.
+Description:
+This is a weather application that provides real-time weather information for any location worldwide. Users can easily search for their desired location and get detailed weather data, including:
 
-## Getting Started
+Current Weather:
+Temperature
+Weather Condition
+Forecast:
+Daily forecasts for the next 5 days
 
-This project is a starting point for a Flutter application.
+Features:
 
-A few resources to get you started if this is your first Flutter project:
+User-friendly interface: Intuitive design for easy navigation.
+Accurate weather data: Reliable data sourced from trusted weather APIs.
+Dark mode: Customizable theme for better user experience.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Framework: Flutter
+API: OpenWeatherMap API
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Screenshots:
+
+![home](assets/screenshots/home_page.jpg)
+![search](assets/screenshots/search_page.jpg)
+![settings](assets/screenshots/settings_page.jpg)
+
+Contact:
+
+Email: devherik@gmail.com
+Instagram: @colaresherik
+Additional Tips:

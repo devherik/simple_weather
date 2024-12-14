@@ -467,6 +467,7 @@ class _SettingsPageState extends State<SettingsPage> {
     bool sended = false;
     bool error = false;
     return AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.primary,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

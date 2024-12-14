@@ -5,12 +5,12 @@ import 'package:hexcolor/hexcolor.dart';
 const green = Color.fromARGB(255, 135, 238, 188);
 const red = Color.fromARGB(255, 226, 141, 141);
 const blue = Color.fromARGB(255, 84, 189, 238);
-var primaryDarkColor = HexColor('522B5B');
-var secondaryDarkColor = HexColor('59415e');
-var terciaryDarkColor = HexColor('273526');
-var primaryLightColor = HexColor('f7fcfe');
-var secondaryLightColor = HexColor('dce1e3');
-var terciaryLightColor = HexColor('c0cfb2');
+var primaryDarkColor = HexColor('1f271b');
+var secondaryDarkColor = HexColor('8bb174');
+var terciaryDarkColor = HexColor('a37871');
+var primaryLightColor = HexColor('fffbff');
+var secondaryLightColor = HexColor('f7ebe8');
+var terciaryLightColor = HexColor('a37871');
 var neutralColor = HexColor('845F6C');
 
 //spaces

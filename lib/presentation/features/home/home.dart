@@ -252,35 +252,31 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget weatherSearchButton() => Padding(
-        padding: const EdgeInsets.all(8),
-        child: MaterialButton(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-          minWidth: MediaQuery.of(context).size.width,
-          onPressed: () {
-            context.push('/search', extra: {'weather': _weatherController});
-          },
-          splashColor: Theme.of(context).colorScheme.secondary,
-          elevation: 0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                Iconsax.search_normal,
-                color: Theme.of(context).colorScheme.inversePrimary,
-              ),
-              Text(
-                ' Pesquisar',
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    letterSpacing: 3,
-                    fontSize: 16),
-              )
-            ],
-          ),
+  Widget weatherSearchButton() => MaterialButton(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+        minWidth: MediaQuery.of(context).size.width,
+        onPressed: () {
+          context.push('/search', extra: {'weather': _weatherController});
+        },
+        splashColor: Theme.of(context).colorScheme.secondary,
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              Iconsax.search_normal,
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
+            Text(
+              ' Pesquisar',
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                  letterSpacing: 3,
+                  fontSize: 16),
+            )
+          ],
         ),
       );
 

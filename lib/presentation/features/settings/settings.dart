@@ -49,6 +49,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   global.smallBoxSpace,
                   MaterialButton(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 12),
+                    minWidth: MediaQuery.of(context).size.width,
+                    splashColor: Theme.of(context).colorScheme.secondary,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -77,6 +84,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   MaterialButton(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 12),
+                    minWidth: MediaQuery.of(context).size.width,
+                    splashColor: Theme.of(context).colorScheme.secondary,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -105,6 +119,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   MaterialButton(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 12),
+                    minWidth: MediaQuery.of(context).size.width,
+                    splashColor: Theme.of(context).colorScheme.secondary,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -144,6 +165,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   global.smallBoxSpace,
                   MaterialButton(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 12),
+                    minWidth: MediaQuery.of(context).size.width,
+                    splashColor: Theme.of(context).colorScheme.secondary,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -170,6 +198,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   MaterialButton(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 24, horizontal: 12),
+                      minWidth: MediaQuery.of(context).size.width,
+                      splashColor: Theme.of(context).colorScheme.secondary,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
@@ -461,15 +496,20 @@ class _SettingsPageState extends State<SettingsPage> {
             hintStyle: Theme.of(context).textTheme.labelMedium,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(
+                    width: 0.5,
+                    color: Theme.of(context).colorScheme.inversePrimary)),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide(
-                    width: 2.0,
+                    width: 1.0,
                     color: Theme.of(context).colorScheme.inversePrimary)),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide(
-                    width: 2.0,
+                    width: 1.0,
                     color: Theme.of(context).colorScheme.inversePrimary))),
       ),
       actions: <Widget>[
@@ -493,13 +533,10 @@ class _SettingsPageState extends State<SettingsPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Iconsax.send1),
+                const Icon(Iconsax.send_2),
                 Text(
                   ' Enviar',
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      letterSpacing: 3,
-                      fontSize: 16),
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
               ],
             ),

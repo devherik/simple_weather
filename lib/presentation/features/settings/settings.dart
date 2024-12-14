@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
@@ -156,7 +158,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       showDialog(
                         context: context,
                         builder: (context) =>
-                            modalBottomSheetSendMSG('Informe um problema'),
+                            alertDialogSheetSendMSG('Problema'),
                       );
                     },
                   ),
@@ -182,7 +184,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         showDialog(
                           context: context,
                           builder: (context) =>
-                              modalBottomSheetSendMSG('Envie seu feedback'),
+                              alertDialogSheetSendMSG('Feedback'),
                         );
                       }),
                   SizedBox(
@@ -423,101 +425,85 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  modalBottomSheetSendMSG(String title) {
+  alertDialogSheetSendMSG(String title) {
+    final TextEditingController controller = TextEditingController();
+    bool sended = false;
+    bool error = false;
     return AlertDialog(
-      title: Text(
-        title,
-        style: Theme.of(context).textTheme.titleSmall,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          Builder(
+            builder: (context) => IconButton(
+                onPressed: () => context.pop(),
+                icon: Icon(
+                  Iconsax.close_circle,
+                  color: global.red,
+                )),
+          )
+        ],
       ),
-      content: Container(
-        height: MediaQuery.of(context).size.height * .75,
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            TextFormField(
-              maxLines: 5,
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.next,
-              textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.bodyMedium,
-              decoration: InputDecoration(
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.inversePrimary)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(
-                          color:
-                              Theme.of(context).colorScheme.inversePrimary))),
-            ),
-            global.smallBoxSpace,
-            Row(
+      content: TextFormField(
+        controller: controller,
+        maxLines: 5,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.next,
+        textAlign: TextAlign.start,
+        style: Theme.of(context).textTheme.bodyMedium,
+        decoration: InputDecoration(
+            hintText: 'Digite aqui',
+            hintStyle: Theme.of(context).textTheme.labelMedium,
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(
+                    width: 2.0,
+                    color: Theme.of(context).colorScheme.inversePrimary)),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(
+                    width: 2.0,
+                    color: Theme.of(context).colorScheme.inversePrimary))),
+      ),
+      actions: <Widget>[
+        Flexible(
+          child: MaterialButton(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+            onPressed: () async {
+              sended = true;
+              try {} catch (e) {
+                sended = false;
+                error = true;
+                log(e.toString());
+              } finally {}
+            },
+            splashColor: Theme.of(context).colorScheme.secondary,
+            elevation: 1,
+            color: global.green,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                MaterialButton(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-                  minWidth: MediaQuery.of(context).size.width * .4,
-                  onPressed: () {
-                    context.pop();
-                  },
-                  splashColor: Theme.of(context).colorScheme.secondary,
-                  elevation: 0,
-                  color: Theme.of(context).colorScheme.primary,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Row(
-                    children: [
-                      const Icon(Iconsax.close_circle),
-                      Text(
-                        ' Cancelar',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                            letterSpacing: 3,
-                            fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-                MaterialButton(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-                  minWidth: MediaQuery.of(context).size.width * .4,
-                  onPressed: () async {},
-                  splashColor: Theme.of(context).colorScheme.secondary,
-                  elevation: 0,
-                  color: global.green,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Row(
-                    children: [
-                      const Icon(Iconsax.send1),
-                      Text(
-                        ' Enviar',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                            letterSpacing: 3,
-                            fontSize: 16),
-                      ),
-                    ],
-                  ),
+                const Icon(Iconsax.send1),
+                Text(
+                  ' Enviar',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      letterSpacing: 3,
+                      fontSize: 16),
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 

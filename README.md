@@ -20,12 +20,9 @@ API: OpenWeatherMap API
 
 Screenshots:
 
-![home](assets/screenshots/home_page.jpg)
-![search](assets/screenshots/search_page.jpg)
-![settings](assets/screenshots/settings_page.jpg)
+![home](assets/screenshots/home_page.jpg){ width=50% } ![search](assets/screenshots/search_page.jpg) ![settings](assets/screenshots/settings_page.jpg)
 
 Contact:
 
 Email: devherik@gmail.com
 Instagram: @colaresherik
-Additional Tips:

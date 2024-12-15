@@ -22,8 +22,6 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
   }
 
-//TODO: organize the code
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -615,7 +613,15 @@ class _SettingsPageState extends State<SettingsPage> {
                         vertical: 24, horizontal: 12),
                     minWidth: MediaQuery.of(context).size.width * .3,
                     onPressed: () async {
-                      await widget._mainController.eraseAllInformation();
+                      try {
+                        await widget._mainController.eraseAllInformation();
+                      } on Exception catch (e) {
+                        log(e.toString());
+                      } finally {
+                        setState(() {});
+                        // ignore: use_build_context_synchronously
+                        context.push('/');
+                      }
                     },
                     splashColor: Theme.of(context).colorScheme.secondary,
                     elevation: 0,

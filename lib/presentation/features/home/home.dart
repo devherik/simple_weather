@@ -35,9 +35,10 @@ class _HomePageState extends State<HomePage>
 
     _weatherController.initController();
 
-    _mainController.weatherUnit$.addListener(
-        () => setState(() async => await _weatherController.updateWeather()));
-    _mainController.themeMode$.addListener(() => setState(() {}));
+    _mainController.weatherUnit$.addListener(() async {
+      await _weatherController.updateWeather();
+      setState(() {});
+    });
 
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1))
@@ -327,4 +328,10 @@ class _HomePageState extends State<HomePage>
           style: Theme.of(context).textTheme.labelSmall,
         ),
       );
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
 }

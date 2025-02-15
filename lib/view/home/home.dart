@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
-import 'package:simple_weather_app/domain/entities/weather_entity.dart';
-import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
+import 'package:simple_weather_app/model/weather_entity.dart';
+import 'package:simple_weather_app/viewmodel/main_controller.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
-import 'package:simple_weather_app/presentation/controllers/weather_controller.dart';
+import 'package:simple_weather_app/viewmodel/weather_controller.dart';
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 
 class HomePage extends StatefulWidget {

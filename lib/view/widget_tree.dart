@@ -1,7 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_weather_app/presentation/features/error/error.dart';
-import 'package:simple_weather_app/presentation/features/home/home.dart';
+import 'package:simple_weather_app/view/error/error.dart';
+import 'package:simple_weather_app/view/home/home.dart';
 
 class WidgetTree extends StatefulWidget {
   const WidgetTree({super.key});

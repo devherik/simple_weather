@@ -5,11 +5,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:simple_weather_app/config/mockup/weather_mockup_imp.dart';
 import 'package:simple_weather_app/data/data_sources/remote/location_api_imp.dart';
 import 'package:simple_weather_app/data/data_sources/remote/weather_api_imp.dart';
-import 'package:simple_weather_app/domain/entities/weather_entity.dart';
+import 'package:simple_weather_app/model/weather_entity.dart';
 import 'package:simple_weather_app/infra/port/input/location_api.dart';
 import 'package:simple_weather_app/infra/port/input/weather_api.dart';
-import 'package:simple_weather_app/presentation/controllers/localstorage_controller.dart';
-import 'package:simple_weather_app/presentation/controllers/main_controller.dart';
+import 'package:simple_weather_app/viewmodel/localstorage_controller.dart';
+import 'package:simple_weather_app/viewmodel/main_controller.dart';
 import 'package:weather/weather.dart';
 
 class WeatherController {

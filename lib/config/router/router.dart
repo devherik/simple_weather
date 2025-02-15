@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:simple_weather_app/presentation/features/error/error.dart';
-import 'package:simple_weather_app/presentation/features/home/home.dart';
-import 'package:simple_weather_app/presentation/features/search/search.dart';
-import 'package:simple_weather_app/presentation/features/settings/settings.dart';
-import 'package:simple_weather_app/widget_tree.dart';
+import 'package:simple_weather_app/view/error/error.dart';
+import 'package:simple_weather_app/view/home/home.dart';
+import 'package:simple_weather_app/view/search/search.dart';
+import 'package:simple_weather_app/view/settings/settings.dart';
+import 'package:simple_weather_app/view/widget_tree.dart';
 
 class AppRouter {
   final router = GoRouter(routes: <RouteBase>[

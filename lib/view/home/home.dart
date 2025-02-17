@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:simple_weather_app/model/weather_entity.dart';
 import 'package:simple_weather_app/viewmodel/main_controller.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
-import 'package:simple_weather_app/viewmodel/weather_controller.dart';
+import 'package:simple_weather_app/viewmodel/weather_viewmodel.dart';
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 
 class HomePage extends StatefulWidget {

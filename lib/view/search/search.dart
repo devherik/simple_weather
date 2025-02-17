@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simple_weather_app/viewmodel/weather_controller.dart';
+import 'package:simple_weather_app/viewmodel/weather_viewmodel.dart';
 import 'package:simple_weather_app/view/detailed/detailed.dart';
 
 class SearchPage extends StatefulWidget {

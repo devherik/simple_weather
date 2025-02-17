@@ -2,12 +2,12 @@ import 'package:simple_weather_app/infra/port/input/weather_api.dart';
 import 'package:weather/weather.dart';
 
 class WeatherApiImp implements WeatherApi {
-  WeatherApiImp._privateConstructor();
-  static final WeatherApiImp instance = WeatherApiImp._privateConstructor();
-  WeatherFactory? _factory;
+  WeatherApiImp._();
+  static final WeatherApiImp instance = WeatherApiImp._();
+  late WeatherFactory _factory;
 
   @override
-  initAPI(String key) async {
+  Future<void> initApi(String key) async {
     try {
       _factory = WeatherFactory(key);
     } on Exception {
@@ -16,9 +16,9 @@ class WeatherApiImp implements WeatherApi {
   }
 
   @override
-  getWeatherByCity(String city) async {
+  Future<Weather> getWeatherByCity(String city) async {
     try {
-      final Weather value = await _factory!.currentWeatherByCityName(city);
+      final Weather value = await _factory.currentWeatherByCityName(city);
       return value;
     } on Exception {
       rethrow;
@@ -26,9 +26,9 @@ class WeatherApiImp implements WeatherApi {
   }
 
   @override
-  getWeatherByLocation(double lat, double lon) async {
+  Future<Weather> getWeatherByLocation(double lat, double lon) async {
     try {
-      final Weather value = await _factory!.currentWeatherByLocation(lat, lon);
+      final Weather value = await _factory.currentWeatherByLocation(lat, lon);
       return value;
     } on Exception {
       rethrow;
@@ -36,10 +36,10 @@ class WeatherApiImp implements WeatherApi {
   }
 
   @override
-  getForecastByCity(String city) async {
+  Future<List<Weather>> getForecastByCity(String city) async {
     try {
       final List<Weather> values =
-          await _factory!.fiveDayForecastByCityName(city);
+          await _factory.fiveDayForecastByCityName(city);
       return values;
     } on Exception {
       rethrow;
@@ -50,7 +50,7 @@ class WeatherApiImp implements WeatherApi {
   getForecastByLocation(double lat, double lon) async {
     try {
       final List<Weather> values =
-          await _factory!.fiveDayForecastByLocation(lat, lon);
+          await _factory.fiveDayForecastByLocation(lat, lon);
       return values;
     } on Exception {
       rethrow;

@@ -62,5 +62,5 @@ class WeatherMockupImp implements WeatherApi {
   }
 
   @override
-  initAPI(String key) {}
+  initApi(String key) {}
 }

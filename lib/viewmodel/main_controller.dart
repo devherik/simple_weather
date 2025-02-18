@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:simple_weather_app/data/data_sources/remote/location_api_imp.dart';
 import 'package:simple_weather_app/infra/port/input/location_api.dart';
-import 'package:simple_weather_app/viewmodel/localstorage_controller.dart';
+import 'package:simple_weather_app/viewmodel/localstorage_viewmodel.dart';
 
 class MainController {
   // a controller to start the application apis, plugins, themes etc
@@ -10,8 +10,8 @@ class MainController {
   static final MainController instance = MainController._privateConstructor();
 
   final LocationApi _locationApi = LocationApiImp.instance;
-  final LocalstorageController _localstorageController =
-      LocalstorageController.instance;
+  final LocalstorageViewmodel _localstorageController =
+      LocalstorageViewmodel.instance;
 
   var themeMode$ = ValueNotifier<ThemeMode>(ThemeMode.system);
   var weatherUnit$ = ValueNotifier<String>('Celcius');

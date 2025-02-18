@@ -1,6 +1,6 @@
 abstract class LocationApi<T> {
-  initAPI();
-  T getCurrentLocation();
-  T checkPermission();
-  T requestLocationPermission();
+  Future<void> initApi();
+  Future<T> getCurrentLocation();
+  Future<T> checkPermission();
+  Future<T> requestLocationPermission();
 }

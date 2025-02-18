@@ -1,43 +1,57 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:result_dart/result_dart.dart';
+import 'package:simple_weather_app/model/weather_entity.dart';
+import 'package:simple_weather_app/repositories_services/localstorage/localstorage_repository.dart';
+import 'package:simple_weather_app/repositories_services/localstorage/localstorage_repository_imp.dart';
 import 'package:simple_weather_app/repositories_services/weather/weather_repository.dart';
 import 'package:simple_weather_app/repositories_services/weather/weather_repository_imp.dart';
-import 'package:weather/weather.dart';
 
-class WeatherViewmodel {
-  final WeatherRepositoryImp _weatherRepository;
-  final ValueNotifier<Weather?> weatherNotifier = ValueNotifier<Weather?>(null);
-  final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
-  final ValueNotifier<String?> errorMessage = ValueNotifier<String?>(null);
+class WeatherViewmodel extends ValueNotifier<WeatherEntity> {
+  WeatherViewmodel._(super._value);
+  static final instance = WeatherViewmodel._(WeatherEntity.empty());
 
-  WeatherViewmodel(this._weatherRepository);
+  late WeatherEntity lastWeather;
+  late WeatherRepository _weatherRepository;
+  late LocalstorageRepository _localstorageRepository;
 
-  Future<void> fetchWeather(String city) async {
-    isLoading.value = true;
-    final result = await _weatherRepository.getWeatherByCity(city);
-    result.fold(
-      success: (weather) {
-        weatherNotifier.value = weather;
-        isLoading.value = false;
-      },
-      failure: (error) {
-        errorMessage.value = error.toString();
-        isLoading.value = false;
-      },
-    );
+  Future<bool> init() async {
+    _weatherRepository = WeatherRepositoryImp();
+    _localstorageRepository = LocalstorageRepositoryImp();
+    await _weatherRepository.init();
+    await _localstorageRepository.init().whenComplete(() async {
+      await _localstorageRepository
+          .getData('lastWeather')
+          .onSuccess((success) => lastWeather = WeatherEntity.fromJson(success))
+          .onFailure((failure) => log(failure.toString()));
+    });
+    return true;
   }
 
-  Future<void> fetchForecast(String city) async {
-    isLoading.value = true;
-    final result = await _weatherRepository.getForecastByCity(city);
-    result.fold(
-      success: (forecast) {
-        weatherNotifier.value = forecast.first;
-        isLoading.value = false;
-      },
-      failure: (error) {
-        errorMessage.value = error.toString();
-        isLoading.value = false;
-      },
-    );
+  Future<void> updateCurrentWeather() async {}
+
+  Future<void> fetchWeatherByCity(String city) async {
+    await _weatherRepository
+        .getWeatherByCity(city)
+        .onSuccess((success) => value = success)
+        .onFailure((failure) => log(failure.toString()));
+  }
+
+  Future<void> fetchWeatherByLocation() async {}
+
+  Future<void> fetchForecastByCity(String city) async {
+    await _weatherRepository
+        .getFilteredForecastByCity(city)
+        .onSuccess((success) => value.forecast = success)
+        .onFailure((failure) => log(failure.toString()));
+  }
+
+  Future<void> fetchForecastByLocation() async {}
+
+  void updateLastWeather(WeatherEntity weather) {
+    _localstorageRepository
+        .saveData('lastWeather', weather.toJson())
+        .onFailure((failure) => log(failure.toString()));
   }
 }

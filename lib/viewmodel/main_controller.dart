@@ -19,7 +19,7 @@ class MainController {
 
   initController() async {
     await dotenv.load(fileName: '.env');
-    await _locationApi.initAPI();
+    await _locationApi.initApi();
     await _localstorageController.initController();
     setTheme();
     setWeatherUnit();

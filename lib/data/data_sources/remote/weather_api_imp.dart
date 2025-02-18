@@ -1,59 +1,47 @@
+import 'dart:developer';
+
 import 'package:simple_weather_app/infra/port/input/weather_api.dart';
 import 'package:weather/weather.dart';
 
 class WeatherApiImp implements WeatherApi {
   WeatherApiImp._();
   static final WeatherApiImp instance = WeatherApiImp._();
+
   late WeatherFactory _factory;
+  bool _status = false;
 
   @override
   Future<void> initApi(String key) async {
-    try {
+    if (!_status) {
       _factory = WeatherFactory(key);
-    } on Exception {
-      rethrow;
+      _status = true;
+    } else {
+      log('WeatherApiImp already initialized');
     }
   }
 
   @override
   Future<Weather> getWeatherByCity(String city) async {
-    try {
-      final Weather value = await _factory.currentWeatherByCityName(city);
-      return value;
-    } on Exception {
-      rethrow;
-    }
+    final Weather value = await _factory.currentWeatherByCityName(city);
+    return value;
   }
 
   @override
   Future<Weather> getWeatherByLocation(double lat, double lon) async {
-    try {
-      final Weather value = await _factory.currentWeatherByLocation(lat, lon);
-      return value;
-    } on Exception {
-      rethrow;
-    }
+    final Weather value = await _factory.currentWeatherByLocation(lat, lon);
+    return value;
   }
 
   @override
   Future<List<Weather>> getForecastByCity(String city) async {
-    try {
-      final List<Weather> values =
-          await _factory.fiveDayForecastByCityName(city);
-      return values;
-    } on Exception {
-      rethrow;
-    }
+    final List<Weather> values = await _factory.fiveDayForecastByCityName(city);
+    return values;
   }
 
   @override
-  getForecastByLocation(double lat, double lon) async {
-    try {
-      final List<Weather> values =
-          await _factory.fiveDayForecastByLocation(lat, lon);
-      return values;
-    } on Exception {
-      rethrow;
-    }
+  Future<List<Weather>> getForecastByLocation(double lat, double lon) async {
+    final List<Weather> values =
+        await _factory.fiveDayForecastByLocation(lat, lon);
+    return values;
   }
 }

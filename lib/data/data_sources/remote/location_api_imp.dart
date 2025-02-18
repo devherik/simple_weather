@@ -7,7 +7,8 @@ class LocationApiImp implements LocationApi {
   LocationApiImp._privateConstructor();
   static final LocationApiImp instance = LocationApiImp._privateConstructor();
 
-  Position? _currentPosition;
+  late Position currentPosition;
+  bool _status = false;
 
   bool _servicePermission = false;
   GeolocatorPlatform? _geolocatorPlatform;
@@ -15,12 +16,12 @@ class LocationApiImp implements LocationApi {
 
   @override
   getCurrentLocation() async {
-    _currentPosition = await _geolocatorPlatform!.getCurrentPosition();
-    return _currentPosition;
+    currentPosition = await _geolocatorPlatform!.getCurrentPosition();
+    return currentPosition;
   }
 
   @override
-  initAPI() async {
+  initApi() async {
     _geolocatorPlatform = GeolocatorPlatform.instance;
     _servicePermission = await _geolocatorPlatform!.isLocationServiceEnabled();
     if (!_servicePermission) {
@@ -32,7 +33,7 @@ class LocationApiImp implements LocationApi {
       await requestLocationPermission();
       if (_permission == LocationPermission.whileInUse ||
           _permission == LocationPermission.always) {
-        _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
+        currentPosition = await _geolocatorPlatform!.getCurrentPosition(
             locationSettings:
                 const LocationSettings(accuracy: LocationAccuracy.best));
       } else {
@@ -41,7 +42,7 @@ class LocationApiImp implements LocationApi {
     } else {
       if (_permission == LocationPermission.whileInUse ||
           _permission == LocationPermission.always) {
-        _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
+        currentPosition = await _geolocatorPlatform!.getCurrentPosition(
             locationSettings:
                 const LocationSettings(accuracy: LocationAccuracy.best));
         // _currentAddress
@@ -56,10 +57,10 @@ class LocationApiImp implements LocationApi {
     _permission = await _geolocatorPlatform!.requestPermission();
     if (_permission == LocationPermission.whileInUse ||
         _permission == LocationPermission.always) {
-      _currentPosition = await _geolocatorPlatform!.getCurrentPosition(
+      currentPosition = await _geolocatorPlatform!.getCurrentPosition(
           locationSettings:
               const LocationSettings(accuracy: LocationAccuracy.best));
-      return _currentPosition;
+      return currentPosition;
       // _currentAddress
     } else {
       throw 'Permission denied';

@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  late WeatherController _weatherController;
+  late WeatherViewmodel _weatherViewmodel;
   late MyUtil util;
   late MainController _mainController;
 
@@ -29,14 +29,14 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    _weatherController = WeatherController.instance;
+    _weatherViewmodel = WeatherViewmodel.instance;
     _mainController = MainController.instance;
     util = MyUtil.instance;
 
-    _weatherController.initController();
+    _weatherViewmodel.init();
 
     _mainController.weatherUnit$.addListener(() async {
-      await _weatherController.updateWeather();
+      await _weatherViewmodel.updateCurrentWeather();
       setState(() {});
     });
 
@@ -62,10 +62,11 @@ class _HomePageState extends State<HomePage>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 FutureBuilder(
-                    future: _weatherController.initController(),
+                    future: _weatherViewmodel.init(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        final WeatherEntity weatherEntity = snapshot.data!;
+                        final WeatherEntity weatherEntity =
+                            _weatherViewmodel.value;
                         return Column(
                           children: <Widget>[
                             global.smallBoxSpace,
@@ -104,7 +105,7 @@ class _HomePageState extends State<HomePage>
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                     onPressed: () => context.push('/settings', extra: {
-                          'weather': _weatherController,
+                          'weather': _weatherViewmodel,
                           'main': _mainController
                         }))),
             Column(
@@ -136,7 +137,7 @@ class _HomePageState extends State<HomePage>
                             ),
                           ),
                           onPressed: () async {
-                            await _weatherController.updateWeather();
+                            await _weatherViewmodel.updateCurrentWeather();
                             animationController.forward().whenComplete(
                                   () => animationController.reset(),
                                 );
@@ -255,7 +256,7 @@ class _HomePageState extends State<HomePage>
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
-          context.push('/search', extra: {'weather': _weatherController});
+          context.push('/search', extra: {'weather': _weatherViewmodel});
         },
         splashColor: Theme.of(context).colorScheme.secondary,
         elevation: 0,

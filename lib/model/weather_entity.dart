@@ -40,6 +40,11 @@ class WeatherEntity {
         DateTime.parse(json['sunSet']));
   }
 
+  factory WeatherEntity.empty() {
+    return WeatherEntity('City', 'Country', DateTime.now(), 'Weather', 0, 0, 0,
+        0, 0, DateTime.now(), DateTime.now());
+  }
+
   factory WeatherEntity.fromWeather(WeatherEntity weather) {
     return WeatherEntity(
         weather.cityName,

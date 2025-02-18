@@ -12,8 +12,6 @@ class LocalstorageViewmodel extends ValueNotifier<AppPreferencesEntity> {
 
   late LocalstorageRepository _localstorageRepository;
 
-  Map<String, String> lastLocation = {'latitude': '', 'longitude': ''};
-
   Future<void> initController() async {
     _localstorageRepository = LocalstorageRepositoryImp();
     await _localstorageRepository.init().whenComplete(() async {

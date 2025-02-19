@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     viewmodel = LocalstorageViewmodel.instance;
-    viewmodel.initController();
+    viewmodel.init();
   }
 
   @override

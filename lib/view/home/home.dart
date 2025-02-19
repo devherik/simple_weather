@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:go_router/go_router.dart';
 import 'package:simple_weather_app/model/weather_entity.dart';
-import 'package:simple_weather_app/viewmodel/main_controller.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
+import 'package:simple_weather_app/viewmodel/localstorage_viewmodel.dart';
 import 'package:simple_weather_app/viewmodel/weather_viewmodel.dart';
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 
@@ -18,27 +19,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late WeatherViewmodel _weatherViewmodel;
+  late LocalstorageViewmodel _localstorageViewmodel;
   late MyUtil util;
-  late MainController _mainController;
 
   late AnimationController animationController;
   late Animation<double> turnController;
 
   late String today;
+  late Location position;
 
   @override
   void initState() {
     super.initState();
     _weatherViewmodel = WeatherViewmodel.instance;
-    _mainController = MainController.instance;
-    util = MyUtil.instance;
-
     _weatherViewmodel.init();
-
-    _mainController.weatherUnit$.addListener(() async {
-      await _weatherViewmodel.updateCurrentWeather();
-      setState(() {});
-    });
+    _localstorageViewmodel = LocalstorageViewmodel.instance;
+    _localstorageViewmodel.init();
+    util = MyUtil.instance;
 
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1))
@@ -61,30 +58,23 @@ class _HomePageState extends State<HomePage>
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                FutureBuilder(
-                    future: _weatherViewmodel.init(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final WeatherEntity weatherEntity =
-                            _weatherViewmodel.value;
-                        return Column(
-                          children: <Widget>[
-                            global.smallBoxSpace,
-                            currentWeatherDescription(weatherEntity),
-                            global.mediumBoxSpace,
-                            currentWeatherForecast(weatherEntity),
-                            global.smallBoxSpace,
-                            weatherSearchButton(),
-                            global.smallBoxSpace,
-                            apiLicenseDescription()
-                          ],
-                        );
-                      } else {
-                        return Center(
-                          child: apiLicenseDescription(),
-                        );
-                      }
-                    }),
+                ValueListenableBuilder(
+                  valueListenable: _weatherViewmodel,
+                  builder: (context, value, child) {
+                    return Column(
+                      children: <Widget>[
+                        global.smallBoxSpace,
+                        currentWeatherDescription(value),
+                        global.mediumBoxSpace,
+                        currentWeatherForecast(value),
+                        global.smallBoxSpace,
+                        weatherSearchButton(),
+                        global.smallBoxSpace,
+                        apiLicenseDescription()
+                      ],
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -99,15 +89,16 @@ class _HomePageState extends State<HomePage>
         Row(
           children: <Widget>[
             Builder(
-                builder: (context) => IconButton(
-                    icon: Icon(
-                      Iconsax.setting,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                    onPressed: () => context.push('/settings', extra: {
-                          'weather': _weatherViewmodel,
-                          'main': _mainController
-                        }))),
+              builder: (context) => IconButton(
+                  icon: Icon(
+                    Iconsax.setting,
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                  onPressed: () => context.push('/settings', extra: {
+                        'weather': _weatherViewmodel,
+                        'local': _localstorageViewmodel
+                      })),
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,

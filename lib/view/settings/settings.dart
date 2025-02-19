@@ -3,14 +3,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:simple_weather_app/viewmodel/main_controller.dart';
 
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
+import 'package:simple_weather_app/viewmodel/localstorage_viewmodel.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key, required MainController mcontroll})
-      : _mainController = mcontroll;
-  final MainController _mainController;
+  const SettingsPage({super.key, required LocalstorageViewmodel viewmodel})
+      : _viewmodel = viewmodel,
+        super();
+  final LocalstorageViewmodel _viewmodel;
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -59,9 +60,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       children: <Widget>[
                         const Icon(Iconsax.sun_1),
                         ValueListenableBuilder(
-                          valueListenable: widget._mainController.weatherUnit$,
+                          valueListenable: widget._viewmodel,
                           builder: (context, value, child) => Text(
-                            '  Unidade de tempo - $value',
+                            '  Unidade de tempo - $value.weatherUnit',
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         )
@@ -93,13 +94,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         const Icon(Iconsax.color_swatch),
-                        ValueListenableBuilder(
-                          valueListenable: widget._mainController.weatherUnit$,
-                          builder: (context, value, child) => Text(
-                            '  Tema do aplicativo',
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                        )
+                        Text(
+                          '  Tema do aplicativo',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       ],
                     ),
                     onPressed: () {
@@ -289,7 +287,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
                 minWidth: MediaQuery.of(context).size.width,
                 onPressed: () {
-                  widget._mainController.changeWeatherUnit('Celcius');
+                  widget._viewmodel.value.changeWeatherUnit('Celcius');
                   context.pop();
                 },
                 splashColor: Theme.of(context).colorScheme.secondary,
@@ -309,7 +307,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           fontSize: 16),
                     ),
                     Icon(
-                      widget._mainController.weatherUnit$.value == 'Celcius'
+                      widget._viewmodel.value.weatherUnit == 'Celcius'
                           ? Iconsax.toggle_on_circle5
                           : Iconsax.toggle_off_circle,
                       color: Theme.of(context).colorScheme.inversePrimary,
@@ -326,7 +324,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
                 minWidth: MediaQuery.of(context).size.width,
                 onPressed: () {
-                  widget._mainController.changeWeatherUnit('Fahrenheit');
+                  widget._viewmodel.value.changeWeatherUnit('Fahrenheit');
                   context.pop();
                 },
                 splashColor: Theme.of(context).colorScheme.secondary,
@@ -346,7 +344,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           fontSize: 16),
                     ),
                     Icon(
-                      widget._mainController.weatherUnit$.value == 'Fahrenheit'
+                      widget._viewmodel.value.weatherUnit == 'Fahrenheit'
                           ? Iconsax.toggle_on_circle5
                           : Iconsax.toggle_off_circle,
                       color: Theme.of(context).colorScheme.inversePrimary,
@@ -388,7 +386,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
                 minWidth: MediaQuery.of(context).size.width,
                 onPressed: () {
-                  widget._mainController.changeTheme();
+                  widget._viewmodel.value.changeTheme();
                   context.pop();
                 },
                 splashColor: Theme.of(context).colorScheme.secondary,
@@ -408,7 +406,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           fontSize: 16),
                     ),
                     Icon(
-                      !widget._mainController.darkThemeOn
+                      widget._viewmodel.value.theme.toString() == 'dark'
                           ? Iconsax.toggle_on_circle5
                           : Iconsax.toggle_off_circle,
                       color: Theme.of(context).colorScheme.inversePrimary,
@@ -425,7 +423,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
                 minWidth: MediaQuery.of(context).size.width,
                 onPressed: () {
-                  widget._mainController.changeTheme();
+                  widget._viewmodel.value.changeTheme();
                   context.pop();
                 },
                 splashColor: Theme.of(context).colorScheme.secondary,
@@ -445,7 +443,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           fontSize: 16),
                     ),
                     Icon(
-                      widget._mainController.darkThemeOn
+                      widget._viewmodel.value.theme.toString() == 'light'
                           ? Iconsax.toggle_on_circle5
                           : Iconsax.toggle_off_circle,
                       color: Theme.of(context).colorScheme.inversePrimary,
@@ -614,7 +612,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     minWidth: MediaQuery.of(context).size.width * .3,
                     onPressed: () async {
                       try {
-                        await widget._mainController.eraseAllInformation();
+                        await widget._viewmodel.clearPreferences();
                       } on Exception catch (e) {
                         log(e.toString());
                       } finally {

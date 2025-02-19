@@ -12,7 +12,7 @@ class LocalstorageViewmodel extends ValueNotifier<AppPreferencesEntity> {
 
   late LocalstorageRepository _localstorageRepository;
 
-  Future<void> initController() async {
+  Future<void> init() async {
     _localstorageRepository = LocalstorageRepositoryImp();
     await _localstorageRepository.init().whenComplete(() async {
       await _localstorageRepository
@@ -21,5 +21,9 @@ class LocalstorageViewmodel extends ValueNotifier<AppPreferencesEntity> {
               (success) => value = AppPreferencesEntity.fromJson(success))
           .onFailure((failure) => log(failure.toString()));
     });
+  }
+
+  Future<void> clearPreferences() async {
+    //await _localstorageRepository.clearData('appPreferences');
   }
 }

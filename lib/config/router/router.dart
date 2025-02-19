@@ -25,7 +25,7 @@ class AppRouter {
           name: 'settingsPage',
           builder: (context, state) {
             Map<String, dynamic> map = state.extra! as Map<String, dynamic>;
-            return SettingsPage(mcontroll: map['main']);
+            return SettingsPage(viewmodel: map['local']);
           },
         ),
         GoRoute(
@@ -33,7 +33,7 @@ class AppRouter {
           name: 'searchPage',
           builder: (context, state) {
             Map<String, dynamic> map = state.extra! as Map<String, dynamic>;
-            return SearchPage(wcontroll: map['weather']);
+            return SearchPage(viewmodel: map['weather']);
           },
         ),
       ],

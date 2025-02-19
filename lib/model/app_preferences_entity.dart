@@ -43,13 +43,13 @@ class AppPreferencesEntity {
     };
   }
 
-  void changeTheme(String newTheme) {
-    switch (newTheme) {
+  void changeTheme() {
+    switch (theme.toString()) {
       case 'light':
-        theme = ThemeMode.light;
+        theme = ThemeMode.dark;
         break;
       case 'dark':
-        theme = ThemeMode.dark;
+        theme = ThemeMode.light;
         break;
       default:
         theme = ThemeMode.light;
@@ -57,8 +57,8 @@ class AppPreferencesEntity {
     }
   }
 
-  void changeWeatherUnit() {
-    weatherUnit = weatherUnit == 'Celcius' ? 'Fahrenheit' : 'Celcius';
+  void changeWeatherUnit(String unity) {
+    weatherUnit = unity;
   }
 
   void changeLanguage() {

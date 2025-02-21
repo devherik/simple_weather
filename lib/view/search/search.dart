@@ -53,7 +53,6 @@ class _SearchPageState extends State<SearchPage> {
                 if (snapshot.hasData) {
                   return DetailedPage(
                     parentContext: context,
-                    wcontroll: widget._viewmodel,
                     weatherData: snapshot.data,
                   );
                 } else {

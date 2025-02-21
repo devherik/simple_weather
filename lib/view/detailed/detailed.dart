@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:simple_weather_app/model/weather_entity.dart';
-import 'package:simple_weather_app/viewmodel/weather_viewmodel.dart';
 import 'package:simple_weather_app/utils/constant/my_util.dart';
 
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 
 class DetailedPage extends StatefulWidget {
-  DetailedPage(
-      {super.key,
-      required parentContext,
-      required wcontroll,
-      required weatherData})
+  DetailedPage({super.key, required parentContext, required weatherData})
       : context = parentContext,
-        weatherController = wcontroll,
         weather = weatherData;
 
   final BuildContext context;
-  final WeatherController weatherController;
   final MyUtil util = MyUtil.instance;
   final WeatherEntity weather;
 

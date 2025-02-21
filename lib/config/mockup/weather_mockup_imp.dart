@@ -35,32 +35,32 @@ class WeatherMockupImp implements WeatherApi {
     },
     "timezone": 7200,
     "id": 3165523,
-    "name": "Province of Turin Turin",
+    "name": "Narnia City",
     "cod": 200
   });
 
   @override
-  getForecastByCity(String city) {
+  Future<List<Weather>> getForecastByCity(String city) async {
     final List<Weather> forecast = [_weatherData, _weatherData];
     return forecast;
   }
 
   @override
-  getForecastByLocation(double lat, double lon) {
+  Future<List<Weather>> getForecastByLocation(double lat, double lon) async {
     final List<Weather> forecast = [_weatherData, _weatherData];
     return forecast;
   }
 
   @override
-  getWeatherByCity(String city) {
+  Future<Weather> getWeatherByCity(String city) async {
     return _weatherData;
   }
 
   @override
-  getWeatherByLocation(double lat, double lon) {
+  Future<Weather> getWeatherByLocation(double lat, double lon) async {
     return _weatherData;
   }
 
   @override
-  initApi(String key) {}
+  Future<void> initApi(String key) async {}
 }

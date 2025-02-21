@@ -11,17 +11,21 @@ class AppPreferencesEntity {
     required this.language,
   });
 
-  factory AppPreferencesEntity.fromJson(Map<String, dynamic> json) {
+  factory AppPreferencesEntity.fromJson(Map<dynamic, dynamic> json) {
+    ThemeMode theme;
+    switch (json['theme']) {
+      case 'ThemeMode.dark':
+        theme = ThemeMode.dark;
+        break;
+      case 'ThemeMode.light':
+        theme = ThemeMode.light;
+        break;
+      default:
+        theme = ThemeMode.light;
+        break;
+    }
     return AppPreferencesEntity(
-      theme: json['theme'],
-      weatherUnit: json['weatherUnit'],
-      language: json['language'],
-    );
-  }
-
-  factory AppPreferencesEntity.toJson(Map<String, dynamic> json) {
-    return AppPreferencesEntity(
-      theme: json['theme'],
+      theme: theme,
       weatherUnit: json['weatherUnit'],
       language: json['language'],
     );
@@ -35,9 +39,9 @@ class AppPreferencesEntity {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<dynamic, dynamic> toJson() {
     return {
-      'theme': theme,
+      'theme': theme.toString(),
       'weatherUnit': weatherUnit,
       'language': language,
     };
@@ -45,10 +49,10 @@ class AppPreferencesEntity {
 
   void changeTheme() {
     switch (theme.toString()) {
-      case 'light':
+      case 'ThemeMode.dark':
         theme = ThemeMode.dark;
         break;
-      case 'dark':
+      case 'ThemeMode.light':
         theme = ThemeMode.light;
         break;
       default:

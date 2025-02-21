@@ -1,3 +1,5 @@
+import 'package:weather/weather.dart';
+
 class WeatherEntity {
   String? cityName;
   String? country;
@@ -25,7 +27,7 @@ class WeatherEntity {
       this.sunRise,
       this.sunSet);
 
-  factory WeatherEntity.fromJson(Map<String, dynamic> json) {
+  factory WeatherEntity.fromJson(Map<dynamic, dynamic> json) {
     return WeatherEntity(
         json['cityName'],
         json['country'],
@@ -41,26 +43,26 @@ class WeatherEntity {
   }
 
   factory WeatherEntity.empty() {
-    return WeatherEntity('City', 'Country', DateTime.now(), 'Weather', 0, 0, 0,
+    return WeatherEntity('Empty', 'Empty', DateTime.now(), 'Weather', 0, 0, 0,
         0, 0, DateTime.now(), DateTime.now());
   }
 
-  factory WeatherEntity.fromWeather(WeatherEntity weather) {
+  factory WeatherEntity.fromWeather(Weather weather) {
     return WeatherEntity(
-        weather.cityName,
+        weather.areaName,
         weather.country,
-        weather.dateTime,
-        weather.weather,
-        weather.condition,
-        weather.temp,
-        weather.maxTemp,
-        weather.minTemp,
-        weather.feelsTemp,
-        weather.sunRise,
-        weather.sunSet);
+        weather.date,
+        weather.weatherDescription,
+        weather.weatherConditionCode,
+        weather.temperature!.celsius,
+        weather.tempMax!.celsius,
+        weather.tempMin!.celsius,
+        weather.tempFeelsLike!.celsius,
+        weather.sunrise,
+        weather.sunset);
   }
 
-  Map<String, dynamic> toJson() {
+  Map<dynamic, dynamic> toJson() {
     return {
       'cityName': cityName,
       'country': country,

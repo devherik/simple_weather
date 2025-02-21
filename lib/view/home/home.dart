@@ -34,7 +34,6 @@ class _HomePageState extends State<HomePage>
     _weatherViewmodel = WeatherViewmodel.instance;
     _weatherViewmodel.init();
     _localstorageViewmodel = LocalstorageViewmodel.instance;
-    _localstorageViewmodel.init();
     util = MyUtil.instance;
 
     animationController =
@@ -44,6 +43,11 @@ class _HomePageState extends State<HomePage>
         CurvedAnimation(parent: animationController, curve: Curves.easeOutCirc);
 
     today = util.weekDay(DateTime.now().weekday);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override

@@ -11,19 +11,28 @@ class LocalstorageViewmodel extends ValueNotifier<AppPreferencesEntity> {
   static final instance = LocalstorageViewmodel._(AppPreferencesEntity.empty());
 
   late LocalstorageRepository _localstorageRepository;
+  bool _status = false;
 
-  Future<void> init() async {
-    _localstorageRepository = LocalstorageRepositoryImp();
-    await _localstorageRepository.init().whenComplete(() async {
+  Future<bool> init() async {
+    if (!_status) {
+      _localstorageRepository = LocalstorageRepositoryImp.instance;
+      await _localstorageRepository.init();
       await _localstorageRepository
           .getData('appPreferences')
           .onSuccess(
               (success) => value = AppPreferencesEntity.fromJson(success))
-          .onFailure((failure) => log(failure.toString()));
-    });
+          .onFailure((failure) => _localstorageRepository.saveData(
+              'appPreferences', AppPreferencesEntity.empty().toJson()));
+      _status = true;
+    } else {
+      log('Localstorage viewmodel already initialized');
+    }
+    return _status;
   }
 
   Future<void> clearPreferences() async {
     //await _localstorageRepository.clearData('appPreferences');
   }
+
+  Future<void> end() async => _status = false;
 }

@@ -7,6 +7,7 @@ import 'package:simple_weather_app/model/weather_entity.dart';
 import 'package:simple_weather_app/repositories_services/localstorage/localstorage_repository.dart';
 import 'package:simple_weather_app/repositories_services/localstorage/localstorage_repository_imp.dart';
 import 'package:simple_weather_app/repositories_services/location/location_service.dart';
+import 'package:simple_weather_app/repositories_services/location/location_service_imp.dart';
 import 'package:simple_weather_app/repositories_services/weather/weather_repository.dart';
 import 'package:simple_weather_app/repositories_services/weather/weather_repository_imp.dart';
 
@@ -21,22 +22,32 @@ class WeatherViewmodel extends ValueNotifier<WeatherEntity> {
 
   late Location position;
 
+  bool _status = false;
+
   Future<bool> init() async {
-    _weatherRepository = WeatherRepositoryImp();
-    _localstorageRepository = LocalstorageRepositoryImp();
-    await _weatherRepository.init();
-    await _localstorageRepository.init().whenComplete(() async {
-      await _localstorageRepository
-          .getData('lastWeather')
-          .onSuccess((success) => lastWeather = WeatherEntity.fromJson(success))
-          .onFailure((failure) => log(failure.toString()));
-    });
-    await _locationService.initApi().whenComplete(() async =>
-        await _locationService
-            .getCurrentLocation()
-            .onSuccess((success) => position = success)
-            .onFailure((failure) => log(failure.toString())));
-    return true;
+    if (!_status) {
+      _weatherRepository = WeatherRepositoryImp.instance;
+      _localstorageRepository = LocalstorageRepositoryImp.instance;
+      _locationService = LocationServiceImp();
+      await _weatherRepository.init();
+      await _localstorageRepository.init().whenComplete(() async {
+        await _localstorageRepository
+            .getData('lastWeather')
+            .onSuccess(
+                (success) => lastWeather = WeatherEntity.fromJson(success))
+            .onFailure((failure) => log(failure.toString()));
+      });
+      await _locationService.initApi().whenComplete(() async =>
+          await _locationService
+              .getCurrentLocation()
+              .onSuccess((success) => position = success)
+              .onFailure((failure) => log(failure.toString())));
+      _status = true;
+    } else {
+      log('Weather viewmodel already initialized');
+    }
+    value.cityName == 'Empty' ? await updateCurrentWeather() : null;
+    return _status;
   }
 
   Future<void> updateCurrentWeather() async {
@@ -44,7 +55,7 @@ class WeatherViewmodel extends ValueNotifier<WeatherEntity> {
         .getCurrentLocation()
         .onSuccess((success) => position = success)
         .onFailure((failure) => log(failure.toString()));
-    await fetchForecastByLocation(position.latitude, position.longitude);
+    await fetchWeatherByLocation(position.latitude, position.longitude);
     await fetchForecastByLocation(position.latitude, position.longitude);
   }
 
@@ -61,8 +72,10 @@ class WeatherViewmodel extends ValueNotifier<WeatherEntity> {
   Future<void> fetchWeatherByLocation(double lat, double lon) async {
     await _weatherRepository
         .getWeatherByLocation(lat, lon)
-        .onSuccess((success) => value = success)
-        .onFailure((failure) => log(failure.toString()));
+        .onSuccess((success) {
+      value = success;
+      updateLastWeather(value);
+    }).onFailure((failure) => log(failure.toString()));
   }
 
   Future<List<WeatherEntity>> fetchForecastByCity(String city) async {

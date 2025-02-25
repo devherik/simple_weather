@@ -50,10 +50,10 @@ class AppPreferencesEntity {
   void changeTheme() {
     switch (theme.toString()) {
       case 'ThemeMode.dark':
-        theme = ThemeMode.dark;
+        theme = ThemeMode.light;
         break;
       case 'ThemeMode.light':
-        theme = ThemeMode.light;
+        theme = ThemeMode.dark;
         break;
       default:
         theme = ThemeMode.light;

@@ -13,6 +13,9 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
+  static _MyAppState? of(BuildContext context) {
+    return context.findAncestorStateOfType<_MyAppState>()!;
+  }
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -20,18 +23,17 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late LocalstorageViewmodel viewmodel;
+  ThemeMode _themeMode = ThemeMode.light;
 
   @override
   void initState() {
     super.initState();
     viewmodel = LocalstorageViewmodel.instance;
-    viewmodel.init();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    viewmodel.addListener(() => setState(() {}));
+    viewmodel.init().whenComplete(() {
+      setState(() {
+        _themeMode = viewmodel.value.theme;
+      });
+    });
   }
 
   @override
@@ -40,14 +42,13 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Simple Weather',
       theme: AppTheme.light,
-      themeMode: viewmodel.value.theme,
+      themeMode: _themeMode,
       darkTheme: AppTheme.dark,
       routerConfig: AppRouter().router,
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  void changeTheme(ThemeMode themeMode) {
+    setState(() => _themeMode = themeMode);
   }
 }

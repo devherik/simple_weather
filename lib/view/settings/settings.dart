@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:simple_weather_app/main.dart';
 
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
 import 'package:simple_weather_app/viewmodel/localstorage_viewmodel.dart';
@@ -31,232 +32,234 @@ class _SettingsPageState extends State<SettingsPage> {
         title: Text('Configurações',
             style: Theme.of(context).textTheme.titleSmall),
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'GERAL',
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  global.smallBoxSpace,
-                  MaterialButton(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 24, horizontal: 12),
-                    minWidth: MediaQuery.of(context).size.width,
-                    splashColor: Theme.of(context).colorScheme.secondary,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+      body: ValueListenableBuilder(
+          valueListenable: widget._viewmodel,
+          builder: (context, value, child) {
+            return Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.all(16),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'GERAL',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        global.smallBoxSpace,
+                        MaterialButton(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 24, horizontal: 12),
+                          minWidth: MediaQuery.of(context).size.width,
+                          splashColor: Theme.of(context).colorScheme.secondary,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              const Icon(Iconsax.sun_1),
+                              Text(
+                                '  Unidade de tempo - ${value.weatherUnit}',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ],
+                          ),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) => modalBottomSheetUnities(),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Divider(
+                            thickness: .1,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        ),
+                        MaterialButton(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 24, horizontal: 12),
+                          minWidth: MediaQuery.of(context).size.width,
+                          splashColor: Theme.of(context).colorScheme.secondary,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              const Icon(Iconsax.color_swatch),
+                              Text(
+                                '  Tema do aplicativo',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ],
+                          ),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) => modalBottomSheetTheme(),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Divider(
+                            thickness: .1,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        ),
+                        MaterialButton(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 24, horizontal: 12),
+                          minWidth: MediaQuery.of(context).size.width,
+                          splashColor: Theme.of(context).colorScheme.secondary,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              const Icon(Iconsax.eraser),
+                              Text(
+                                '  Limpar suas informações',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              )
+                            ],
+                          ),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) => modalBottomSheetEraseAll(),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Divider(
+                            thickness: .1,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    global.veryLargeBoxSpace,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        const Icon(Iconsax.sun_1),
-                        ValueListenableBuilder(
-                          valueListenable: widget._viewmodel,
-                          builder: (context, value, child) => Text(
-                            '  Unidade de tempo - $value.weatherUnit',
-                            style: Theme.of(context).textTheme.bodyLarge,
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'FEEDBACK',
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                        ),
+                        global.smallBoxSpace,
+                        MaterialButton(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 24, horizontal: 12),
+                          minWidth: MediaQuery.of(context).size.width,
+                          splashColor: Theme.of(context).colorScheme.secondary,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              const Icon(Iconsax.message_remove),
+                              Text(
+                                '  Informe um problema',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              )
+                            ],
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  alertDialogSheetSendMSG('Problema'),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Divider(
+                            thickness: .1,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        ),
+                        MaterialButton(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 24, horizontal: 12),
+                            minWidth: MediaQuery.of(context).size.width,
+                            splashColor:
+                                Theme.of(context).colorScheme.secondary,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                const Icon(Iconsax.message_2),
+                                Text(
+                                  '  Envie seu feedback',
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                )
+                              ],
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    alertDialogSheetSendMSG('Feedback'),
+                              );
+                            }),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Divider(
+                            thickness: .1,
+                            color: Theme.of(context).colorScheme.inversePrimary,
                           ),
                         )
                       ],
                     ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) => modalBottomSheetUnities(),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Divider(
-                      thickness: .1,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                  ),
-                  MaterialButton(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 24, horizontal: 12),
-                    minWidth: MediaQuery.of(context).size.width,
-                    splashColor: Theme.of(context).colorScheme.secondary,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Row(
+                    global.veryLargeBoxSpace,
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        const Icon(Iconsax.color_swatch),
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
                         Text(
-                          '  Tema do aplicativo',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          'Feito por Herik Colares',
+                          style: Theme.of(context).textTheme.labelSmall,
                         ),
-                      ],
-                    ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) => modalBottomSheetTheme(),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Divider(
-                      thickness: .1,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                  ),
-                  MaterialButton(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 24, horizontal: 12),
-                    minWidth: MediaQuery.of(context).size.width,
-                    splashColor: Theme.of(context).colorScheme.secondary,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        const Icon(Iconsax.eraser),
-                        Text(
-                          '  Limpar suas informações',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                                height: 15,
+                                width: 15,
+                                child: Center(
+                                    child: Image.asset(
+                                        'assets/icons/github_light.png'))),
+                            Text(
+                              ' devherik',
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                          ],
                         )
                       ],
                     ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) => modalBottomSheetEraseAll(),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Divider(
-                      thickness: .1,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              global.veryLargeBoxSpace,
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'FEEDBACK',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
-                  global.smallBoxSpace,
-                  MaterialButton(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 24, horizontal: 12),
-                    minWidth: MediaQuery.of(context).size.width,
-                    splashColor: Theme.of(context).colorScheme.secondary,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        const Icon(Iconsax.message_remove),
-                        Text(
-                          '  Informe um problema',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        )
-                      ],
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) =>
-                            alertDialogSheetSendMSG('Problema'),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Divider(
-                      thickness: .1,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                  ),
-                  MaterialButton(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 24, horizontal: 12),
-                      minWidth: MediaQuery.of(context).size.width,
-                      splashColor: Theme.of(context).colorScheme.secondary,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Icon(Iconsax.message_2),
-                          Text(
-                            '  Envie seu feedback',
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          )
-                        ],
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) =>
-                              alertDialogSheetSendMSG('Feedback'),
-                        );
-                      }),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Divider(
-                      thickness: .1,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                  )
-                ],
-              ),
-              global.veryLargeBoxSpace,
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Feito por Herik Colares',
-                    style: Theme.of(context).textTheme.labelSmall,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                          height: 15,
-                          width: 15,
-                          child: Center(
-                              child: Image.asset(
-                                  'assets/icons/github_light.png'))),
-                      Text(
-                        ' devherik',
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+            );
+          }),
     );
   }
 
@@ -288,6 +291,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 minWidth: MediaQuery.of(context).size.width,
                 onPressed: () {
                   widget._viewmodel.value.changeWeatherUnit('Celcius');
+                  setState(() {
+                    widget._viewmodel.savePreferences();
+                  });
                   context.pop();
                 },
                 splashColor: Theme.of(context).colorScheme.secondary,
@@ -325,6 +331,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 minWidth: MediaQuery.of(context).size.width,
                 onPressed: () {
                   widget._viewmodel.value.changeWeatherUnit('Fahrenheit');
+                  setState(() {
+                    widget._viewmodel.savePreferences();
+                  });
                   context.pop();
                 },
                 splashColor: Theme.of(context).colorScheme.secondary,
@@ -360,6 +369,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   modalBottomSheetTheme() {
+    bool _value = false;
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -385,9 +395,17 @@ class _SettingsPageState extends State<SettingsPage> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
                 minWidth: MediaQuery.of(context).size.width,
-                onPressed: () {
-                  widget._viewmodel.value.changeTheme();
-                  context.pop();
+                onPressed: () async {
+                  if (widget._viewmodel.value.theme == ThemeMode.light) {
+                    setState(
+                        () => MyApp.of(context)!.changeTheme(ThemeMode.dark));
+                    widget._viewmodel.value.changeTheme();
+                  } else {
+                    setState(
+                        () => MyApp.of(context)!.changeTheme(ThemeMode.light));
+                    widget._viewmodel.value.changeTheme();
+                  }
+                  await widget._viewmodel.savePreferences();
                 },
                 splashColor: Theme.of(context).colorScheme.secondary,
                 elevation: 0,
@@ -406,7 +424,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           fontSize: 16),
                     ),
                     Icon(
-                      widget._viewmodel.value.theme.toString() == 'dark'
+                      widget._viewmodel.value.theme.toString() ==
+                              'ThemeMode.light'
                           ? Iconsax.toggle_on_circle5
                           : Iconsax.toggle_off_circle,
                       color: Theme.of(context).colorScheme.inversePrimary,
@@ -422,9 +441,17 @@ class _SettingsPageState extends State<SettingsPage> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
                 minWidth: MediaQuery.of(context).size.width,
-                onPressed: () {
-                  widget._viewmodel.value.changeTheme();
-                  context.pop();
+                onPressed: () async {
+                  if (widget._viewmodel.value.theme == ThemeMode.dark) {
+                    setState(
+                        () => MyApp.of(context)!.changeTheme(ThemeMode.light));
+                    widget._viewmodel.value.changeTheme();
+                  } else {
+                    setState(
+                        () => MyApp.of(context)!.changeTheme(ThemeMode.dark));
+                    widget._viewmodel.value.changeTheme();
+                  }
+                  await widget._viewmodel.savePreferences();
                 },
                 splashColor: Theme.of(context).colorScheme.secondary,
                 elevation: 0,
@@ -443,7 +470,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           fontSize: 16),
                     ),
                     Icon(
-                      widget._viewmodel.value.theme.toString() == 'light'
+                      widget._viewmodel.value.theme.toString() ==
+                              'ThemeMode.dark'
                           ? Iconsax.toggle_on_circle5
                           : Iconsax.toggle_off_circle,
                       color: Theme.of(context).colorScheme.inversePrimary,

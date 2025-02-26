@@ -180,10 +180,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             ],
                           ),
                           onPressed: () {
-                            showDialog(
+                            showModalBottomSheet(
                               context: context,
                               builder: (context) =>
-                                  alertDialogSheetSendMSG('Problema'),
+                                  modalBottomSheetMessage('Problema'),
                             );
                           },
                         ),
@@ -214,10 +214,10 @@ class _SettingsPageState extends State<SettingsPage> {
                               ],
                             ),
                             onPressed: () {
-                              showDialog(
+                              showModalBottomSheet(
                                 context: context,
                                 builder: (context) =>
-                                    alertDialogSheetSendMSG('Feedback'),
+                                    modalBottomSheetMessage('Feedback'),
                               );
                             }),
                         SizedBox(
@@ -369,7 +369,6 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   modalBottomSheetTheme() {
-    bool _value = false;
     return Container(
       height: 250,
       decoration: BoxDecoration(
@@ -486,69 +485,50 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  alertDialogSheetSendMSG(String title) {
+  modalBottomSheetMessage(String title) {
     final TextEditingController controller = TextEditingController();
-    bool sended = false;
-    bool error = false;
-    return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
           Text(
             title,
             style: Theme.of(context).textTheme.titleSmall,
           ),
-          Builder(
-            builder: (context) => IconButton(
-                onPressed: () => context.pop(),
-                icon: Icon(
-                  Iconsax.close_circle,
-                  color: global.red,
-                )),
-          )
-        ],
-      ),
-      content: TextFormField(
-        controller: controller,
-        maxLines: 5,
-        keyboardType: TextInputType.text,
-        textInputAction: TextInputAction.next,
-        textAlign: TextAlign.start,
-        style: Theme.of(context).textTheme.bodyMedium,
-        decoration: InputDecoration(
-            hintText: 'Digite aqui',
-            hintStyle: Theme.of(context).textTheme.labelMedium,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
-                    width: 0.5,
-                    color: Theme.of(context).colorScheme.inversePrimary)),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
-                    width: 1.0,
-                    color: Theme.of(context).colorScheme.inversePrimary)),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
-                    width: 1.0,
-                    color: Theme.of(context).colorScheme.inversePrimary))),
-      ),
-      actions: <Widget>[
-        Flexible(
-          child: MaterialButton(
+          global.smallBoxSpace,
+          TextFormField(
+            controller: controller,
+            maxLines: 5,
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.next,
+            textAlign: TextAlign.start,
+            style: Theme.of(context).textTheme.bodyMedium,
+            decoration: InputDecoration(
+                hintText: 'Digite aqui',
+                hintStyle: Theme.of(context).textTheme.labelMedium,
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        width: 0.5,
+                        color: Theme.of(context).colorScheme.inversePrimary)),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        width: 1.0,
+                        color: Theme.of(context).colorScheme.inversePrimary)),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        width: 1.0,
+                        color: Theme.of(context).colorScheme.inversePrimary))),
+          ),
+          global.smallBoxSpace,
+          MaterialButton(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-            onPressed: () async {
-              sended = true;
-              try {} catch (e) {
-                sended = false;
-                error = true;
-                log(e.toString());
-              } finally {}
-            },
+            onPressed: () async {},
             splashColor: Theme.of(context).colorScheme.secondary,
             elevation: 1,
             color: global.green,
@@ -566,8 +546,8 @@ class _SettingsPageState extends State<SettingsPage> {
               ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

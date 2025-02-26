@@ -57,6 +57,7 @@ class WeatherViewmodel extends ValueNotifier<WeatherEntity> {
         .onFailure((failure) => log(failure.toString()));
     await fetchWeatherByLocation(position.latitude, position.longitude);
     await fetchForecastByLocation(position.latitude, position.longitude);
+    updateLastWeather(value);
   }
 
   Future<WeatherEntity> fetchWeatherByCity(String city) async {
@@ -72,10 +73,8 @@ class WeatherViewmodel extends ValueNotifier<WeatherEntity> {
   Future<void> fetchWeatherByLocation(double lat, double lon) async {
     await _weatherRepository
         .getWeatherByLocation(lat, lon)
-        .onSuccess((success) {
-      value = success;
-      updateLastWeather(value);
-    }).onFailure((failure) => log(failure.toString()));
+        .onSuccess((success) => value = success)
+        .onFailure((failure) => log(failure.toString()));
   }
 
   Future<List<WeatherEntity>> fetchForecastByCity(String city) async {

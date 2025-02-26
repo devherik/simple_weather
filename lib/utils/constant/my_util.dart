@@ -10,19 +10,19 @@ class MyUtil {
   String weekDay(int day) {
     switch (day) {
       case 1:
-        return 'Segunda';
+        return 'Seg';
       case 2:
-        return 'Terça';
+        return 'Ter';
       case 3:
-        return 'Quarta';
+        return 'Quar';
       case 4:
-        return 'Quinta';
+        return 'Quin';
       case 5:
-        return 'Sexta';
+        return 'Sex';
       case 6:
-        return 'Sábado';
+        return 'Sáb';
       case 7:
-        return 'Domingo';
+        return 'Dom';
       default:
         return 'não sei';
     }

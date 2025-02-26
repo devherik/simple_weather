@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:iconsax/iconsax.dart';
@@ -48,6 +50,7 @@ class _HomePageState extends State<HomePage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    log('Dependencies changed');
   }
 
   @override
@@ -233,7 +236,6 @@ class _HomePageState extends State<HomePage>
                   padding: const EdgeInsets.all(8),
                   itemCount: weatherEntity.forecast.length,
                   scrollDirection: Axis.vertical,
-                  physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -284,7 +286,7 @@ class _HomePageState extends State<HomePage>
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Text(
-              util.weekDay(weather.dateTime!.weekday),
+              '${util.weekDay(weather.dateTime!.weekday)}. ${weather.getHour()}',
               style: Theme.of(context).textTheme.labelLarge,
             ),
           ],

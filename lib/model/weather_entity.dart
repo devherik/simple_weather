@@ -78,7 +78,13 @@ class WeatherEntity {
     };
   }
 
-  String getHour() => '${dateTime!.hour}:${dateTime!.minute}';
+  String getHour() {
+    String hour;
+    dateTime!.hour.toString().length == 1
+        ? hour = '0${dateTime!.hour}:00'
+        : hour = '${dateTime!.hour.toString()}:00';
+    return hour;
+  }
 
   @override
   String toString() {

@@ -51,10 +51,14 @@ class _SearchPageState extends State<SearchPage> {
                   .fetchWeatherByCity(_searchTextController.text.trim()),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return DetailedPage(
-                    parentContext: context,
-                    weatherData: snapshot.data,
-                  );
+                  if (snapshot.data!.cityName == 'Empty') {
+                    return CircularProgressIndicator();
+                  } else {
+                    return DetailedPage(
+                      parentContext: context,
+                      weatherData: snapshot.data,
+                    );
+                  }
                 } else {
                   return CircularProgressIndicator();
                 }

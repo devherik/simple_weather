@@ -56,7 +56,6 @@ class WeatherViewmodel extends ValueNotifier<WeatherEntity> {
         .onSuccess((success) => position = success)
         .onFailure((failure) => log(failure.toString()));
     await fetchWeatherByLocation(position.latitude, position.longitude);
-    await fetchForecastByLocation(position.latitude, position.longitude);
     updateLastWeather(value);
   }
 
@@ -64,17 +63,22 @@ class WeatherViewmodel extends ValueNotifier<WeatherEntity> {
     WeatherEntity weatherEntity = WeatherEntity.empty();
     await _weatherRepository
         .getWeatherByCity(city)
-        .onSuccess((success) => weatherEntity = success)
+        .onSuccess((success) async => weatherEntity = success)
         .onFailure((failure) =>
             log(failure.toString())); //TODO: Implementar erro notification
+    await fetchForecastByCity(city)
+        .then((forecast) => weatherEntity.forecast = forecast);
     return weatherEntity;
   }
 
   Future<void> fetchWeatherByLocation(double lat, double lon) async {
     await _weatherRepository
         .getWeatherByLocation(lat, lon)
-        .onSuccess((success) => value = success)
-        .onFailure((failure) => log(failure.toString()));
+        .onSuccess((success) async {
+      final forecast = await fetchForecastByLocation(lat, lon);
+      value = success;
+      value.forecast = forecast;
+    }).onFailure((failure) => log(failure.toString()));
   }
 
   Future<List<WeatherEntity>> fetchForecastByCity(String city) async {
@@ -87,11 +91,14 @@ class WeatherViewmodel extends ValueNotifier<WeatherEntity> {
     return forecast;
   }
 
-  Future<void> fetchForecastByLocation(double lat, double lon) async {
+  Future<List<WeatherEntity>> fetchForecastByLocation(
+      double lat, double lon) async {
+    List<WeatherEntity> forecast = [];
     await _weatherRepository
         .getFilterdedForecastByLocation(lat, lon)
-        .onSuccess((success) => value.forecast = success)
+        .onSuccess((success) async => forecast = success)
         .onFailure((failure) => log(failure.toString()));
+    return forecast;
   }
 
   void updateLastWeather(WeatherEntity weather) {

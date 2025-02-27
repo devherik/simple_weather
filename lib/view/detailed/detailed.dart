@@ -21,7 +21,7 @@ class _DetailedPageState extends State<DetailedPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(18.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(children: <Widget>[
         Flexible(
           flex: 5,
@@ -56,38 +56,10 @@ class _DetailedPageState extends State<DetailedPage> {
             style: Theme.of(context).textTheme.titleSmall,
           ),
           global.verySmallBoxSpace,
-          Row(
-            children: <Widget>[
-              Text(
-                '${widget.weather.temp!.toStringAsFixed(0)}°  ',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              Column(
-                children: <Widget>[
-                  Row(
-                    children: [
-                      Text('${widget.weather.maxTemp!.toStringAsFixed(0)}°',
-                          style: Theme.of(context).textTheme.labelLarge),
-                      Icon(
-                        Icons.arrow_upward,
-                        color: global.red,
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text('${widget.weather.minTemp!.toStringAsFixed(0)}°',
-                          style: Theme.of(context).textTheme.labelLarge),
-                      Icon(
-                        Icons.arrow_downward,
-                        color: global.blue,
-                      )
-                    ],
-                  ),
-                ],
-              )
-            ],
+          Text(
+            '${widget.weather.temp!.toStringAsFixed(0)}°  ',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
         ],
       );
@@ -96,7 +68,6 @@ class _DetailedPageState extends State<DetailedPage> {
         child: ListView.builder(
           padding: const EdgeInsets.symmetric(vertical: 16),
           itemCount: widget.weather.forecast.length,
-          physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -104,8 +75,7 @@ class _DetailedPageState extends State<DetailedPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                      widget.util.weekDay(
-                          widget.weather.forecast[index].dateTime!.weekday),
+                      '${widget.util.weekDay(widget.weather.forecast[index].dateTime!.weekday)}. ${widget.weather.forecast[index].getHour()}',
                       style: Theme.of(context).textTheme.labelLarge),
                   Row(
                     children: <Widget>[

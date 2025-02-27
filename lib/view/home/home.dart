@@ -68,18 +68,22 @@ class _HomePageState extends State<HomePage>
                 ValueListenableBuilder(
                   valueListenable: _weatherViewmodel,
                   builder: (context, value, child) {
-                    return Column(
-                      children: <Widget>[
-                        global.smallBoxSpace,
-                        currentWeatherDescription(value),
-                        global.mediumBoxSpace,
-                        currentWeatherForecast(value),
-                        global.smallBoxSpace,
-                        weatherSearchButton(),
-                        global.smallBoxSpace,
-                        apiLicenseDescription()
-                      ],
-                    );
+                    if (value.cityName == 'Empty') {
+                      return Center(child: CircularProgressIndicator());
+                    } else {
+                      return Column(
+                        children: <Widget>[
+                          global.smallBoxSpace,
+                          currentWeatherDescription(value),
+                          global.mediumBoxSpace,
+                          currentWeatherForecast(value),
+                          global.smallBoxSpace,
+                          weatherSearchButton(),
+                          global.smallBoxSpace,
+                          apiLicenseDescription()
+                        ],
+                      );
+                    }
                   },
                 ),
               ],
@@ -151,7 +155,7 @@ class _HomePageState extends State<HomePage>
         Row(
           children: [
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   '${weatherEntity.temp!.toStringAsFixed(0)}°',
@@ -163,32 +167,6 @@ class _HomePageState extends State<HomePage>
                       util.withWeather(weatherEntity.condition!),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Row(
-                          children: [
-                            Text(
-                                '  ${weatherEntity.maxTemp!.toStringAsFixed(0)}°',
-                                style: Theme.of(context).textTheme.bodyLarge),
-                            Icon(
-                              Icons.arrow_upward,
-                              color: global.red,
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                                ' | ${weatherEntity.minTemp!.toStringAsFixed(0)}°',
-                                style: Theme.of(context).textTheme.bodyLarge),
-                            Icon(
-                              Icons.arrow_downward,
-                              color: global.blue,
-                            )
-                          ],
-                        ),
-                      ],
                     ),
                   ],
                 )

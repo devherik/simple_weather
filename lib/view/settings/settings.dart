@@ -6,6 +6,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:simple_weather_app/main.dart';
 
 import 'package:simple_weather_app/utils/constant/globals.dart' as global;
+import 'package:simple_weather_app/view/settings/feedback.dart';
 import 'package:simple_weather_app/viewmodel/localstorage_viewmodel.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -60,43 +61,12 @@ class _SettingsPageState extends State<SettingsPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16)),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const Icon(Iconsax.sun_1),
-                              Text(
-                                '  Unidade de tempo - ${value.weatherUnit}',
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                            ],
-                          ),
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) => modalBottomSheetUnities(),
-                            );
-                          },
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Divider(
-                            thickness: .1,
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                          ),
-                        ),
-                        MaterialButton(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 24, horizontal: 12),
-                          minWidth: MediaQuery.of(context).size.width,
-                          splashColor: Theme.of(context).colorScheme.secondary,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               const Icon(Iconsax.color_swatch),
                               Text(
-                                '  Tema do aplicativo',
+                                'Tema do aplicativo',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                             ],
@@ -124,11 +94,12 @@ class _SettingsPageState extends State<SettingsPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16)),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               const Icon(Iconsax.eraser),
                               Text(
-                                '  Limpar suas informações',
+                                'Limpar suas informações',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               )
                             ],
@@ -147,20 +118,6 @@ class _SettingsPageState extends State<SettingsPage> {
                             color: Theme.of(context).colorScheme.inversePrimary,
                           ),
                         ),
-                      ],
-                    ),
-                    global.veryLargeBoxSpace,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'FEEDBACK',
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                        ),
-                        global.smallBoxSpace,
                         MaterialButton(
                           padding: const EdgeInsets.symmetric(
                               vertical: 24, horizontal: 12),
@@ -170,63 +127,24 @@ class _SettingsPageState extends State<SettingsPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16)),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               const Icon(Iconsax.message_remove),
                               Text(
-                                '  Informe um problema',
+                                'Feedback',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               )
                             ],
                           ),
                           onPressed: () {
                             showModalBottomSheet(
+                              isScrollControlled: true,
                               context: context,
-                              builder: (context) =>
-                                  modalBottomSheetMessage('Problema'),
+                              builder: (context) => FeedbackPage(),
                             );
                           },
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Divider(
-                            thickness: .1,
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                          ),
-                        ),
-                        MaterialButton(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 24, horizontal: 12),
-                            minWidth: MediaQuery.of(context).size.width,
-                            splashColor:
-                                Theme.of(context).colorScheme.secondary,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                const Icon(Iconsax.message_2),
-                                Text(
-                                  '  Envie seu feedback',
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                )
-                              ],
-                            ),
-                            onPressed: () {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (context) =>
-                                    modalBottomSheetMessage('Feedback'),
-                              );
-                            }),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Divider(
-                            thickness: .1,
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                          ),
-                        )
                       ],
                     ),
                     global.veryLargeBoxSpace,
@@ -260,111 +178,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             );
           }),
-    );
-  }
-
-  modalBottomSheetUnities() {
-    return Container(
-      height: 250,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              width: 30,
-              child: Divider(
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                  thickness: 3),
-            ),
-            global.smallBoxSpace,
-            Flexible(
-              flex: 1,
-              fit: FlexFit.loose,
-              child: MaterialButton(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-                minWidth: MediaQuery.of(context).size.width,
-                onPressed: () {
-                  widget._viewmodel.value.changeWeatherUnit('Celcius');
-                  setState(() {
-                    widget._viewmodel.savePreferences();
-                  });
-                  context.pop();
-                },
-                splashColor: Theme.of(context).colorScheme.secondary,
-                elevation: 0,
-                color: Theme.of(context).colorScheme.primary,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Celcius',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          letterSpacing: 3,
-                          fontSize: 16),
-                    ),
-                    Icon(
-                      widget._viewmodel.value.weatherUnit == 'Celcius'
-                          ? Iconsax.toggle_on_circle5
-                          : Iconsax.toggle_off_circle,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.loose,
-              child: MaterialButton(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-                minWidth: MediaQuery.of(context).size.width,
-                onPressed: () {
-                  widget._viewmodel.value.changeWeatherUnit('Fahrenheit');
-                  setState(() {
-                    widget._viewmodel.savePreferences();
-                  });
-                  context.pop();
-                },
-                splashColor: Theme.of(context).colorScheme.secondary,
-                elevation: 0,
-                color: Theme.of(context).colorScheme.primary,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Fahrenheit',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          letterSpacing: 3,
-                          fontSize: 16),
-                    ),
-                    Icon(
-                      widget._viewmodel.value.weatherUnit == 'Fahrenheit'
-                          ? Iconsax.toggle_on_circle5
-                          : Iconsax.toggle_off_circle,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -485,72 +298,6 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  modalBottomSheetMessage(String title) {
-    final TextEditingController controller = TextEditingController();
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          global.smallBoxSpace,
-          TextFormField(
-            controller: controller,
-            maxLines: 5,
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-            textAlign: TextAlign.start,
-            style: Theme.of(context).textTheme.bodyMedium,
-            decoration: InputDecoration(
-                hintText: 'Digite aqui',
-                hintStyle: Theme.of(context).textTheme.labelMedium,
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(
-                        width: 0.5,
-                        color: Theme.of(context).colorScheme.inversePrimary)),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(
-                        width: 1.0,
-                        color: Theme.of(context).colorScheme.inversePrimary)),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(
-                        width: 1.0,
-                        color: Theme.of(context).colorScheme.inversePrimary))),
-          ),
-          global.smallBoxSpace,
-          MaterialButton(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-            onPressed: () async {},
-            splashColor: Theme.of(context).colorScheme.secondary,
-            elevation: 1,
-            color: global.green,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Iconsax.send_2),
-                Text(
-                  ' Enviar',
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   modalBottomSheetEraseAll() {
     return Container(
       height: 250,
@@ -630,7 +377,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       }
                     },
                     splashColor: Theme.of(context).colorScheme.secondary,
-                    elevation: 0,
+                    elevation: 1,
                     color: global.red,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)),

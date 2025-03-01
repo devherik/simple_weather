@@ -70,8 +70,8 @@ class WeatherRepositoryImp implements WeatherRepository {
   Future<Result<bool>> init() async {
     if (!_status) {
       try {
-        //_weatherApi = WeatherMockupImp.instance;
-        _weatherApi = WeatherApiImp.instance;
+        _weatherApi = WeatherMockupImp.instance;
+        //_weatherApi = WeatherApiImp.instance;
         await dotenv.load();
         _weatherApiKey = dotenv.env['WEATHER_KEY']!;
         await _weatherApi.initApi(_weatherApiKey);

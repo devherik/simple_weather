@@ -69,7 +69,10 @@ class _HomePageState extends State<HomePage>
                   valueListenable: _weatherViewmodel,
                   builder: (context, value, child) {
                     if (value.cityName == 'Empty') {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(
+                          child: CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ));
                     } else {
                       return Column(
                         children: <Widget>[

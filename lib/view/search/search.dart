@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:simple_weather_app/main.dart';
 import 'package:simple_weather_app/viewmodel/weather_viewmodel.dart';
 import 'package:simple_weather_app/view/detailed/detailed.dart';
 
@@ -40,7 +42,6 @@ class _SearchPageState extends State<SearchPage> {
                 hintStyle: Theme.of(context).textTheme.labelLarge)),
       ),
       body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -52,7 +53,7 @@ class _SearchPageState extends State<SearchPage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data!.cityName == 'Empty') {
-                    return CircularProgressIndicator();
+                    return emptySearchImage();
                   } else {
                     return DetailedPage(
                       parentContext: context,
@@ -60,10 +61,28 @@ class _SearchPageState extends State<SearchPage> {
                     );
                   }
                 } else {
-                  return CircularProgressIndicator();
+                  return emptySearchImage();
                 }
               }),
         ),
+      ),
+    );
+  }
+
+  Widget emptySearchImage() {
+    return Center(
+      child: Column(
+        children: [
+          SvgPicture.asset(
+              MyApp.of(context)!.viewmodel.value.theme == ThemeMode.dark
+                  ? 'assets/images/undraw/location-search_white.svg'
+                  : 'assets/images/undraw/location-search_green.svg',
+              height: 200,
+              width: 200),
+          const SizedBox(height: 16),
+          Text('Nenhum resultado encontrado',
+              style: Theme.of(context).textTheme.bodyLarge)
+        ],
       ),
     );
   }

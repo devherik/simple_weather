@@ -50,6 +50,7 @@ dependencies:
   result_dart: ^2.0.0
   hive_flutter: ^1.1.0
   path_provider: ^2.1.5
+  flutter_svg: ^2.0.17
 
 dev_dependencies:
   flutter_test:
@@ -94,6 +95,8 @@ flutter:
     - assets/images/icons/moon.png
     - assets/icons/github_dark.png
     - assets/icons/github_light.png
+    - assets/images/undraw/location-search_green.svg
+    - assets/images/undraw/location-search_white.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

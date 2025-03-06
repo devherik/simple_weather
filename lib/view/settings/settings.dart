@@ -97,17 +97,18 @@ class _SettingsPageState extends State<SettingsPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              const Icon(Iconsax.eraser),
+                              const Icon(Iconsax.message_remove),
                               Text(
-                                'Limpar suas informações',
+                                'Feedback',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               )
                             ],
                           ),
                           onPressed: () {
                             showModalBottomSheet(
+                              isScrollControlled: true,
                               context: context,
-                              builder: (context) => modalBottomSheetEraseAll(),
+                              builder: (context) => FeedbackPage(),
                             );
                           },
                         ),
@@ -130,18 +131,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              const Icon(Iconsax.message_remove),
+                              const Icon(Iconsax.eraser),
                               Text(
-                                'Feedback',
+                                'Limpar suas informações',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               )
                             ],
                           ),
                           onPressed: () {
                             showModalBottomSheet(
-                              isScrollControlled: true,
                               context: context,
-                              builder: (context) => FeedbackPage(),
+                              builder: (context) => modalBottomSheetEraseAll(),
                             );
                           },
                         ),

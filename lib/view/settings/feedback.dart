@@ -5,11 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class FeedbackPage extends StatelessWidget {
-  const FeedbackPage({super.key});
+  FeedbackPage({super.key});
+  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
       height: MediaQuery.of(context).size.height,

@@ -1,0 +1,2 @@
+/home/herik-colares/Projects/Flutter/simple_weather_app/android/app/.cxx/Debug/6f2c6f2e/x86/CMakeFiles/edit_cache.dir
+/home/herik-colares/Projects/Flutter/simple_weather_app/android/app/.cxx/Debug/6f2c6f2e/x86/CMakeFiles/rebuild_cache.dir

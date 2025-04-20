@@ -1,0 +1,1 @@
+/home/herik-colares/Projects/Flutter/simple_weather_app/build/app/intermediates/cxx/Debug/6f2c6f2e/obj/arm64-v8a
